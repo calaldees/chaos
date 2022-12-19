@@ -1,3 +1,5 @@
+const nonHexRegex = new RegExp('[^0-9a-f]+', 'gi')
+
 function* hexToBytes(hex) {
     console.assert(hex.length % 2 == 0)
     for (let c = 0; c < hex.length; c += 2) {
@@ -26,23 +28,30 @@ function* bytesToMono8x8ImageDataChunks(bytesIterable) {
     }
 }
 
-const nonHexRegex = new RegExp('[^0-9a-f]+', 'gi')
-function hexStringTo8x8ImageDataChunks(hexString) {
-    return [...bytesToMono8x8ImageDataChunks(hexToBytes(hexString.replaceAll(nonHexRegex, "")))]
-}
-
-function ImageData4ToImageBitmap(imageDataArray) {
-    console.assert(imageDataArray.length == 4)
-    const offscreen = new OffscreenCanvas(16, 16)
+function ImageDataToImageBitmap(imageDataArray) {
+    const size = Math.sqrt(imageDataArray.length) * 8
+    const offscreen = new OffscreenCanvas(size, size)
     const c = offscreen.getContext("2d")
-    c.putImageData(imageDataArray[0], 0, 0)
-    c.putImageData(imageDataArray[1], 8, 0)
-    c.putImageData(imageDataArray[2], 0, 8)
-    c.putImageData(imageDataArray[3], 8, 8)
+    if (imageDataArray.length == 1) {
+        c.putImageData(imageDataArray[0], 0, 0)
+    } else 
+    if (imageDataArray.length == 4) {
+        c.putImageData(imageDataArray[0], 0, 0)
+        c.putImageData(imageDataArray[1], 8, 0)
+        c.putImageData(imageDataArray[2], 0, 8)
+        c.putImageData(imageDataArray[3], 8, 8)
+    } else {
+        throw `unable to process imageDataArray`
+    }
     return offscreen.transferToImageBitmap()
 }
 
+function loadImage(data) {
+    if (typeof(data) == "string" && data.startsWith("data:")) {throw "do some base64 decoding shiz"}
+    if (typeof(data) == "string") {data = hexToBytes(data.toLowerCase().replaceAll(nonHexRegex, ""))}
+    return ImageDataToImageBitmap([...bytesToMono8x8ImageDataChunks(data)])
+}
+
 export {
-    hexStringTo8x8ImageDataChunks,
-    ImageData4ToImageBitmap,
+    loadImage,
 }

@@ -2,7 +2,7 @@
 <body style="margin: 0;">
 <canvas id="canvas" width="480" height="270" style="image-rendering: pixelated; object-fit: contain; width:100%; max-width: 100%; height: 100%; max-height: 100%;"></canvas>
 <script type="module">
-    import {ImageData4ToImageBitmap,hexStringTo8x8ImageDataChunks} from './image_decode.js'
+    import {loadImage} from './image_decode.js'
 
 
     const canvas = document.getElementById('canvas')
@@ -27,9 +27,13 @@
         $13,$13,$03,$03,$07,$1F,$00,$00
         $80,$C0,$C0,$C0,$E0,$E0,$00,$00
     `
-    const testImage = ImageData4ToImageBitmap(hexStringTo8x8ImageDataChunks(wizard1))
 
-    c.drawImage(testImage, 0, 0)
+    const border1 = `$FF,$FF,$EA,$F5,$D0,$E4,$D0,$EA`
+
+    c.drawImage(loadImage(wizard1), 0, 0)
+    c.drawImage(loadImage(border1), 16, 16)
+    c.drawImage(loadImage(s_cursor), 32, 32)
+
 
 
 </script>
