@@ -5,6 +5,7 @@
 <script type="module">
     import {loadImage} from './image_decode.js'
     import {drawBorder} from './border.js'
+    import {shiftImage} from './image_draw.js'
 
 
     const canvas = document.getElementById('canvas')
@@ -30,11 +31,15 @@
         $80,$C0,$C0,$C0,$E0,$E0,$00,$00
     `
 
-    c.drawImage(loadImage(wizard1), 16, 16)
+    c.drawImage(shiftImage(loadImage(wizard1), "#0FF ") , 16, 16)
 
-    c.drawImage(loadImage(s_cursor), 48, 48)
+    const i = loadImage(s_cursor)
 
-    drawBorder(c,0,0,w,h)
+    c.drawImage(shiftImage(i, '#EE0'), 48, 48)
+
+    //c.drawImage(loadImage(s_cursor), 48, 48)
+
+    drawBorder(c,"#EE0",0,0,w,h)
 
 
 </script>
