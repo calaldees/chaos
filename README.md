@@ -9,6 +9,3 @@ Unsorted
 ========
 
 https://stackoverflow.com/questions/45706829/change-color-image-in-canvas
-https://developer.mozilla.org/en-US/docs/Web/API/ImageData/ImageData
-https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8ClampedArray
-https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView/getUint8

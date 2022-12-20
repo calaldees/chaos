@@ -40,7 +40,9 @@ function ImageDataToImageBitmap(imageDataArray) {
         c.putImageData(imageDataArray[1], 8, 0)
         c.putImageData(imageDataArray[2], 0, 8)
         c.putImageData(imageDataArray[3], 8, 8)
-    } else {
+    } else 
+    // TODO: length 12? for 3 frame animation?
+    {
         throw `unable to process imageDataArray`
     }
     return offscreen.transferToImageBitmap()
@@ -51,6 +53,9 @@ function loadImage(data) {
     if (typeof(data) == "string") {data = hexToBytes(data.toLowerCase().replaceAll(nonHexRegex, ""))}
     return ImageDataToImageBitmap([...bytesToMono8x8ImageDataChunks(data)])
 }
+
+// await (await fetch("data:application/octet;base64," + base64data)).arrayBuffer()
+// https://stackoverflow.com/questions/21797299/convert-base64-string-to-arraybuffer#comment124033543_49273187
 
 export {
     loadImage,
