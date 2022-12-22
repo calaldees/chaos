@@ -12,9 +12,10 @@
 <body>
 <canvas id="canvas" width="256" height="192"></canvas>
 <script type="module">
-    import {loadImage} from './image_decode.js'
+    import {loadImage, loadImages} from './image_decode.js'
     import {drawBorder} from './border.js'
-    import {shiftImage} from './image_draw.js'
+    import {shiftImage, COLOR} from './image_draw.js'
+    import {sprite_data} from './sprite_data.js'
 
 
     const canvas = document.getElementById('canvas')
@@ -23,8 +24,10 @@
     const w = canvas.width
     const h = canvas.height
 
-    c.fillStyle = 'black'
+    c.fillStyle = COLOR.black
     c.fillRect(0, 0, w, h)
+
+    drawBorder(c,COLOR.yellow,0,0,w,h)
 
     const s_cursor = `
         $FF,$80,$80,$87,$8C,$88,$8C,$87
@@ -33,22 +36,35 @@
         $31,$11,$11,$31,$E1,$01,$01,$FF
     `
 
+    /*
     const wizard1 = `
         $00,$00,$01,$01,$07,$0F,$3B,$1B
         $00,$00,$80,$80,$FE,$9C,$8C,$84
         $13,$13,$03,$03,$07,$1F,$00,$00
         $80,$C0,$C0,$C0,$E0,$E0,$00,$00
     `
-
     c.drawImage(shiftImage(loadImage(wizard1), "#0FF ") , 16, 16)
+    */
+
+    const wizard_sprites = [...loadImages(sprite_data.wizards)]
+    for (let i=0 ; i<wizard_sprites.length ; i++) {
+        c.drawImage(shiftImage(wizard_sprites[i], Object.values(COLOR)[i%7+1]) , (i+1)*16, 16)
+    }
+
+
+    const monster_sprites = [...loadImages(sprite_data.monsters)]
+    for (let i=0 ; i<monster_sprites.length ; i++) {
+        c.drawImage(shiftImage(monster_sprites[i], COLOR.white) , (i%16)*16, 32+(Math.floor(i/16)*16))
+    }
 
     const i = loadImage(s_cursor)
 
-    c.drawImage(shiftImage(i, '#EE0'), 48, 48)
+    c.drawImage(shiftImage(i, '#EE0'), 64, 48)
 
     //c.drawImage(loadImage(s_cursor), 48, 48)
 
-    drawBorder(c,"#EE0",0,0,w,h)
+    
+
 
 
 </script>
