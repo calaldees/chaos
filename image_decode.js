@@ -1,6 +1,6 @@
 const nonHexRegex = new RegExp('[^0-9a-f]+', 'gi')
-function cleanHexString(hex_string) {return hex_string.toLowerCase().replaceAll(nonHexRegex, "")}
-function* hexToBytes(hex) {
+export function cleanHexString(hex_string) {return hex_string.toLowerCase().replaceAll(nonHexRegex, "")}
+export function* hexToBytes(hex) {
     console.assert(hex.length % 2 == 0)
     for (let c = 0; c < hex.length; c += 2) {
         yield parseInt(hex.substr(c, 2), 16)
@@ -17,7 +17,7 @@ function* bytesToMonoImageDataArray(bytes) {
     }
 }
 
-function* bytesToMono8x8ImageDataChunks(bytesIterable) {
+export function* bytesToMono8x8ImageDataChunks(bytesIterable) {
     const bytes = []
     for (let byte of bytesIterable) {
         bytes.push(byte)
@@ -28,7 +28,7 @@ function* bytesToMono8x8ImageDataChunks(bytesIterable) {
     }
 }
 
-function ImageDataToImageBitmap(imageDataArray) {
+export function ImageDataToImageBitmap(imageDataArray) {
     const size = Math.sqrt(imageDataArray.length) * 8
     const offscreen = new OffscreenCanvas(size, size)
     const c = offscreen.getContext("2d")

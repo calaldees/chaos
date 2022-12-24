@@ -16,6 +16,7 @@
     import {drawBorder} from './border.js'
     import {shiftImage, COLOR} from './image_draw.js'
     import {sprite_data} from './sprite_data.js'
+    import {drawFont, fontImageData} from './text.js'
 
 
     const canvas = document.getElementById('canvas')
@@ -57,9 +58,12 @@
         c.drawImage(shiftImage(monster_sprites[i], COLOR.white) , (i%16)*16, 32+(Math.floor(i/16)*16))
     }
 
-    const i = loadImage(s_cursor)
+    drawFont(c, `Hello!`, 148, 16)
 
-    c.drawImage(shiftImage(i, '#EE0'), 64, 48)
+
+
+    //const i = loadImage(s_cursor)
+    //c.drawImage(shiftImage(i, '#EE0'), 64, 48)
 
     //c.drawImage(loadImage(s_cursor), 48, 48)
 
