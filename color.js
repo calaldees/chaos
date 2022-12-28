@@ -2,13 +2,22 @@
 
 export const COLOR = {
     black: "#000",
-    blue: "#00E",
-    red: "#E00",
-    magenta: "#E0E",
-    green: "#0E0",
-    cyan: "#0EE",
-    yellow: "#EE0",
-    white: "#EEE",
+    blue: "#00D",
+    red: "#D00",
+    magenta: "#D0D",
+    green: "#0D0",
+    cyan: "#0DD",
+    yellow: "#DD0",
+    white: "#DDD",
+
+    black_bright: "#000",
+    blue_bright: "#00F",
+    red_bright: "#F00",
+    magenta_bright: "#F0F",
+    green_bright: "#0F0",
+    cyan_bright: "#0FF",
+    yellow_bright: "#FF0",
+    white_bright: "#FFF",
 }
 
 export function shiftImage(imageBitmap, color) {

@@ -1,3 +1,6 @@
+import { monster_sprites } from "./sprites.js"
+import { COLOR } from './color.js'
+
 export const units = {
     "King Cobra": {
         "attackType": "struck",
@@ -13,8 +16,10 @@ export const units = {
         "status": [],
         "name": "King Cobra",
         "animFrames": [0, 1, 2, 1],
-        "animSpeed": 4,
-        "animColor": ["TODO"]
+        "animColors": [COLOR.green_bright],
+        "animSpeed": 5, //4
+        "corpseFrame": monster_sprites[8],
+        "animSprites": monster_sprites.slice(1,4),
     },
     "Ghost": {
         "attackType": "attacked",
@@ -30,6 +35,8 @@ export const units = {
         "status": ["undead", "trans", "flying", "noCorpse"],
         "name": "Ghost",
         "animFrames": [0, 1, 2, 3],
+        "animColors": [COLOR.cyan, COLOR.cyan_bright],
         "animSpeed": 4,
+        "animSprites": monster_sprites.slice(79,84),
     },
 }

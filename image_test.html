@@ -14,9 +14,12 @@
 <script type="module">
     import {loadImage, loadImages} from './image_decode.js'
     import {drawBorder} from './border.js'
-    import {shiftImage, COLOR} from './image_draw.js'
-    import {sprite_data} from './sprite_data.js'
+    import {shiftImage, COLOR} from './color.js'
     import {drawFont, fontImageData} from './text.js'
+    import {monster_sprites, wizard_sprites} from './sprites.js'
+
+    import {Unit} from './units.js'
+    import {units} from './unit_data.js'
 
 
     const canvas = document.getElementById('canvas')
@@ -37,40 +40,36 @@
         $31,$11,$11,$31,$E1,$01,$01,$FF
     `
 
-    /*
-    const wizard1 = `
-        $00,$00,$01,$01,$07,$0F,$3B,$1B
-        $00,$00,$80,$80,$FE,$9C,$8C,$84
-        $13,$13,$03,$03,$07,$1F,$00,$00
-        $80,$C0,$C0,$C0,$E0,$E0,$00,$00
-    `
-    c.drawImage(shiftImage(loadImage(wizard1), "#0FF ") , 16, 16)
-    */
-
-    const wizard_sprites = [...loadImages(sprite_data.wizards)]
     for (let i=0 ; i<wizard_sprites.length ; i++) {
         c.drawImage(shiftImage(wizard_sprites[i], Object.values(COLOR)[i%7+1]) , (i+1)*16, 16)
     }
 
+    //for (let i=0 ; i<monster_sprites.length ; i++) {
+    //    c.drawImage(shiftImage(monster_sprites[i], COLOR.white) , (i%16)*16, 32+(Math.floor(i/16)*16))
+    //}
 
-    const monster_sprites = [...loadImages(sprite_data.monsters)]
-    for (let i=0 ; i<monster_sprites.length ; i++) {
-        c.drawImage(shiftImage(monster_sprites[i], COLOR.white) , (i%16)*16, 32+(Math.floor(i/16)*16))
+    const uu = new Unit(units["Ghost"])
+    const vv = new Unit(units["King Cobra"])
+
+
+    let frame = 0
+    function main(time) {
+        const requestAnimationFrameId = requestAnimationFrame(main)
+        const frame_ = Math.floor(frame/6)
+        c.fillRect(48, 48, 32, 16)
+        c.drawImage(shiftImage(...uu.sprite_color(uu.unit_frame(frame_))), 48, 48)
+        c.drawImage(shiftImage(...vv.sprite_color(vv.unit_frame(frame_))), 64, 48)
+        frame++
     }
+    main()
 
     drawFont(c, `Hello!`, 148, 16)
-
 
 
     //const i = loadImage(s_cursor)
     //c.drawImage(shiftImage(i, '#EE0'), 64, 48)
 
     //c.drawImage(loadImage(s_cursor), 48, 48)
-
-    
-
-
-
 </script>
 </body>
 </html>

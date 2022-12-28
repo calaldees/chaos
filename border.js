@@ -1,5 +1,5 @@
 import {loadImage} from './image_decode.js'
-import {shiftImage} from './image_draw.js'
+import {shiftImage} from './color.js'
 
 // Border data from https://zxnet.co.uk/spectrum/chaos/asm/BB15.html
 const borders = Object.fromEntries(Object.entries({
