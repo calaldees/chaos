@@ -17,7 +17,7 @@ export const units = {
         "name": "King Cobra",
         "animFrames": [0, 1, 2, 1],
         "animColors": [COLOR.green_bright],
-        "animSpeed": 5, //4
+        "animSpeed": 4,
         "corpseFrame": monster_sprites[8],
         "animSprites": monster_sprites.slice(1,4),
     },

@@ -16,8 +16,15 @@ export class Unit {
         this.status = []
     }
 
+    dirty(frame) {
+        return (frame % this.template.animSpeed) == 0
+    }
+
+    animation_frame(frame) {
+        return Math.floor(frame / this.template.animSpeed)
+    }
     unit_frame(frame) {
-        return Math.floor(frame / this.template.animSpeed) % this.template.animFrames.length
+        return this.animation_frame(frame) % this.template.animFrames.length
     }
 
     sprite_color(unit_frame) {

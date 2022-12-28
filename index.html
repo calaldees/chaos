@@ -21,6 +21,8 @@
     import {Unit} from './units.js'
     import {units} from './unit_data.js'
 
+    import {Map} from './map.js'
+
 
     const canvas = document.getElementById('canvas')
     const c = canvas.getContext('2d')
@@ -48,17 +50,23 @@
     //    c.drawImage(shiftImage(monster_sprites[i], COLOR.white) , (i%16)*16, 32+(Math.floor(i/16)*16))
     //}
 
-    const uu = new Unit(units["Ghost"])
-    const vv = new Unit(units["King Cobra"])
+    function drawUnit(unit, frame, x, y) {
+        c.fillStyle = COLOR.black
+        c.fillRect(x*16, y*16, 16, 16)
+        c.drawImage(shiftImage(...unit.sprite_color(unit.unit_frame(frame))), x*16, y*16)
+    }
 
+    const map = new Map()
+    map.setUnit(new Unit(units["Ghost"]), 3,3)
+    map.setUnit(new Unit(units["King Cobra"]), 4,3)
 
     let frame = 0
     function main(time) {
         const requestAnimationFrameId = requestAnimationFrame(main)
-        const frame_ = Math.floor(frame/6)
-        c.fillRect(48, 48, 32, 16)
-        c.drawImage(shiftImage(...uu.sprite_color(uu.unit_frame(frame_))), 48, 48)
-        c.drawImage(shiftImage(...vv.sprite_color(vv.unit_frame(frame_))), 64, 48)
+        //const _frame = Math.floor(frame/6)
+        for (let [position, unit] of map.dirty(frame)) {
+            drawUnit(unit, Math.floor(frame/6), ...position)
+        }
         frame++
     }
     main()
