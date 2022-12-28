@@ -3,7 +3,7 @@ import { enumerate, Dimension } from "./core.js";
 
 export class Map {
     constructor() {
-        this.dimension = new Dimension(16, 12, 1)
+        this.dimension = new Dimension(15, 10, 1)
         this.data = new Array(16*12)
     }
     * dirty(frame) {

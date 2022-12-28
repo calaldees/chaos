@@ -17,7 +17,7 @@ export const units = {
         "name": "King Cobra",
         "animFrames": [0, 1, 2, 1],
         "animColors": [COLOR.green_bright],
-        "animSpeed": 4,
+        "animSpeed": 24,
         "corpseFrame": monster_sprites[8],
         "animSprites": monster_sprites.slice(1,4),
     },
@@ -36,7 +36,7 @@ export const units = {
         "name": "Ghost",
         "animFrames": [0, 1, 2, 3],
         "animColors": [COLOR.cyan, COLOR.cyan_bright],
-        "animSpeed": 4,
+        "animSpeed": 32,
         "animSprites": monster_sprites.slice(79,84),
     },
 }

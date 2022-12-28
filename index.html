@@ -33,7 +33,7 @@
     c.fillStyle = COLOR.black
     c.fillRect(0, 0, w, h)
 
-    drawBorder(c,COLOR.yellow,0,0,w,h)
+    drawBorder(c,COLOR.blue,0,0,w,h-16)
 
     const s_cursor = `
         $FF,$80,$80,$87,$8C,$88,$8C,$87
@@ -51,9 +51,10 @@
     //}
 
     function drawUnit(unit, frame, x, y) {
+        const [_x, _y] = [Math.floor(x*16)+8, Math.floor(y*16)+8]
         c.fillStyle = COLOR.black
-        c.fillRect(x*16, y*16, 16, 16)
-        c.drawImage(shiftImage(...unit.sprite_color(unit.unit_frame(frame))), x*16, y*16)
+        c.fillRect(_x, _y, 16, 16)
+        c.drawImage(shiftImage(...unit.sprite_color(unit.unit_frame(frame))), _x, _y)
     }
 
     const map = new Map()
@@ -65,18 +66,18 @@
         const requestAnimationFrameId = requestAnimationFrame(main)
         //const _frame = Math.floor(frame/6)
         for (let [position, unit] of map.dirty(frame)) {
-            drawUnit(unit, Math.floor(frame/6), ...position)
+            drawUnit(unit, frame, ...position)
+            //drawUnit(map.getUnit(3,3,1), frame, ...map.dimension.index_to_position((frame)%150))
         }
         frame++
     }
     main()
 
-    drawFont(c, `Hello!`, 148, 16)
+    drawFont(c, `Chaos Mobile Test`, 0, 176)
 
 
     //const i = loadImage(s_cursor)
     //c.drawImage(shiftImage(i, '#EE0'), 64, 48)
-
     //c.drawImage(loadImage(s_cursor), 48, 48)
 </script>
 </body>
