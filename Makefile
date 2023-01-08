@@ -1,5 +1,5 @@
 
-serve: classicspells.json classicunits.json
+serve: data/classicspells.json data/classicunits.json
 	python3 -m http.server
 
 data/classicspells.json:

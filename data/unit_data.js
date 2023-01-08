@@ -1,8 +1,7 @@
-import { monster_sprites } from "./sprites.js"
-import { COLOR } from '../gfx/color.js'
 
-export const units = {
+export const unit_data = {
     "King Cobra": {
+        "name": "King Cobra",
         "attackType": "struck",
         "properties": {
             "mov": 1,
@@ -14,14 +13,10 @@ export const units = {
             "res": 6
         },
         "status": [],
-        "name": "King Cobra",
-        "animFrames": [0, 1, 2, 1],
-        "animColors": [COLOR.green_bright],
-        "animSpeed": 24,
-        "corpseFrame": monster_sprites[8],
-        "animSprites": monster_sprites.slice(1,4),
+
     },
     "Dire Wolf": {
+        "name": "Dire Wolf",
         "attackType": "savaged",
         "properties": {
             "mov": 3,
@@ -33,14 +28,9 @@ export const units = {
             "res": 7
         },
         "status": [],
-        "name": "Dire Wolf",
-        "animFrames": [0, 1, 2, 1],
-        "animColors": [COLOR.white],
-        "animSpeed": 30,  //?
-        "corpseFrame": monster_sprites[17],
-        "animSprites": monster_sprites.slice(13,16),
     },
     "Crocodile": {
+        "name": "Crocodile",
         "attackType": "bit",
         "properties": {
             "mov": 1,
@@ -52,16 +42,10 @@ export const units = {
             "res": 2
         },
         "status": [],
-        "name": "Crocodile",
-        "animFrames": [0, 1, 2, 1],
-        "animColors": [COLOR.green],
-        "animSpeed": 30,  //?
-        "corpseFrame": monster_sprites[28],
-        "animSprites": monster_sprites.slice(23,26),
     },
 
-
     "Ghost": {
+        "name": "Ghost",
         "attackType": "attacked",
         "properties": {
             "mov": 2,
@@ -73,10 +57,5 @@ export const units = {
             "res": 9
         },
         "status": ["undead", "trans", "flying", "noCorpse"],
-        "name": "Ghost",
-        "animFrames": [0, 1, 2, 3],
-        "animColors": [COLOR.cyan, COLOR.cyan_bright],
-        "animSpeed": 32,
-        "animSprites": monster_sprites.slice(79,84),
     },
 }

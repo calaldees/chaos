@@ -17,12 +17,13 @@
     import {shiftImage, COLOR} from './gfx/color.js'
     import {drawFont, fontImageData} from './gfx/text.js'
 
-    import {monster_sprites, wizard_sprites} from './data/sprites.js'
-    import {units} from './data/unit_data.js'
+    import {monster_sprites, wizard_sprites} from './gfx/sprites.js'  // for test
+    import {unit_data} from './data/unit_data.js'
 
-    import {Unit} from './model/units.js'
+    import {Unit} from './model/unit.js'
     import {Map} from './model/map.js'
 
+    import {GfxMap} from './gfx/map.js'
 
     const canvas = document.getElementById('canvas')
     const c = canvas.getContext('2d')
@@ -37,56 +38,38 @@
     clear()
 
 
-
+    // Sprite tests
     drawBorder(c,COLOR.blue,0,0,w,h-16)
-
-    const s_cursor = `
-        $FF,$80,$80,$87,$8C,$88,$8C,$87
-        $FF,$01,$01,$E1,$31,$11,$01,$E1
-        $80,$80,$88,$8C,$87,$80,$80,$FF
-        $31,$11,$11,$31,$E1,$01,$01,$FF
-    `
-
+    drawFont(c, `Chaos Mobile Test`, 0, 176)
     for (let i=0 ; i<wizard_sprites.length ; i++) {
         c.drawImage(shiftImage(wizard_sprites[i], Object.values(COLOR)[i%7+1]) , (i+1)*16, 16)
     }
-
     for (let i=0 ; i<monster_sprites.length ; i++) {
         c.drawImage(shiftImage(monster_sprites[i], COLOR.white) , (i%16)*16, 32+(Math.floor(i/16)*16))
     }
 
-    function drawUnit(unit, frame, x, y) {
-        const [_x, _y] = [Math.floor(x*16)+8, Math.floor(y*16)+8]
-        c.fillStyle = COLOR.black
-        c.fillRect(_x, _y, 16, 16)
-        c.drawImage(shiftImage(...unit.sprite_color(unit.unit_frame(frame))), _x, _y)
-    }
-
+    // Model
     const map = new Map()
-    map.setUnit(new Unit(units["Ghost"]), 3,3)
-    map.setUnit(new Unit(units["King Cobra"]), 4,3)
-    map.setUnit(new Unit(units["Dire Wolf"]), 5,3)
-    map.setUnit(new Unit(units["Crocodile"]), 6,3)
+    map.setUnit(new Unit(unit_data["Ghost"]), 3,3)
+    map.setUnit(new Unit(unit_data["King Cobra"]), 4,3)
+    map.setUnit(new Unit(unit_data["Dire Wolf"]), 5,3)
+    map.setUnit(new Unit(unit_data["Crocodile"]), 6,3)
 
+
+    // Gfx
+    const gfx_map = new GfxMap(c, map)
+
+    // Main Loop
     let frame = 0
     function main(time) {
         const requestAnimationFrameId = requestAnimationFrame(main)
         //const _frame = Math.floor(frame/6)
         //clear()
-        for (let [position, unit] of map.dirty(frame)) {
-            drawUnit(unit, frame, ...position)
-            //drawUnit(map.getUnit(3,3,1), frame, ...map.dimension.index_to_position((frame)%150))
-        }
+        gfx_map.drawDirtyGfxUnits(frame)
         frame++
     }
     main()
 
-    drawFont(c, `Chaos Mobile Test`, 0, 176)
-
-
-    //const i = loadImage(s_cursor)
-    //c.drawImage(shiftImage(i, '#EE0'), 64, 48)
-    //c.drawImage(loadImage(s_cursor), 48, 48)
 </script>
 </body>
 </html>
