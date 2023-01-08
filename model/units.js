@@ -13,7 +13,7 @@ export class Unit {
     constructor(template, owner, status) {
         this.template = template
         this.owner = owner
-        this.status = []
+        this.status = new Set()
     }
 
     dirty(frame) {

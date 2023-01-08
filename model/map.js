@@ -1,4 +1,4 @@
-import { enumerate, Dimension } from "./core.js";
+import { enumerate, Dimension } from "../core.js";
 
 
 export class Map {

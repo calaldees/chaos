@@ -1,4 +1,4 @@
-import { loadImages } from './image_decode.js'
+import { loadImages } from '../gfx/image_decode.js'
 import { sprite_data } from './sprite_data.js'
 
 export const wizard_sprites = [...loadImages(sprite_data.wizards)]

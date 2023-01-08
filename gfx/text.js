@@ -1,8 +1,8 @@
-import {enumerate} from './core.js'
+import {enumerate} from '../core.js'
 
 import {cleanHexString, hexToBytes, bytesToMono8x8ImageDataChunks} from './image_decode.js'
 
-import {sprite_data} from './sprite_data.js'
+import {sprite_data} from '../data/sprite_data.js'
 
 export function imageDataToImageBitmap(topImageData, bottomImageData) {
     const offscreen = new OffscreenCanvas(8, 16)

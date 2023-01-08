@@ -12,16 +12,16 @@
 <body>
 <canvas id="canvas" width="256" height="192"></canvas>
 <script type="module">
-    import {loadImage, loadImages} from './image_decode.js'
-    import {drawBorder} from './border.js'
-    import {shiftImage, COLOR} from './color.js'
-    import {drawFont, fontImageData} from './text.js'
-    import {monster_sprites, wizard_sprites} from './sprites.js'
+    import {loadImage, loadImages} from './gfx/image_decode.js'
+    import {drawBorder} from './gfx/border.js'
+    import {shiftImage, COLOR} from './gfx/color.js'
+    import {drawFont, fontImageData} from './gfx/text.js'
 
-    import {Unit} from './units.js'
-    import {units} from './unit_data.js'
+    import {monster_sprites, wizard_sprites} from './data/sprites.js'
+    import {units} from './data/unit_data.js'
 
-    import {Map} from './map.js'
+    import {Unit} from './model/units.js'
+    import {Map} from './model/map.js'
 
 
     const canvas = document.getElementById('canvas')
@@ -30,8 +30,13 @@
     const w = canvas.width
     const h = canvas.height
 
-    c.fillStyle = COLOR.black
-    c.fillRect(0, 0, w, h)
+    function clear() {
+        c.fillStyle = COLOR.black
+        c.fillRect(0, 0, w, h)
+    }
+    clear()
+
+
 
     drawBorder(c,COLOR.blue,0,0,w,h-16)
 
@@ -46,9 +51,9 @@
         c.drawImage(shiftImage(wizard_sprites[i], Object.values(COLOR)[i%7+1]) , (i+1)*16, 16)
     }
 
-    //for (let i=0 ; i<monster_sprites.length ; i++) {
-    //    c.drawImage(shiftImage(monster_sprites[i], COLOR.white) , (i%16)*16, 32+(Math.floor(i/16)*16))
-    //}
+    for (let i=0 ; i<monster_sprites.length ; i++) {
+        c.drawImage(shiftImage(monster_sprites[i], COLOR.white) , (i%16)*16, 32+(Math.floor(i/16)*16))
+    }
 
     function drawUnit(unit, frame, x, y) {
         const [_x, _y] = [Math.floor(x*16)+8, Math.floor(y*16)+8]
@@ -60,11 +65,14 @@
     const map = new Map()
     map.setUnit(new Unit(units["Ghost"]), 3,3)
     map.setUnit(new Unit(units["King Cobra"]), 4,3)
+    map.setUnit(new Unit(units["Dire Wolf"]), 5,3)
+    map.setUnit(new Unit(units["Crocodile"]), 6,3)
 
     let frame = 0
     function main(time) {
         const requestAnimationFrameId = requestAnimationFrame(main)
         //const _frame = Math.floor(frame/6)
+        //clear()
         for (let [position, unit] of map.dirty(frame)) {
             drawUnit(unit, frame, ...position)
             //drawUnit(map.getUnit(3,3,1), frame, ...map.dimension.index_to_position((frame)%150))
