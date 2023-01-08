@@ -43,6 +43,35 @@ export const unit_data = {
         },
         "status": [],
     },
+    "Faun": {
+        "name": "Faun",
+        "attackType": "stabbed",
+        "properties": {
+            "mov": 1,
+            "com": 3,
+            "rcm": 0,
+            "rng": 0,
+            "def": 2,
+            "mnv": 8,
+            "res": 7
+        },
+        "status": [],
+    },
+    "Vampire": {
+        "name": "Vampire",
+        "attackType": "savaged",
+        "properties": {
+            "mov": 4,
+            "com": 6,
+            "rcm": 0,
+            "rng": 0,
+            "def": 8,
+            "mnv": 5,
+            "res": 6
+        },
+        "status": ["undead", "trans", "flying", "noCorpse"],
+    },
+
 
     "Ghost": {
         "name": "Ghost",

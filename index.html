@@ -54,10 +54,14 @@
     map.setUnit(new Unit(unit_data["King Cobra"]), 4,3)
     map.setUnit(new Unit(unit_data["Dire Wolf"]), 5,3)
     map.setUnit(new Unit(unit_data["Crocodile"]), 6,3)
+    map.setUnit(new Unit(unit_data["Faun"]), 7,3)
+    map.setUnit(new Unit(unit_data["Vampire"]), 8,3)
 
 
     // Gfx
     const gfx_map = new GfxMap(c, map)
+
+    gfx_map.draw()
 
     // Main Loop
     let frame = 0

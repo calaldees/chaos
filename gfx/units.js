@@ -26,7 +26,7 @@ const unit_gfx_data = {
     "Crocodile": {
         "animFrames": [0, 1, 2, 1],
         "animColors": [COLOR.green],
-        "animSpeed": 30,  //?
+        "animSpeed": 34,  //?
         "corpseFrame": monster_sprites[28],
         "animSprites": monster_sprites.slice(23,26),
     },
@@ -36,6 +36,20 @@ const unit_gfx_data = {
         "animSpeed": 32,
         "animSprites": monster_sprites.slice(79,84),
     },
+    "Faun": {
+        "animFrames": [0, 1, 2, 1],
+        "animColors": [COLOR.white],
+        "animSpeed": 40, //?
+        "corpseFrame": monster_sprites[40],
+        "animSprites": monster_sprites.slice(35,38),
+    },
+    "Vampire": {
+        "animFrames": [0, 1, 2, 1],
+        "animColors": [COLOR.red],
+        "animSpeed": 10, //?
+        "corpseFrame": monster_sprites[34],
+        "animSprites": monster_sprites.slice(31,34),
+    }
 }
 
 
