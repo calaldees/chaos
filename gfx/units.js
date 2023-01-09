@@ -16,19 +16,60 @@ const unit_gfx_data = {
         "corpseFrame": monster_sprites[8],
         "animSprites": monster_sprites.slice(1,4),
     },
+    "Bat": {
+        "animFrames": [0, 1, 2, 1],
+        "animColors": [COLOR.white_bright],
+        "animSpeed": 20, //?
+        "corpseFrame": monster_sprites[4],
+        "animSprites": monster_sprites.slice(5,8),
+    },
+    "Gooey Blob": {
+        "animFrames": [0, 1, 2, 1],
+        "animColors": [COLOR.green_bright],
+        "animSpeed": 18, //?
+        "corpseFrame": monster_sprites[12], // no-corpse?
+        "animSprites": monster_sprites.slice(9,12),
+    },
     "Dire Wolf": {
         "animFrames": [0, 1, 2, 1],
-        "animColors": [COLOR.white],
+        "animColors": [COLOR.yellow_bright],
         "animSpeed": 30,  //?
         "corpseFrame": monster_sprites[17],
         "animSprites": monster_sprites.slice(13,16),
     },
+    "Spectre": {
+        "animFrames": [0, 0, 0, 0],
+        "animColors": [COLOR.white_bright, COLOR.cyan_bright, COLOR.magenta_bright, COLOR.blue_bright],
+        "animSpeed": 10,  //?
+        "corpseFrame": monster_sprites[18], // no-corpse?
+        "animSprites": monster_sprites.slice(17,18),
+    },
+    "Goblin": {
+        "animFrames": [0, 1, 2, 1],
+        "animSpeed": 30, //?
+        "animColors": [COLOR.magenta_bright],
+        "corpseFrame": monster_sprites[22],
+        "animSprites": monster_sprites.slice(19,22),
+    },
     "Crocodile": {
         "animFrames": [0, 1, 2, 1],
-        "animColors": [COLOR.green],
+        "animColors": [COLOR.green], // original was light green
         "animSpeed": 34,  //?
         "corpseFrame": monster_sprites[28],
         "animSprites": monster_sprites.slice(23,26),
+    },
+    "Green Dragon": {
+        "animFrames": [0, 1, 2, 1],
+        "animColors": [COLOR.green_bright],
+        "animSpeed": 31,  //?
+        "corpseFrame": monster_sprites[32],
+        "animSprites": monster_sprites.slice(27,31),
+    },
+    "Magic Fire": {
+        "animFrames": [0, 3, 2, 1],
+        "animColors": [COLOR.yellow_bright, COLOR.red_bright, COLOR.yellow],
+        "animSpeed": 16,
+        "animSprites": monster_sprites.slice(63,67),
     },
     "Ghost": {
         "animFrames": [0, 1, 2, 3],
@@ -49,7 +90,14 @@ const unit_gfx_data = {
         "animSpeed": 10, //?
         "corpseFrame": monster_sprites[34],
         "animSprites": monster_sprites.slice(31,34),
-    }
+    },
+    "Ogre": {
+        "animFrames": [0, 1, 2, 1],
+        "animSpeed": 17, //?
+        "animColors": [COLOR.red_bright],
+        "corpseFrame": monster_sprites[102], // no-corpse?
+        "animSprites": monster_sprites.slice(98,102),
+    },
 }
 
 
@@ -62,16 +110,16 @@ class GfxUnit {
         return (frame % this.template.animSpeed) == 0
     }
 
-    animation_frame(frame) {
+    _animation_frame(frame) {
         return Math.floor(frame / this.template.animSpeed)
     }
-    unit_frame(frame) {
-        return this.animation_frame(frame) % this.template.animFrames.length
+    _unit_frame(frame) {
+        return this._animation_frame(frame) % this.template.animFrames.length
     }
 
-    sprite_color(unit_frame) {
-        const sprite = this.template.animSprites[this.template.animFrames[unit_frame]]
-        const color = this.template.animColors[unit_frame % this.template.animColors.length]
+    sprite_color(frame) {
+        const sprite = this.template.animSprites[this.template.animFrames[this._unit_frame(frame)]]
+        const color  = this.template.animColors[this._animation_frame(frame) % this.template.animColors.length]
         return [sprite, color]
     }
 }

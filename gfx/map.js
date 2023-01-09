@@ -12,8 +12,7 @@ export class GfxMap {
     * _indexed_gfx_units() {
         for (let [i, unit] of enumerate(this.map_model.data)) {
             if (!unit) {continue}
-            const gfx_unit = gfx_units[unit.template.name]  // lookup graphics for this unit.name
-            yield [i, gfx_unit]
+            yield [i, gfx_units[unit.template.name], unit]
         }
     }
 
@@ -24,22 +23,23 @@ export class GfxMap {
     // Dirty Animation ---------------------------------------------------------
 
     * _dirtyGfxUnits(frame) {
-        for (let [i, gfx_unit] of this._indexed_gfx_units()) {
-            if (gfx_unit.isDirty(frame)) {
+        for (let [i, gfx_unit, unit] of this._indexed_gfx_units()) {
+            if (gfx_unit.isDirty(frame)) {  // TODO unit not dead?
                 yield [i, gfx_unit]
             }
         }
     }
 
-    _drawGfxUnit(gfx_unit, frame, i) {  // TODO: refactor _indexed_gfx_units for this
+    _drawGfxUnit(i, gfx_unit, frame) {  // TODO: refactor _indexed_gfx_units for this
         const [_x, _y] = [...this.map_model.dimension.index_to_position(i)].map(_=>Math.floor(_*16)+8)
         this.c.fillStyle = COLOR.black; this.c.fillRect(_x, _y, 16, 16);
-        this.c.drawImage(shiftImage(...gfx_unit.sprite_color(gfx_unit.unit_frame(frame))), _x, _y)
+        this.c.drawImage(shiftImage(...gfx_unit.sprite_color(frame)), _x, _y)
     }
 
     drawDirtyGfxUnits(frame) {
         for (let [i, gfx_unit] of this._dirtyGfxUnits(frame)) {
-            this._drawGfxUnit(gfx_unit, frame, i)
+            this._drawGfxUnit(i, gfx_unit, frame)
         }
     }
+
 }
