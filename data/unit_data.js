@@ -1,3 +1,4 @@
+// https://github.com/lewster32/archaos/blob/main/assets/data/classicunits.json
 
 export const unit_data = {
     "King Cobra": {
@@ -155,6 +156,87 @@ export const unit_data = {
             "res": 6
         },
         "status": ["undead", "trans", "flying", "noCorpse"],
+    },
+    "Lion": {
+        "name": "Lion",
+        "attackType": "mauled",
+        "properties": {
+            "mov": 4,
+            "com": 6,
+            "rcm": 0,
+            "rng": 0,
+            "def": 4,
+            "mnv": 3,
+            "res": 8
+        },
+        "status": [],
+    },
+    "Gryphon": {
+        "name": "Gryphon",
+        "attackType": "clawed",
+        "properties": {
+            "mov": 5,
+            "com": 3,
+            "rcm": 0,
+            "rng": 0,
+            "def": 5,
+            "mnv": 6,
+            "res": 5
+        },
+        "status": ["mount", "flying"],
+    },
+    "Elf": {
+        "name": "Elf",
+        "attackType": "hit",
+        "rangedType": "shot",
+        "projectileType": "arrow",
+        "properties": {
+            "mov": 1,
+            "com": 1,
+            "rcm": 2,
+            "rng": 6,
+            "def": 2,
+            "mnv": 7,
+            "res": 5
+        },
+        "status": [],
+    },
+
+
+
+
+
+    "Pegasus": {
+        "name": "Pegasus",
+        "attackType": "kicked",
+        "properties": {
+            "mov": 5,
+            "com": 2,
+            "rcm": 0,
+            "rng": 0,
+            "def": 4,
+            "mnv": 7,
+            "res": 6
+        },
+        "status": ["mount", "flying"],
+    },
+
+
+    "Manticore": {
+        "name": "Manticore",
+        "attackType": "bit",
+        "rangedType": "stung",
+        "projectileType": "arrow",
+        "properties": {
+            "mov": 5,
+            "com": 3,
+            "rcm": 1,
+            "rng": 3,
+            "def": 6,
+            "mnv": 8,
+            "res": 6
+        },
+        "status": ["mount", "flying"],
     },
 
 

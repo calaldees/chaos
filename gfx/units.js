@@ -1,7 +1,7 @@
 //units?
 
 // https://zxnet.co.uk/spectrum/chaos/asm/E440.html
-// https://github.com/lewster32/archaos/blob/main/assets/data/classicunits.json
+
 
 import { COLOR } from './color.js'
 
@@ -91,6 +91,35 @@ const unit_gfx_data = {
         "corpseFrame": monster_sprites[34],
         "animSprites": monster_sprites.slice(31,34),
     },
+    "Lion": {
+        "animFrames": [0, 1, 2, 1],
+        "animSpeed": 27,  //?
+        "animColors": [COLOR.yellow_bright],
+        "corpseFrame": monster_sprites[44],
+        "animSprites": monster_sprites.slice(39,42),
+    },
+    "Gryphon": {
+        "animFrames": [0, 1, 2, 1],
+        "animSpeed": 27,  //?
+        "animColors": [COLOR.white],
+        "corpseFrame": monster_sprites[46],
+        "animSprites": monster_sprites.slice(43,46),
+    },
+    "Elf": {
+        "animFrames": [0, 1, 2, 3, 0],
+        "animSpeed": 25,
+        "animColors": [COLOR.green_bright],
+        "corpseFrame": monster_sprites[50],
+        "animSprites": monster_sprites.slice(47,51),
+    },
+    "Manticore": {
+        "animFrames": [0, 1, 2, 1],
+        "animSpeed": 26,  //?
+        "animColors": [COLOR.yellow_bright],
+        "corpseFrame": monster_sprites[72],
+        "animSprites": monster_sprites.slice(67,71),
+    },
+
     "Ogre": {
         "animFrames": [0, 1, 2, 1],
         "animSpeed": 17, //?
