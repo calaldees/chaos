@@ -71,12 +71,6 @@ const unit_gfx_data = {
         "animSpeed": 16,
         "animSprites": monster_sprites.slice(63,67),
     },
-    "Ghost": {
-        "animFrames": [0, 1, 2, 3],
-        "animColors": [COLOR.cyan, COLOR.cyan_bright],
-        "animSpeed": 32,
-        "animSprites": monster_sprites.slice(79,84),
-    },
     "Faun": {
         "animFrames": [0, 1, 2, 1],
         "animColors": [COLOR.white],
@@ -112,6 +106,27 @@ const unit_gfx_data = {
         "corpseFrame": monster_sprites[50],
         "animSprites": monster_sprites.slice(47,51),
     },
+    "Horse": {
+        "animFrames": [0, 1, 2, 1],
+        "animSpeed": 23, //?
+        "animColors": [COLOR.yellow],
+        "corpseFrame": monster_sprites[55],
+        "animSprites": monster_sprites.slice(52,55),
+    },
+    "Orc": {
+        "animFrames": [0, 1, 2, 1],
+        "animSpeed": 23, //?
+        "animColors": [COLOR.cyan_bright],
+        "corpseFrame": monster_sprites[58],
+        "animSprites": monster_sprites.slice(56,59),
+    },
+    "Red Dragon": {
+        "animFrames": [0, 1, 2, 1],
+        "animSpeed": 32, // ?
+        "animColors": [COLOR.red_bright],
+        "corpseFrame": monster_sprites[63],
+        "animSprites": monster_sprites.slice(60,63),
+    },
     "Manticore": {
         "animFrames": [0, 1, 2, 1],
         "animSpeed": 26,  //?
@@ -119,13 +134,151 @@ const unit_gfx_data = {
         "corpseFrame": monster_sprites[72],
         "animSprites": monster_sprites.slice(67,71),
     },
-
+    "Troll": {
+        "animFrames": [0, 1, 2, 1],
+        "animSpeed": 54, // ?
+        "animColors": [COLOR.green],
+        "corpseFrame": monster_sprites[74],
+        "animSprites": monster_sprites.slice(71,74),
+    },
+    "Unicorn": {
+        "animFrames": [0, 1, 2, 1],
+        "animSpeed": 33, // ?
+        "animColors": [COLOR.cyan_bright],
+        "corpseFrame": monster_sprites[78],
+        "animSprites": monster_sprites.slice(75,78),
+    },
+    "Ghost": {
+        "animFrames": [0, 1, 2, 3],
+        "animColors": [COLOR.cyan, COLOR.cyan_bright],
+        "animSpeed": 32,
+        "animSprites": monster_sprites.slice(79,84),
+    },
+    "Wraith": {
+        "animFrames": [0, 1, 3, 2],
+        "animSpeed": 61, //?
+        "animColors": [COLOR.cyan_bright],
+        "animSprites": monster_sprites.slice(83,87),
+    },
+    "Bear": {
+        "animFrames": [0, 1, 2, 1],
+        "animSpeed": 33, // ?
+        "animColors": [COLOR.red],
+        "corpseFrame": monster_sprites[92],
+        "animSprites": monster_sprites.slice(87,90),
+    },
+    "Gorilla": {
+        "animFrames": [0, 1, 2, 1],
+        "animSpeed": 25, // ?
+        "animColors": [COLOR.yellow],
+        "corpseFrame": monster_sprites[95],
+        "animSprites": monster_sprites.slice(91,95),
+    },
+    "Skeleton": {
+        "animFrames": [0, 1, 2, 1],
+        "animSpeed": 24, // ?
+        "animColors": [COLOR.white_bright],
+        "corpseFrame": monster_sprites[98],
+        "animSprites": monster_sprites.slice(95,98),
+    },
     "Ogre": {
         "animFrames": [0, 1, 2, 1],
         "animSpeed": 17, //?
         "animColors": [COLOR.red_bright],
-        "corpseFrame": monster_sprites[102], // no-corpse?
+        "corpseFrame": monster_sprites[102],
         "animSprites": monster_sprites.slice(98,102),
+    },
+    "Zombie": {
+        "animFrames": [3,0,1,2],
+        "animSpeed": 30, //?
+        "animColors": [COLOR.cyan],
+        "animSprites": monster_sprites.slice(102,106),
+    },
+    "Harpy": {
+        "animFrames": [0, 1, 2, 1],
+        "animSpeed": 17, //?
+        "animColors": [COLOR.cyan_bright],
+        "corpseFrame": monster_sprites[109],
+        "animSprites": monster_sprites.slice(106,109),
+    },
+    "Pegasus": {
+        "animFrames": [0, 1, 2, 1],
+        "animSpeed": 18, //?
+        "animColors": [COLOR.white_bright],
+        "corpseFrame": monster_sprites[112],
+        "animSprites": monster_sprites.slice(110,113),
+    },
+    "Eagle": {
+        "animFrames": [0, 1, 2, 1],
+        "animSpeed": 19, //?
+        "animColors": [COLOR.yellow_bright],
+        "corpseFrame": monster_sprites[117],
+        "animSprites": monster_sprites.slice(114,117),
+    },
+    "Hydra": {
+        "animFrames": [0, 1, 2, 1],
+        "animSpeed": 22, //?
+        "animColors": [COLOR.green_bright],
+        "corpseFrame": monster_sprites[121],
+        "animSprites": monster_sprites.slice(118,121),
+    },
+    "Giant Rat": {
+        "animFrames": [0, 1, 2, 1],
+        "animSpeed": 29, //?
+        "animColors": [COLOR.white],
+        "corpseFrame": monster_sprites[125],
+        "animSprites": monster_sprites.slice(122,125),
+    },
+    "Centaur": {
+        "animFrames": [0, 1, 2, 1],
+        "animSpeed": 29, //?
+        "animColors": [COLOR.yellow],
+        "corpseFrame": monster_sprites[128],
+        "animSprites": monster_sprites.slice(126,129),
+    },
+    "Giant": {
+        "animFrames": [0, 1, 2, 1],
+        "animSpeed": 33, //?
+        "animColors": [COLOR.cyan],
+        "corpseFrame": monster_sprites[133],
+        "animSprites": monster_sprites.slice(130,133),
+    },
+    "Golden Dragon": {
+        "animFrames": [0, 1, 2, 1],
+        "animSpeed": 34, //?
+        "animColors": [COLOR.yellow_bright],
+        "corpseFrame": monster_sprites[136],
+        "animSprites": monster_sprites.slice(134,137),
+    },
+    "Dark Citadel": {
+        "animFrames": [0],
+        "animSpeed": 60,  //?
+        "animColors": [COLOR.magenta, COLOR.magenta_bright],
+        "animSprites": monster_sprites.slice(138,139),
+    },
+    "Magic Castle": {
+        "animFrames": [0],
+        "animSpeed": 30,  //?
+        "animColors": [COLOR.cyan, COLOR.cyan_bright],
+        "animSprites": monster_sprites.slice(139,140),
+    },
+    "Shadow Wood": {
+        "animFrames": [0],
+        "animSpeed": 27,  //?
+        "animColors": [COLOR.cyan, COLOR.cyan_bright],
+        "animSprites": monster_sprites.slice(140,141),
+    },
+    "Magic Wood": {
+        "animFrames": [0],
+        "animSpeed": 21,  //?
+        "animColors": [COLOR.green, COLOR.green_bright, COLOR.yellow, COLOR.yellow_bright],
+        "animSprites": monster_sprites.slice(141,142),
+    },
+    "Wall": {
+        "animFrames": [0],
+        "animSpeed": 300,  //?
+        "animColors": [COLOR.yellow_bright],
+        "animSprites": monster_sprites.slice(142,143),
     },
 }
 
