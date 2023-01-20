@@ -20,13 +20,21 @@ export const COLOR = {
     white_bright: "#FFF",
 }
 
-export function shiftImage(imageBitmap, color) {
+export function shiftImage(imageBitmap, color, flip=0) {
+    // flip bitmask - 1=flipX 2=flipY 3=flipX+flipY
     const w = imageBitmap.width
     const h = imageBitmap.height
     const o = new OffscreenCanvas(w, h)
     const c = o.getContext("2d")
 
-    c.drawImage(imageBitmap, 0, 0)
+    // flip
+    c.save();
+    c.scale(flip&1?-1:1, flip&2?-1:1);
+    c.drawImage(imageBitmap, flip&1?-w:0, flip&2?-h:0);
+    c.restore();
+    // notes for no-flip
+    //c.drawImage(imageBitmap, 0, 0)
+
     c.globalCompositeOperation = "source-in"
     c.fillStyle = color
     c.fillRect(0,0,w,h)
