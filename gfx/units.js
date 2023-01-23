@@ -276,9 +276,9 @@ const unit_gfx_data = {
     "Wall": {
         "animFrames": [0],
         "animSpeed": 300,  //?
-        "animColors": [COLOR.yellow_bright],
+        "animColors": [COLOR.red_bright],
         "animSprites": monster_sprites.slice(142,143),
-        "colorBackground": COLOR.red_bright,  // ultra special case
+        "colorBackground": COLOR.yellow_bright,  // ultra special case
     },
 }
 
