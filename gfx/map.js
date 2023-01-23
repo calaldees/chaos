@@ -3,6 +3,8 @@ import { enumerate} from '../core.js'
 import { COLOR, shiftImage } from "./color.js"
 import { gfx_units } from "./units.js"
 
+const CORPSE_FRAME = -1
+
 export class GfxMap {
     constructor(c, map_model) {
         this.c = c
@@ -17,7 +19,9 @@ export class GfxMap {
     }
 
     draw() {
-        this.drawDirtyGfxUnits(0)  // TODO? should draw corpses
+        for (let [i, gfx_unit, unit] of this._indexed_gfx_units()) {
+            this._drawGfxUnit(i, gfx_unit, unit.status.has("corpse") ? CORPSE_FRAME : 0)
+        }
     }
 
     // Dirty Animation ---------------------------------------------------------
@@ -30,16 +34,17 @@ export class GfxMap {
         }
     }
 
-    _drawGfxUnit(i, gfx_unit, frame) {  // TODO: refactor _indexed_gfx_units for this
-        const [_x, _y] = [...this.map_model.dimension.index_to_position(i)].map(_=>Math.floor(_*16)+8)
-        this.c.fillStyle = COLOR.black; this.c.fillRect(_x, _y, 16, 16);
-        this.c.drawImage(shiftImage(...gfx_unit.sprite_color(frame)), _x, _y)
-    }
-
     drawDirtyGfxUnits(frame) {
         for (let [i, gfx_unit] of this._dirtyGfxUnits(frame)) {
             this._drawGfxUnit(i, gfx_unit, frame)
         }
+    }
+
+    _drawGfxUnit(i, gfx_unit, frame=0) {  // TODO: refactor _indexed_gfx_units for this
+        const [_x, _y] = [...this.map_model.dimension.index_to_position(i)].map(j=>Math.floor(j*16)+8)
+        this.c.fillStyle = gfx_unit.color_background()
+        this.c.fillRect(_x, _y, 16, 16)
+        this.c.drawImage(shiftImage(...gfx_unit[frame==CORPSE_FRAME?'sprite_and_color_corpse':'sprite_and_color'](frame)), _x, _y)
     }
 
 }

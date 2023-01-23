@@ -20,6 +20,7 @@ export const COLOR = {
     white_bright: "#FFF",
 }
 
+// TODO - move to somewhere - this does more than color now
 export function shiftImage(imageBitmap, color, flip=0) {
     // flip bitmask - 1=flipX 2=flipY 3=flipX+flipY
     const w = imageBitmap.width

@@ -34,7 +34,7 @@ const unit_gfx_data = {
         "animFrames": [0, 1, 2, 1],
         "animColors": [COLOR.yellow_bright],
         "animSpeed": 30,  //?
-        "corpseFrame": monster_sprites[17],
+        "corpseFrame": monster_sprites[16],
         "animSprites": monster_sprites.slice(13,16),
     },
     "Spectre": {
@@ -55,15 +55,15 @@ const unit_gfx_data = {
         "animFrames": [0, 1, 2, 1],
         "animColors": [COLOR.green], // original was light green
         "animSpeed": 34,  //?
-        "corpseFrame": monster_sprites[28],
+        "corpseFrame": monster_sprites[26],
         "animSprites": monster_sprites.slice(23,26),
     },
     "Green Dragon": {
         "animFrames": [0, 1, 2, 1],
         "animColors": [COLOR.green_bright],
         "animSpeed": 31,  //?
-        "corpseFrame": monster_sprites[32],
-        "animSprites": monster_sprites.slice(27,31),
+        "corpseFrame": monster_sprites[30],
+        "animSprites": monster_sprites.slice(27,30),
     },
     "Magic Fire": {
         "animFrames": [0, 3, 2, 1],
@@ -75,7 +75,7 @@ const unit_gfx_data = {
         "animFrames": [0, 1, 2, 1],
         "animColors": [COLOR.white],
         "animSpeed": 40, //?
-        "corpseFrame": monster_sprites[40],
+        "corpseFrame": monster_sprites[38],
         "animSprites": monster_sprites.slice(35,38),
     },
     "Vampire": {
@@ -89,7 +89,7 @@ const unit_gfx_data = {
         "animFrames": [0, 1, 2, 1],
         "animSpeed": 27,  //?
         "animColors": [COLOR.yellow_bright],
-        "corpseFrame": monster_sprites[44],
+        "corpseFrame": monster_sprites[42],
         "animSprites": monster_sprites.slice(39,42),
     },
     "Gryphon": {
@@ -103,7 +103,7 @@ const unit_gfx_data = {
         "animFrames": [0, 1, 2, 3, 0],
         "animSpeed": 25,
         "animColors": [COLOR.green_bright],
-        "corpseFrame": monster_sprites[50],
+        "corpseFrame": monster_sprites[51],
         "animSprites": monster_sprites.slice(47,51),
     },
     "Horse": {
@@ -117,22 +117,22 @@ const unit_gfx_data = {
         "animFrames": [0, 1, 2, 1],
         "animSpeed": 23, //?
         "animColors": [COLOR.cyan_bright],
-        "corpseFrame": monster_sprites[58],
+        "corpseFrame": monster_sprites[59],
         "animSprites": monster_sprites.slice(56,59),
     },
     "Red Dragon": {
         "animFrames": [0, 1, 2, 1],
         "animSpeed": 32, // ?
         "animColors": [COLOR.red_bright],
-        "corpseFrame": monster_sprites[63],
+        "corpseFrame": monster_sprites[30],
         "animSprites": monster_sprites.slice(60,63),
     },
     "Manticore": {
         "animFrames": [0, 1, 2, 1],
         "animSpeed": 26,  //?
         "animColors": [COLOR.yellow_bright],
-        "corpseFrame": monster_sprites[72],
-        "animSprites": monster_sprites.slice(67,71),
+        "corpseFrame": monster_sprites[70],
+        "animSprites": monster_sprites.slice(67,70),
     },
     "Troll": {
         "animFrames": [0, 1, 2, 1],
@@ -164,29 +164,28 @@ const unit_gfx_data = {
         "animFrames": [0, 1, 2, 1],
         "animSpeed": 33, // ?
         "animColors": [COLOR.red],
-        "corpseFrame": monster_sprites[92],
+        "corpseFrame": monster_sprites[90],
         "animSprites": monster_sprites.slice(87,90),
     },
     "Gorilla": {
         "animFrames": [0, 1, 2, 1],
         "animSpeed": 25, // ?
         "animColors": [COLOR.yellow],
-        "corpseFrame": monster_sprites[95],
-        "animSprites": monster_sprites.slice(91,95),
+        "corpseFrame": monster_sprites[94],
+        "animSprites": monster_sprites.slice(91,94),
     },
     "Skeleton": {
         "animFrames": [0, 1, 2, 1],
         "animSpeed": 24, // ?
         "animColors": [COLOR.white_bright],
-        "corpseFrame": monster_sprites[98],
         "animSprites": monster_sprites.slice(95,98),
     },
     "Ogre": {
         "animFrames": [0, 1, 2, 1],
         "animSpeed": 17, //?
         "animColors": [COLOR.red_bright],
-        "corpseFrame": monster_sprites[102],
-        "animSprites": monster_sprites.slice(98,102),
+        "corpseFrame": monster_sprites[101],
+        "animSprites": monster_sprites.slice(98,101),
     },
     "Zombie": {
         "animFrames": [3,0,1,2],
@@ -205,7 +204,7 @@ const unit_gfx_data = {
         "animFrames": [0, 1, 2, 1],
         "animSpeed": 18, //?
         "animColors": [COLOR.white_bright],
-        "corpseFrame": monster_sprites[112],
+        "corpseFrame": monster_sprites[113],
         "animSprites": monster_sprites.slice(110,113),
     },
     "Eagle": {
@@ -233,7 +232,7 @@ const unit_gfx_data = {
         "animFrames": [0, 1, 2, 1],
         "animSpeed": 29, //?
         "animColors": [COLOR.yellow],
-        "corpseFrame": monster_sprites[128],
+        "corpseFrame": monster_sprites[129],
         "animSprites": monster_sprites.slice(126,129),
     },
     "Giant": {
@@ -247,7 +246,7 @@ const unit_gfx_data = {
         "animFrames": [0, 1, 2, 1],
         "animSpeed": 34, //?
         "animColors": [COLOR.yellow_bright],
-        "corpseFrame": monster_sprites[136],
+        "corpseFrame": monster_sprites[137],
         "animSprites": monster_sprites.slice(134,137),
     },
     "Dark Citadel": {
@@ -279,6 +278,7 @@ const unit_gfx_data = {
         "animSpeed": 300,  //?
         "animColors": [COLOR.yellow_bright],
         "animSprites": monster_sprites.slice(142,143),
+        "colorBackground": COLOR.red_bright,  // ultra special case
     },
 }
 
@@ -299,11 +299,21 @@ class GfxUnit {
         return this._animation_frame(frame) % this.template.animFrames.length
     }
 
-    sprite_color(frame) {
+    sprite_and_color(frame) {
         const sprite = this.template.animSprites[this.template.animFrames[this._unit_frame(frame)]]
         const color  = this.template.animColors[this._animation_frame(frame) % this.template.animColors.length]
         return [sprite, color]
     }
+
+    sprite_and_color_corpse() {
+        //if (frame<0 && this.template.corpseFrame) {
+        return [this.template.corpseFrame || monster_sprites[142], this.template.animColors[0]]  // currently 142 is a placeholder error wall .. I want to create my own error graphic
+    }
+
+    color_background() {
+        return this.template.colorBackground || COLOR.black
+    }
+
 }
 
 export const gfx_units = Object.fromEntries(Object.entries(unit_gfx_data)

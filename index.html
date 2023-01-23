@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <link id="favicon" rel="shortcut icon" type="image/png" href="data:image/png;base64,....==" />
-    <title>Chaos: Image Test</title>
+    <title>Chaos</title>
     <style>
         html, body {margin: 0; padding: 0; height: 100%; overflow: hidden;}
         canvas {image-rendering: pixelated; object-fit: contain; width:100%; max-width: 100%; height: 100%; max-height: 100%;}
@@ -44,9 +44,9 @@
     for (let i=0 ; i<wizard_sprites.length ; i++) {
         c.drawImage(shiftImage(wizard_sprites[i], Object.values(COLOR)[i%7+1]) , (i+1)*16, 16)
     }
-    for (let i=0 ; i<monster_sprites.length ; i++) {
-        c.drawImage(shiftImage(monster_sprites[i], COLOR.white) , (i%16)*16, 32+(Math.floor(i/16)*16))
-    }
+    //for (let i=0 ; i<monster_sprites.length ; i++) {
+    //    c.drawImage(shiftImage(monster_sprites[i], COLOR.white) , (i%16)*16, 32+(Math.floor(i/16)*16))
+    //}
 
     // Model
     const map = new Map()
@@ -64,8 +64,8 @@
     map.setUnit(new Unit(unit_data["Magic Fire"]), 14,1)
     map.setUnit(new Unit(unit_data["Lion"]), 0,2)
     map.setUnit(new Unit(unit_data["Gryphon"]), 1,2)
-    map.setUnit(new Unit(unit_data["Elf"]), 3,2)
     map.setUnit(new Unit(unit_data["Manticore"]), 2,2)
+    map.setUnit(new Unit(unit_data["Elf"]), 3,2)
     map.setUnit(new Unit(unit_data["Horse"]), 4,2)
     map.setUnit(new Unit(unit_data["Orc"]), 5,2)
     map.setUnit(new Unit(unit_data["Red Dragon"]), 6,2)
@@ -90,8 +90,8 @@
     map.setUnit(new Unit(unit_data["Shadow Wood"]), 10,3)
     map.setUnit(new Unit(unit_data["Magic Wood"]), 11,3)
     map.setUnit(new Unit(unit_data["Wall"]), 12,3)
-    
-    
+
+    //map.getUnit(4,1).status.add("corpse")
 
 
     // Gfx
