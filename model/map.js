@@ -3,13 +3,17 @@ import { enumerate, Dimension } from "../core.js";
 
 export class Map {
     constructor() {
-        this.dimension = new Dimension(15, 10, 1)
-        this.data = new Array(16*12)
+        this.dimension = new Dimension(15, 10)
+        this.data = new Array(this.dimension.size)
     }
-    setUnit(unit, x, y) {
-        this.data[this.dimension.position_to_index(x,y,1)] = unit
+    setUnit(unit, i) {
+        this.data[i] = unit
+        unit.setPos(i)
     }
-    getUnit(x, y) {
-        return this.data[this.dimension.position_to_index(x,y,1)]
+    getUnit(i) {
+        return this.data[i]
+    }
+    moveUnit(i1, i2) {
+
     }
 }

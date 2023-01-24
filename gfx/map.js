@@ -19,32 +19,35 @@ export class GfxMap {
     }
 
     draw() {
-        for (let [i, gfx_unit, unit] of this._indexed_gfx_units()) {
-            this._drawGfxUnit(i, gfx_unit, unit.status.has("corpse") ? CORPSE_FRAME : 0)
+        for (let _ of this._indexed_gfx_units()) {
+            this._drawGfxUnit(..._)
         }
     }
 
     // Dirty Animation ---------------------------------------------------------
 
     * _dirtyGfxUnits(frame) {
-        for (let [i, gfx_unit, unit] of this._indexed_gfx_units()) {
-            if (gfx_unit.isDirty(frame)) {  // TODO unit not dead?
-                yield [i, gfx_unit]
+        for (let _ of this._indexed_gfx_units()) {
+            const [i, gfx_unit, unit] = _
+            if (gfx_unit.isDirty(frame) && !unit.status.has("corpse")) {
+                yield _
             }
         }
     }
 
     drawDirtyGfxUnits(frame) {
-        for (let [i, gfx_unit] of this._dirtyGfxUnits(frame)) {
-            this._drawGfxUnit(i, gfx_unit, frame)
+        for (let _ of this._dirtyGfxUnits(frame)) {
+            this._drawGfxUnit(..._, frame)
         }
     }
 
-    _drawGfxUnit(i, gfx_unit, frame=0) {  // TODO: refactor _indexed_gfx_units for this
+    _drawGfxUnit(i, gfx_unit, unit, frame=0) {  // TODO: refactor _indexed_gfx_units for this
+        const sprite_color = gfx_unit[unit.status.has("corpse") ? 'sprite_and_color_corpse':'sprite_and_color'](frame)
+        const image = shiftImage(...sprite_color, unit.flip)
         const [_x, _y] = [...this.map_model.dimension.index_to_position(i)].map(j=>Math.floor(j*16)+8)
         this.c.fillStyle = gfx_unit.color_background()
         this.c.fillRect(_x, _y, 16, 16)
-        this.c.drawImage(shiftImage(...gfx_unit[frame==CORPSE_FRAME?'sprite_and_color_corpse':'sprite_and_color'](frame)), _x, _y)
+        this.c.drawImage(image, _x, _y)
     }
 
 }

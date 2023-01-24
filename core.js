@@ -52,21 +52,17 @@ assertEquals([
 
 
 export class Dimension {
-    constructor(...dimensions) {
-        this.dimensions = [...dimensions];
+    constructor(width, height, depth=1) {
+        this.dimensions = [width, height, depth]
     }
 
-    get width() {return this.dimensions[0];}
-    get height() {return this.dimensions[1];}
-    get depth() {return this.dimensions[2];}
-    get size() {return this.dimensions.reduce((prev, current) => prev * current);}
+    get width() {return this.dimensions[0]}
+    get height() {return this.dimensions[1]}
+    get depth() {return this.dimensions[2]}
+    get size() {return this.dimensions.reduce((prev, current) => prev * current)}
 
-    normalise_position(...position) {
-        return [ // TODO: remove duplication? map?
-            mod(position[0], this.dimensions[0]),
-            mod(position[1], this.dimensions[1]),
-            mod(position[2], this.dimensions[2]),
-        ];
+    normalise_position(x,y,z) {
+        return [mod(x, this.width), mod(y, this.height), mod(z, this.depth)]
     }
 
     index_to_position(i) {
@@ -74,12 +70,12 @@ export class Dimension {
             mod(i, this.width),
             mod(Math.floor(i/this.width), this.height),
             Math.floor(i/(this.width * this.height)),
-        ];
+        ]
     }
 
-    position_to_index(...position) {
-        const _position = this.normalise_position(...position);
-        return (this.width * this.height * _position[2]) + (this.width * _position[1]) + _position[0];
+    position_to_index(x,y,z) {
+        const [_x,_y,_z] = this.normalise_position(x,y,z)
+        return (this.width * this.height * _z) + (this.width * _y) + _x
     }
 }
 assertEqualsObject([
