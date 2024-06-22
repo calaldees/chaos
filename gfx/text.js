@@ -27,3 +27,6 @@ export function drawFont(c, string, x, y) {
         c.drawImage(fontImageBitMaps[char], x+(i*8), y)
     }
 }
+
+// TODO: Color? - use Linux codes?
+// https://www.codeproject.com/Articles/5329247/How-to-change-text-color-in-a-Linux-terminal
