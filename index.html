@@ -5,7 +5,7 @@
     <link id="favicon" rel="shortcut icon" type="image/png" href="data:image/png;base64,....==" />
     <title>Chaos</title>
     <style>
-        html, body {margin: 0; padding: 0; height: 100%; overflow: hidden;}
+        html, body {margin: 0; padding: 0; height: 100%; overflow: hidden; background-color: black;}
         canvas {image-rendering: pixelated; object-fit: contain; width:100%; max-width: 100%; height: 100%; max-height: 100%;}
     </style>
 </head>
@@ -26,17 +26,14 @@
 
     import {GfxMap} from './gfx/map.js'
 
+    import {CanvasAnimationBase} from './gfx/animation_base.js'
+
     const canvas = document.getElementById('canvas')
     const c = canvas.getContext('2d')
 
     const w = canvas.width
     const h = canvas.height
 
-    function clear() {
-        c.fillStyle = COLOR.black
-        c.fillRect(0, 0, w, h)
-    }
-    clear()
 
 
     // Sprite tests
@@ -65,6 +62,20 @@
 
     gfx_map.draw()
 
+
+class CanvasDemo extends CanvasAnimationBase {
+    constructor() {
+        super(...arguments)
+    }
+    loop(context, frame) {
+        gfx_map.drawDirtyGfxUnits(frame)
+    }
+}
+new CanvasDemo(undefined, 30)
+
+/*
+    // ---
+
     let running = true
     let requestAnimationFrameId
 	function setRunning(_running=true) {
@@ -74,7 +85,6 @@
 			cancelAnimationFrame(requestAnimationFrameId)
 			requestAnimationFrameId = undefined
             time_start = undefined
-            frame_previous = 0
 		} else if (running && !requestAnimationFrameId) {
 			main()
 		}
@@ -105,7 +115,7 @@
         requestAnimationFrameId = requestAnimationFrame(main)  // queue render for next animation frame
     }
     setRunning()
-
+*/
 </script>
 </body>
 </html>
