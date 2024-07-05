@@ -66,13 +66,24 @@
     gfx_map.draw()
 
     // Main Loop
-    let frame = 0
+    //let frame = 0
+    const FRAMES_PER_SECOND = 30
+    let time_start
+    let frame_previous = 0
     function main(time) {
-        const requestAnimationFrameId = requestAnimationFrame(main)
+        const requestAnimationFrameId = requestAnimationFrame(main)  // queue render for next animation frame in advance
+
+        // Frame limiter (because requestAnimationFrame is system dependent)
+        time_start = time_start || time
+        const time_delta = time - time_start
+        const frame = Math.floor(time_delta/(1000/FRAMES_PER_SECOND))
+        for (let i=0 ; i<frame-frame_previous ; i++) {
+            gfx_map.drawDirtyGfxUnits(frame)
+        }
+        frame_previous = frame
+
         //const _frame = Math.floor(frame/6)
         //clear()
-        gfx_map.drawDirtyGfxUnits(frame)
-        frame++
     }
     main()
 
