@@ -34,7 +34,7 @@ class CanvasAnimationBase {
         this.frame = 0
         this.milliseconds_per_frame = 1000/fps
 
-        this.run()
+        //this.setRunning(true)  // race hazzard in starting?
     }
 
     get w() {return this.canvas.width}
@@ -46,16 +46,16 @@ class CanvasAnimationBase {
         //c.fillRect(0, 0, w, h)
     }
 
-	setRunning = (running) => {
-		this.running = running
-		console.log("running", running);
-		if (!this.running && this.requestAnimationFrameId) {
-			cancelAnimationFrame(this.requestAnimationFrameId)
-			this.requestAnimationFrameId = undefined;
-		} else if (running && !this.requestAnimationFrameId) {
-			this.run()
-		}
-	}
+    setRunning = (running) => {
+        console.log("setRunning", running)
+        this.running = running
+        if (!this.running && this.requestAnimationFrameId) {
+            cancelAnimationFrame(this.requestAnimationFrameId)
+            this.requestAnimationFrameId = undefined;
+        } else if (running && !this.requestAnimationFrameId) {
+            this.run()
+        }
+    }
 
     load_image = (name, url) => {
         const images = this.images
@@ -75,12 +75,12 @@ class CanvasAnimationBase {
         if (this.running) {this.requestAnimationFrameId = requestAnimationFrame(this.run)}
     }
     drawLine(c, x1,y1,x2,y2,color='white',lineWidth=1) {
-		c.strokeStyle = color
-		c.lineWidth = lineWidth
-		c.beginPath()
-		c.moveTo(x1, y1)
-		c.lineTo(x2, y2)
-		c.stroke()
+        c.strokeStyle = color
+        c.lineWidth = lineWidth
+        c.beginPath()
+        c.moveTo(x1, y1)
+        c.lineTo(x2, y2)
+        c.stroke()
     }
     loop(context, frame) {
         throw Exception("Not Implemented Error")

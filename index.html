@@ -28,94 +28,43 @@
 
     import {CanvasAnimationBase} from './gfx/animation_base.js'
 
-    const canvas = document.getElementById('canvas')
-    const c = canvas.getContext('2d')
 
-    const w = canvas.width
-    const h = canvas.height
-
-
-
-    // Sprite tests
-    drawBorder(c,COLOR.blue,0,0,w,h-16)
-    drawFont(c, `Chaos Mobile Test`, 0, 176)
-    for (let i=0 ; i<wizard_sprites.length ; i++) {
-        c.drawImage(shiftImage(wizard_sprites[i], Object.values(COLOR)[i%7+1]) , (i+1)*16, 16)
-    }
-    //for (let i=0 ; i<monster_sprites.length ; i++) {
-    //    c.drawImage(shiftImage(monster_sprites[i], COLOR.white) , (i%16)*16, 32+(Math.floor(i/16)*16))
-    //}
-
-
-    // Model
-    const map = new Map()
-    for (let [i, unit_name] of enumerate(Object.keys(unit_data))) {
-        map.setUnit(new Unit(unit_data[unit_name]), i)
-    }
-
-    map.getUnit(0).status.add("corpse")
-    map.getUnit(3).setPos(5) // HACK - test sprite flipping
-
-
-    // Gfx
-    const gfx_map = new GfxMap(c, map)
-
-    gfx_map.draw()
-
-
-class CanvasDemo extends CanvasAnimationBase {
+class ChaosTest extends CanvasAnimationBase {
     constructor() {
         super(...arguments)
+
+        const c = this.context
+
+        // Sprite tests
+        drawBorder(c,COLOR.blue,0,0,this.w,this.h-16)
+        drawFont(c, `Chaos Mobile Test`, 0, 176)
+        for (let i=0 ; i<wizard_sprites.length ; i++) {
+            c.drawImage(shiftImage(wizard_sprites[i], Object.values(COLOR)[i%7+1]) , (i+1)*16, 16)
+        }
+        //for (let i=0 ; i<monster_sprites.length ; i++) {
+        //    c.drawImage(shiftImage(monster_sprites[i], COLOR.white) , (i%16)*16, 32+(Math.floor(i/16)*16))
+        //}
+
+        // Model
+        const map = new Map()
+        for (let [i, unit_name] of enumerate(Object.keys(unit_data))) {
+            map.setUnit(new Unit(unit_data[unit_name]), i)
+        }
+
+        map.getUnit(0).status.add("corpse")
+        map.getUnit(3).setPos(5) // HACK - test sprite flipping
+
+        // Gfx
+        this.gfx_map = new GfxMap(c, map)
+        this.gfx_map.draw()
+
     }
     loop(context, frame) {
-        gfx_map.drawDirtyGfxUnits(frame)
+        this.gfx_map.drawDirtyGfxUnits(frame)
     }
 }
-new CanvasDemo(undefined, 30)
+new ChaosTest(undefined, 30).setRunning(true)
 
-/*
-    // ---
-
-    let running = true
-    let requestAnimationFrameId
-	function setRunning(_running=true) {
-		running = _running;
-		console.log("running", running);
-		if (!running && requestAnimationFrameId) {
-			cancelAnimationFrame(requestAnimationFrameId)
-			requestAnimationFrameId = undefined
-            time_start = undefined
-		} else if (running && !requestAnimationFrameId) {
-			main()
-		}
-	}
-    window.addEventListener("focus", () => {setRunning(true)}, false)
-	window.addEventListener("blur", () => {setRunning(false)}, false)
-
-    // Main Loop
-    //let frame = 0
-    const FRAMES_PER_SECOND = 30
-    let time_start
-    let frame_previous = 0
-    function main(time) {
-        requestAnimationFrameId = undefined
-
-        // Frame limiter (because requestAnimationFrame is system dependent - it can be 30fps, it could be 120fps, who knows)
-        time_start = time_start || time
-        const time_delta = time - time_start
-        const frame = Math.floor(time_delta/(1000/FRAMES_PER_SECOND))
-        for (let _frame=frame_previous ; _frame<frame ; _frame++) {
-            gfx_map.drawDirtyGfxUnits(_frame)
-            console.log(_frame)
-        }
-        frame_previous = frame
-
-        //const _frame = Math.floor(frame/6)
-        //clear()
-        requestAnimationFrameId = requestAnimationFrame(main)  // queue render for next animation frame
-    }
-    setRunning()
-*/
 </script>
 </body>
 </html>
