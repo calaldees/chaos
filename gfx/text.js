@@ -28,5 +28,25 @@ export function drawFont(c, string, x, y) {
     }
 }
 
+export function drawFont_color(c, string, x, y) {
+    // strip out color code and create color map to be inline with 'i'
+    for (let [i, char] of enumerate(string)) {
+        c.drawImage(fontImageBitMaps[char], x+(i*8), y)
+    }
+}
+export function word_wrap() {
+    //word wrap?
+}
+export function render_text() {
+    
+}
+
+
 // TODO: Color? - use Linux codes?
 // https://www.codeproject.com/Articles/5329247/How-to-change-text-color-in-a-Linux-terminal
+// https://stackoverflow.com/questions/4842424/list-of-ansi-color-escape-sequences
+// https://ss64.com/nt/syntax-ansi.html
+
+// "\033[31;1;4m"
+
+const ANSI_color = new RegExp("\\033\\[([0-9;])m", 'g')
