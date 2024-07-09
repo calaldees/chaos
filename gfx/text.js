@@ -49,4 +49,17 @@ export function render_text() {
 
 // "\033[31;1;4m"
 
-const ANSI_color = new RegExp("\\033\\[([0-9;])m", 'g')
+const REGEX_ansi_color = /\\033\[([0-9;]+)m/d
+function extract_ansi_colors(text) {
+    const pos_ansi = []
+    let match
+    while ((match = REGEX_ansi_color.exec(text))) {
+        const pos = match.indices[0][0]
+        const ansi_codes = match[1].split(";")
+        pos_ansi.push([pos, ansi_codes])
+        text = text.replace(match[0],"")
+    }
+    return [text, pos_ansi]
+}
+extract_ansi_colors("Bob is cool \\033[0;41;2mHello World\\033[0m")
+// TODO: unit test this shiz
