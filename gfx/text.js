@@ -1,7 +1,7 @@
-import {enumerate} from '../core.js'
+import {enumerate, assertEqualsObject, zip} from '../core.js'
 
 import {cleanHexString, hexToBytes, bytesToMono8x8ImageDataChunks} from './image_decode.js'
-
+import {COLOR, shiftImage} from './color.js'
 import {sprite_data} from '../data/sprite_data.js'
 
 export function imageDataToImageBitmap(topImageData, bottomImageData) {
@@ -28,26 +28,12 @@ export function drawFont(c, string, x, y) {
     }
 }
 
-export function drawFont_color(c, string, x, y) {
-    // strip out color code and create color map to be inline with 'i'
-    for (let [i, char] of enumerate(string)) {
-        c.drawImage(fontImageBitMaps[char], x+(i*8), y)
-    }
-}
-export function word_wrap() {
-    //word wrap?
-}
-export function render_text() {
-    
-}
 
 
-// TODO: Color? - use Linux codes?
+// Color - with ansi terminal color codes
 // https://www.codeproject.com/Articles/5329247/How-to-change-text-color-in-a-Linux-terminal
 // https://stackoverflow.com/questions/4842424/list-of-ansi-color-escape-sequences
 // https://ss64.com/nt/syntax-ansi.html
-
-// "\033[31;1;4m"
 
 const REGEX_ansi_color = /\\033\[([0-9;]+)m/d
 function extract_ansi_colors(text) {
@@ -61,5 +47,69 @@ function extract_ansi_colors(text) {
     }
     return [text, pos_ansi]
 }
-extract_ansi_colors("Bob is cool \\033[0;41;2mHello World\\033[0m")
-// TODO: unit test this shiz
+assertEqualsObject([
+    [ extract_ansi_colors("Hello\\033[0;41;2mWorld\\033[0m!"), ["HelloWorld!", [[5,["0","41","2"]],[10,["0"]]]] ],
+])
+
+const MAP_ansi_color_to_canvas_color = {
+    "0": COLOR.black,
+    "30": COLOR.black,           "40": COLOR.black,
+    "31": COLOR.red,             "41": COLOR.red,
+    "32": COLOR.green,           "42": COLOR.green,
+    "33": COLOR.yellow,          "43": COLOR.yellow,
+    "34": COLOR.blue,            "44": COLOR.blue,
+    "35": COLOR.magenta,         "45": COLOR.magenta,
+    "36": COLOR.cyan,            "46": COLOR.cyan,
+    "37": COLOR.white,           "47": COLOR.white,
+    "90": COLOR.black_bright,   "100": COLOR.black_bright,
+    "91": COLOR.red_bright,     "101": COLOR.red_bright,
+    "92": COLOR.green_bright,   "102": COLOR.green_bright,
+    "93": COLOR.yellow_bright,  "103": COLOR.yellow_bright,
+    "94": COLOR.blue_bright,    "104": COLOR.blue_bright,
+    "95": COLOR.magenta_bright, "105": COLOR.magenta_bright,
+    "96": COLOR.cyan_bright,    "106": COLOR.cyan_bright,
+    "97": COLOR.white_bright,   "107": COLOR.white_bright,
+}
+const DEFAULT_ANSI_COLORS = [COLOR.white_bright, COLOR.black]
+function* pos_ansi_to_color_lookup(text_length, pos_ansi) {
+    let [color_foreground, color_background] = DEFAULT_ANSI_COLORS
+    let pos, ansi_codes
+    function _next_pos_ansi() {[pos, ansi_codes] = pos_ansi?.length ? pos_ansi.shift() : [undefined, undefined]}
+    _next_pos_ansi()
+    for (let i=0 ; i<text_length ; i++) {
+        if (i == pos) {
+            for (let ansi_code of ansi_codes) {
+                const color = MAP_ansi_color_to_canvas_color[ansi_code]
+                // tidy this? - I feel this should be a function lookup rather than `if`
+                if (ansi_code==0) {[color_foreground, color_background]=DEFAULT_ANSI_COLORS}
+                if (ansi_code>=30 && ansi_code<=37 || ansi_code>=90 && ansi_code<=97) {color_foreground = color}
+                if (ansi_code>=40 && ansi_code<=47 || ansi_code>=100 && ansi_code<=107) {color_background = color}
+            }
+            _next_pos_ansi()
+        }
+        yield [color_foreground, color_background]
+    }
+}
+assertEqualsObject([
+    [ [...pos_ansi_to_color_lookup(1, [])], [["#FFF","#000"]]],
+    [ [...pos_ansi_to_color_lookup(3, [[1,[91,41]]])], [["#FFF","#000"],["#F00","#D00"],["#F00","#D00"]]],
+    [ [...pos_ansi_to_color_lookup(3, [[1,[91,41]],[2,[102]]])], [["#FFF","#000"],["#F00","#D00"],["#F00","#0F0"]]],
+])
+
+
+export function drawFont_color(c, string, x, y) {
+    let [text, pos_ansi] = extract_ansi_colors(string)
+    let color_lookup = [...pos_ansi_to_color_lookup(text.length, pos_ansi)]
+    for (let [i, [char, [color_foreground, color_background]]] of enumerate(zip(text, color_lookup))) {
+        const _x = x+(i*8)
+        c.fillStyle = color_background
+        c.fillRect(_x, y, 8, 16)
+        c.drawImage(shiftImage(fontImageBitMaps[char],color_foreground), _x, y)
+    }
+}
+export function word_wrap() {
+    //word wrap?
+}
+export function render_text() {
+    
+}

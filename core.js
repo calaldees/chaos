@@ -37,8 +37,34 @@ export function* enumerate(iterable) {
 assertEqualsObject([
     [ [...enumerate(['a','b','c'])], [[0,'a'],[1, 'b'],[2,'c']] ],
     [ [...enumerate([['a','a'],['b','b'],['c','c']])], [[0,['a','a']],[1,['b','b']],[2,['c','c']]] ],
-]);
+])
 
+export function all(iterable) {
+    for (let i of iterable) {
+        if (!i) {return false}
+    }
+    return true
+}
+assertEquals([
+    [ all([true, true]) , true],
+    [ all([true, false]) , false],
+    [ all([true, 'bob', 1]) , true],
+])
+
+
+export function* zip(...iterables) {
+    const iterators = [...iterables].map(iterable => iterable[Symbol.iterator]())
+    while (true) {
+        const iterable_items = iterators.map(iterator => iterator.next())
+        if (all(iterable_items.map(i => i.done))) {break}
+        yield iterable_items.map(i => i.value)
+    }
+}
+assertEqualsObject([
+    [ [...zip(['a','b'],['c','d'])], [['a','c'],['b','d']] ],
+    [ [...zip(['a','b'],['c','d'],['e','f'])], [['a','c','e'],['b','d','f']] ],
+    [ [...zip(['a','b'],['c'])], [['a','c'],['b',null]] ],
+])
 
 // correct modulo operator
 // https://stackoverflow.com/a/17323608
