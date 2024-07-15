@@ -96,20 +96,33 @@ assertEqualsObject([
     [ [...pos_ansi_to_color_lookup(3, [[1,[91,41]],[2,[102]]])], [["#FFF","#000"],["#F00","#D00"],["#F00","#0F0"]]],
 ])
 
-
-export function drawFont_color(c, string, x, y) {
+const [FONT_WIDTH, FONT_HEIGHT] = [8, 16]
+export function drawFont_color(c, string, x, y, x_wrap=1) {
     let [text, pos_ansi] = extract_ansi_colors(string)
     let color_lookup = [...pos_ansi_to_color_lookup(text.length, pos_ansi)]
     for (let [i, [char, [color_foreground, color_background]]] of enumerate(zip(text, color_lookup))) {
-        const _x = x+(i*8)
+        const x_char = i * FONT_WIDTH
+        const y_char = Math.floor(x_char / x_wrap) * FONT_HEIGHT
+        const _x = x + (x_char % x_wrap)
+        const _y = y + y_char
         c.fillStyle = color_background
-        c.fillRect(_x, y, 8, 16)
-        c.drawImage(shiftImage(fontImageBitMaps[char],color_foreground), _x, y)
+        c.fillRect(_x, _y, FONT_WIDTH, FONT_HEIGHT)
+        c.drawImage(shiftImage(fontImageBitMaps[char], color_foreground), _x, _y)
     }
 }
-export function word_wrap() {
-    //word wrap?
+
+function* _word_wrap_generator(text, x_chars, indentation) {
+    let x_char = 0
+    for (let word of text.split(" ")) {
+        if ((x_char + word.length) > x_chars) {
+            yield " ".repeat((x_chars - x_char) + indentation)
+            x_char = indentation
+        }
+        yield word
+        x_char += word.length
+    }
 }
-export function render_text() {
-    
-}
+export function word_wrap(text, x_chars, indentation=2) {return [..._word_wrap_generator(text, x_chars, indentation)].join(" ")}
+assertEqualsObject([
+    [ word_wrap("this is a test of wrapping", 13), "this is a      test of       wrapping" ],
+])
