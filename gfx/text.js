@@ -97,7 +97,7 @@ assertEqualsObject([
 ])
 
 const [FONT_WIDTH, FONT_HEIGHT] = [8, 16]
-export function drawFont_color(c, string, x, y, x_wrap=1) {
+export function drawFont_color(c, string, x, y, x_wrap=Infinity) {
     let [text, pos_ansi] = extract_ansi_colors(string)
     let color_lookup = [...pos_ansi_to_color_lookup(text.length, pos_ansi)]
     for (let [i, [char, [color_foreground, color_background]]] of enumerate(zip(text, color_lookup))) {
@@ -119,10 +119,10 @@ function* _word_wrap_generator(text, x_chars, indentation) {
             x_char = indentation
         }
         yield word
-        x_char += word.length
+        x_char += word.length+1
     }
 }
-export function word_wrap(text, x_chars, indentation=2) {return [..._word_wrap_generator(text, x_chars, indentation)].join(" ")}
+export function word_wrap(text, x_chars, indentation=0) {return [..._word_wrap_generator(text, x_chars, indentation)].join(" ")}
 assertEqualsObject([
-    [ word_wrap("this is a test of wrapping", 13), "this is a      test of       wrapping" ],
+    [ word_wrap("this is a test of wrapping", 13), "this is a     test of       wrapping" ],
 ])
