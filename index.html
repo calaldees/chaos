@@ -16,7 +16,7 @@
     import {loadImage, loadImages} from './gfx/image_decode.js'
     import {drawBorder} from './gfx/border.js'
     import {shiftImage, COLOR} from './gfx/color.js'
-    import {drawFont_color, fontImageData, word_wrap} from './gfx/text.js'
+    import {drawFont_color, fontImageData} from './gfx/text.js'
 
     import {monster_sprites, wizard_sprites} from './gfx/sprites.js'  // for test
     import {unit_data} from './data/unit_data.js'
@@ -45,7 +45,7 @@ class ChaosTest extends CanvasAnimationBase {
         //    c.drawImage(shiftImage(monster_sprites[i], COLOR.white) , (i%16)*16, 32+(Math.floor(i/16)*16))
         //}
 
-        drawFont_color(c, word_wrap(`This is a test of word wrap, I hope it works, I sure do!`,16), 16, 78, 128)
+        //drawFont_color(c, word_wrap(`This is a test of word wrap, I hope it works, I sure do!`,16), 16, 78, 128)
 
         // Model
         const map = new Map()
