@@ -97,30 +97,33 @@ assertEqualsObject([
 ])
 
 const [FONT_WIDTH, FONT_HEIGHT] = [8, 16]
-export function drawFont_color(c, string, x, y) {
+export function drawFont_color(c, string, x, y, x_width=Infinity) {
     let [text, pos_ansi] = extract_ansi_colors(string)
     let color_lookup = [...pos_ansi_to_color_lookup(text.length, pos_ansi)]
+    console.assert(color_lookup.length == text.length, "drawFont text and color length should match")
     for (let [i, [char, [color_foreground, color_background]]] of enumerate(zip(text, color_lookup))) {
-        const _x = x + (i * FONT_WIDTH)
+        const _x_progress = (i * FONT_WIDTH)
+        const _x = x + (_x_progress % x_width)
+        const _y = y + Math.floor(_x_progress / x_width) * FONT_HEIGHT
         c.fillStyle = color_background
-        c.fillRect(_x, y, FONT_WIDTH, FONT_HEIGHT)
-        c.drawImage(shiftImage(fontImageBitMaps[char], color_foreground), _x, y)
+        c.fillRect(_x, _y, FONT_WIDTH, FONT_HEIGHT)
+        c.drawImage(shiftImage(fontImageBitMaps[char], color_foreground), _x, _y)
     }
 }
 
+// forget about word wrapping for now ..
 function* _word_wrap_generator(text, x_chars, indentation) {
     let x_char = 0
     for (let word of text.split(" ")) {
-        // I did it wrong; just use new lines
-        //if ((x_char + word.length) > x_chars) {
-        //    yield " ".repeat((x_chars - x_char) + indentation)
-        //    x_char = indentation
-        //}
-        //yield word
-        //x_char += word.length+1
+        if ((x_char + word.length) > x_chars) {
+            yield " ".repeat(x_chars - x_char + indentation)
+            x_char = indentation
+        }
+        yield word + " "
+        x_char += word.length + 1
     }
 }
-export function word_wrap(text, x_chars, indentation=0) {return [..._word_wrap_generator(text, x_chars, indentation)].join(" ")}
+export function word_wrap(text, x_chars, indentation=0) {return [..._word_wrap_generator(text, x_chars, indentation)].join("").trimEnd()}
 assertEqualsObject([
-    [ word_wrap("this is a test of wrapping", 13), "this is a\n  test of\n  wrapping" ],
+    [ word_wrap("this is a test of wrapping", 13, 2), "this is a      test of      wrapping" ],
 ])
