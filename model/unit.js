@@ -4,6 +4,7 @@ export class Unit {
         this.owner = owner
         this.status = new Set()
         this.positions = []
+        this.moves_remaining = 0
     }
     get pos() {
         return this.positions[0]

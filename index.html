@@ -18,7 +18,7 @@
     import {shiftImage, COLOR} from './gfx/color.js'
     import {drawFont_color, fontImageData} from './gfx/text.js'
 
-    import {monster_sprites, wizard_sprites} from './gfx/sprites.js'  // for test
+    import {sprites} from './gfx/sprites.js'  // temp for testing drawing in index
     import {unit_data} from './data/unit_data.js'
 
     import {Unit} from './model/unit.js'
@@ -38,8 +38,8 @@ class ChaosTest extends CanvasAnimationBase {
         // Sprite tests
         drawBorder(c,COLOR.blue,0,0,this.w,this.h-16)
         drawFont_color(c, `Chaos \\033[91;103mMobile\\033[0m Test`, 0, 176)
-        for (let i=0 ; i<wizard_sprites.length ; i++) {
-            c.drawImage(shiftImage(wizard_sprites[i], Object.values(COLOR)[i%7+1]) , (i+1)*16, 16)
+        for (let i=0 ; i<sprites.wizard.length ; i++) {
+            c.drawImage(shiftImage(sprites.wizard[i], Object.values(COLOR)[i%7+1]) , (i+1)*16, 16)
         }
         //for (let i=0 ; i<monster_sprites.length ; i++) {
         //    c.drawImage(shiftImage(monster_sprites[i], COLOR.white) , (i%16)*16, 32+(Math.floor(i/16)*16))

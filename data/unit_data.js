@@ -1,4 +1,16 @@
+// https://zxnet.co.uk/spectrum/chaos/asm/E440.html
 // https://github.com/lewster32/archaos/blob/main/assets/data/classicunits.json
+
+// com Combat=0, 
+// rcm Ranged combat=0, 
+// rng Range=0, 
+// def Defence=0, 
+// mov Movement allowance=0, 
+// mnv Manoeuvre rating=0, 
+// res Magic resistance=0, 
+// Casting chance=0, 
+// Chaos/Law=0, 
+// Animation delay=1
 
 export const unit_data = {
     "King Cobra": {
@@ -572,7 +584,58 @@ export const unit_data = {
         "status": ["invuln", "struct", "noCorpse"],
     },
 
-
+    "Wizard Sword": {
+        "name": "Wizard Sword",
+        "properties": {
+            "mov": 0,
+            "com": 3,  // this will be added to wizard I assume
+            "rcm": 0,
+            "rng": 0,
+            "def": 0,
+            "mnv": 0,
+            "res": 0
+        },
+        "status": ["wizardMod"],
+    },
+    "Wizard Knife": {
+        "name": "Wizard Knife",
+        "properties": {
+            "mov": 0,
+            "com": 2,  // this will be added to wizard I assume
+            "rcm": 0,
+            "rng": 0,
+            "def": 0,
+            "mnv": 0,
+            "res": 0
+        },
+        "status": ["wizardMod"],
+    },
+    "Wizard Fly": {
+        "name": "Wizard Fly",
+        "properties": {
+            "mov": 5,
+            "com": 0,
+            "rcm": 0,
+            "rng": 0,
+            "def": 0,
+            "mnv": 0,
+            "res": 0
+        },
+        "status": ["wizardMod", "flying"],
+    },
+    "Wizard Bow": {
+        "name": "Wizard Bow",
+        "properties": {
+            "mov": 0,
+            "com": 0,
+            "rcm": 0,
+            "rng": 5,
+            "def": 0,
+            "mnv": 0,
+            "res": 0
+        },
+        "status": ["wizardMod"],
+    },
 
 
 
