@@ -636,6 +636,58 @@ export const unit_data = {
         },
         "status": ["wizardMod"],
     },
+    "Wizard Armor": {
+        "name": "Wizard Armor",
+        "properties": {
+            "mov": 0,
+            "com": 0,
+            "rcm": 0,
+            "rng": 0,
+            "def": 5,
+            "mnv": 0,
+            "res": 0
+        },
+        "status": ["wizardMod"],
+    },
+    "Wizard Shield": {
+        "name": "Wizard Shield",
+        "properties": {
+            "mov": 0,
+            "com": 0,
+            "rcm": 0,
+            "rng": 0,
+            "def": 3,
+            "mnv": 0,
+            "res": 0
+        },
+        "status": ["wizardMod"],
+    },
+
+
+    "Wizard JULIAN": {
+        "name": "Wizard JULIAN",
+    },
+    "Wizard GANDALF": {
+        "name": "Wizard GANDALF",
+    },
+    "Wizard GREATFOGEY": {
+        "name": "Wizard GREATFOGEY",
+    },
+    "Wizard DYERARTI": {
+        "name": "Wizard DYERARTI",
+    },
+    "Wizard GOWIN": {
+        "name": "Wizard GOWIN",
+    },
+    "Wizard MERLIN": {
+        "name": "Wizard MERLIN",
+    },
+    "Wizard ILIAN RANE": {
+        "name": "Wizard ILIAN RANE",
+    },
+    "Wizard ASIMONO ZARK": {
+        "name": "Wizard ASIMONO ZARK",
+    },
 
 
 

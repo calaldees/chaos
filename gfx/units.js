@@ -280,6 +280,8 @@ const unit_gfx_data = {
         "colorBackground": COLOR.yellow_bright,  // ultra special case
     },
 
+    // Wizard Mods
+
     "Wizard Sword": {
         "animFrames": [0,1,2,1],
         "animSpeed": 33,  //?
@@ -303,6 +305,69 @@ const unit_gfx_data = {
         "animSpeed": 29,  //?
         "animColors": [COLOR.white],
         "animSprites": sprites.wizard.slice(19,23),
+    },
+    "Wizard Armor": {
+        "animFrames": [0],
+        "animSpeed": 300,  //?
+        "animColors": [COLOR.white],
+        "animSprites": sprites.wizard.slice(14,15),
+    },
+    "Wizard Shield": {
+        "animFrames": [0],
+        "animSpeed": 300,  //?
+        "animColors": [COLOR.white],
+        "animSprites": sprites.wizard.slice(15,16),
+    },
+
+    // Wizards
+
+    "Wizard JULIAN": {
+        "animFrames": [0],
+        "animSpeed": 300,  //?
+        "animColors": [COLOR.white],
+        "animSprites": sprites.wizard.slice(0,1),
+    },
+    "Wizard GANDALF": {
+        "animFrames": [0],
+        "animSpeed": 300,  //?
+        "animColors": [COLOR.white],
+        "animSprites": sprites.wizard.slice(1,2),
+    },
+    "Wizard GREATFOGEY": {
+        "animFrames": [0],
+        "animSpeed": 300,  //?
+        "animColors": [COLOR.white],
+        "animSprites": sprites.wizard.slice(2,3),
+    },
+    "Wizard DYERARTI": {
+        "animFrames": [0],
+        "animSpeed": 300,  //?
+        "animColors": [COLOR.white],
+        "animSprites": sprites.wizard.slice(3,4),
+    },
+    "Wizard GOWIN": {
+        "animFrames": [0],
+        "animSpeed": 300,  //?
+        "animColors": [COLOR.white],
+        "animSprites": sprites.wizard.slice(4,5),
+    },
+    "Wizard MERLIN": {
+        "animFrames": [0],
+        "animSpeed": 300,  //?
+        "animColors": [COLOR.white],
+        "animSprites": sprites.wizard.slice(5,6),
+    },
+    "Wizard ILIAN RANE": {
+        "animFrames": [0],
+        "animSpeed": 300,  //?
+        "animColors": [COLOR.white],
+        "animSprites": sprites.wizard.slice(6,7),
+    },
+    "Wizard ASIMONO ZARK": {
+        "animFrames": [0],
+        "animSpeed": 300,  //?
+        "animColors": [COLOR.white],
+        "animSprites": sprites.wizard.slice(7,8),
     },
 
 
