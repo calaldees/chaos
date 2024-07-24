@@ -25,7 +25,7 @@
     import {Map} from './model/map.js'
 
     import {GfxMap} from './gfx/map.js'
-    import {GfxEffects} from './gfx/effects.js'
+    import {GfxEffects, SpriteEffect} from './gfx/effects.js'
 
     import {CanvasAnimationBase} from './gfx/animation_base.js'
 
@@ -65,10 +65,21 @@ class ChaosTest extends CanvasAnimationBase {
 
         // Gfx Effects
         this.gfx_effects = new GfxEffects()
+        this.gfx_effects.addEffect(
+            new SpriteEffect(sprites.animation.twirl, 15*5+10)
+        )
+        this.gfx_effects.addEffect(
+            new SpriteEffect(sprites.animation.dragon_breath, 15*5+11)
+        )
+        this.gfx_effects.addEffect(
+            new SpriteEffect(sprites.animation.attack_effect, 15*5+12)
+        )
+
+
     }
     loop(context, frame) {
         this.gfx_map.drawDirtyGfxUnits(context, frame)
-        this.gfx_effects.draw(context)
+        this.gfx_effects.draw(context, frame)
     }
 }
 new ChaosTest(undefined, 30).setRunning(true)
