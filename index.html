@@ -25,6 +25,7 @@
     import {Map} from './model/map.js'
 
     import {GfxMap} from './gfx/map.js'
+    import {GfxEffects} from './gfx/effects.js'
 
     import {CanvasAnimationBase} from './gfx/animation_base.js'
 
@@ -58,13 +59,16 @@ class ChaosTest extends CanvasAnimationBase {
         map.getUnit(0).status.add("corpse")
         map.getUnit(3).setPos(5) // HACK - test sprite flipping
 
-        // Gfx
-        this.gfx_map = new GfxMap(c, map)
-        this.gfx_map.draw()
+        // Gfx Map
+        this.gfx_map = new GfxMap(map)
+        this.gfx_map.draw(this.context)
 
+        // Gfx Effects
+        this.gfx_effects = new GfxEffects()
     }
     loop(context, frame) {
-        this.gfx_map.drawDirtyGfxUnits(frame)
+        this.gfx_map.drawDirtyGfxUnits(context, frame)
+        this.gfx_effects.draw(context)
     }
 }
 new ChaosTest(undefined, 30).setRunning(true)

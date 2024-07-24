@@ -77,6 +77,24 @@ assertEquals([
 ]);
 
 
+// https://stackoverflow.com/a/37319954/3356840
+export function filterInPlace(a, condition, thisArg) {
+    let j = 0;
+    a.forEach((e, i) => {
+        if (condition.call(thisArg, e, i, a)) {
+            if (i!==j) a[j] = e;
+            j++;
+        }
+    });
+    a.length = j;
+    return a;
+}
+assertEqualsObject([
+    [ filterInPlace([1,2,3,4,5], (i)=>i%2), [1,3,5] ],
+]);
+
+
+
 export class Dimension {
     constructor(width, height, depth=1) {
         this.dimensions = [width, height, depth]

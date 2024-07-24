@@ -4,10 +4,11 @@ import { COLOR, shiftImage } from "./color.js"
 import { gfx_units } from "./units.js"
 
 const CORPSE_FRAME = -1
+const BORDER_OFFSET_PX = 8  // Probably needs to be passed rather than a constant? Maybe the context can be transposed?
+const CELL_SIZE_PX = 16
 
 export class GfxMap {
-    constructor(c, map_model) {
-        this.c = c
+    constructor(map_model) {
         this.map_model = map_model
     }
 
@@ -18,9 +19,9 @@ export class GfxMap {
         }
     }
 
-    draw() {
+    draw(c) {
         for (let _ of this._indexed_gfx_units()) {
-            this._drawGfxUnit(..._)
+            this._drawGfxUnit(c, ..._)
         }
     }
 
@@ -35,19 +36,19 @@ export class GfxMap {
         }
     }
 
-    drawDirtyGfxUnits(frame) {
+    drawDirtyGfxUnits(c, frame) {
         for (let _ of this._dirtyGfxUnits(frame)) {
-            this._drawGfxUnit(..._, frame)
+            this._drawGfxUnit(c, ..._, frame)
         }
     }
 
-    _drawGfxUnit(i, gfx_unit, unit, frame=0) {  // TODO: refactor _indexed_gfx_units for this
+    _drawGfxUnit(c, i, gfx_unit, unit, frame=0) {  // TODO: refactor _indexed_gfx_units for this
         const sprite_color = gfx_unit[unit.status.has("corpse") ? 'sprite_and_color_corpse':'sprite_and_color'](frame)
         const image = shiftImage(...sprite_color, unit.flip)
-        const [_x, _y] = [...this.map_model.dimension.index_to_position(i)].map(j=>Math.floor(j*16)+8)
-        this.c.fillStyle = gfx_unit.color_background()
-        this.c.fillRect(_x, _y, 16, 16)
-        this.c.drawImage(image, _x, _y)
+        const [_x, _y] = [...this.map_model.dimension.index_to_position(i)].map(j=>Math.floor(j*CELL_SIZE_PX)+BORDER_OFFSET_PX)
+        c.fillStyle = gfx_unit.color_background()
+        c.fillRect(_x, _y, 16, 16)
+        c.drawImage(image, _x, _y)
     }
 
 }
