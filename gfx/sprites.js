@@ -10,5 +10,7 @@ export const sprites = {
         "twirl": [...loadImages(sprite_data.twirlsprite)],
         "attack_effect": [...loadImages(sprite_data.attack_effect_sprites)],
         "dragon_breath": [...loadImages(sprite_data.anim_dragon_breath)],
+        "explosion": [...loadImages(sprite_data.explosionsprite)],
+        "woop": [...loadImages(sprite_data.woop)],
     },
 }
