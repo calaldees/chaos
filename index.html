@@ -25,7 +25,7 @@
     import {Map} from './model/map.js'
 
     import {GfxMap} from './gfx/map.js'
-    import {GfxEffects, SpriteEffect} from './gfx/effects.js'
+    import {GfxEffects, SpriteEffect, HighlightEffect} from './gfx/effects.js'
 
     import {CanvasAnimationBase} from './gfx/animation_base.js'
 
@@ -48,6 +48,8 @@ class ChaosTest extends CanvasAnimationBase {
         //    c.drawImage(shiftImage(monster_sprites[i], COLOR.white) , (i%16)*16, 32+(Math.floor(i/16)*16))
         //}
 
+        c.drawImage(sprites.animation.twirl[8], 10*16,7*16)
+
         drawFont_color(c, `This is a test of word wrap, I hope it works, I sure do!`, 16, 78, 128)
 
         // Model
@@ -65,6 +67,7 @@ class ChaosTest extends CanvasAnimationBase {
 
         // Gfx Effects
         this.gfx_effects = new GfxEffects()
+
         this.gfx_effects.addEffect(
             new SpriteEffect(sprites.animation.twirl, 15*5+10)
         )
@@ -73,6 +76,16 @@ class ChaosTest extends CanvasAnimationBase {
         )
         this.gfx_effects.addEffect(
             new SpriteEffect(sprites.animation.attack_effect, 15*5+12)
+        )
+        this.gfx_effects.addEffect(
+            new SpriteEffect(sprites.animation.explosion, 15*5+13)
+        )
+        this.gfx_effects.addEffect(
+            new SpriteEffect(sprites.animation.woop, 15*5+14)
+        )
+
+        this.gfx_effects.addEffect(
+            new HighlightEffect(COLOR.yellow, [70,71,72,(71-15),(71+15)])
         )
 
 
