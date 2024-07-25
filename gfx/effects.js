@@ -5,7 +5,7 @@ const BORDER_OFFSET_PX = 8  // Probably needs to be passed rather than a constan
 const CELL_SIZE_PX = 16
 const dimension = new Dimension(15, 10)
 function i_to_xy(i) {
-    return [...dimension.index_to_position(i)].map(j=>Math.floor(j*CELL_SIZE_PX)+BORDER_OFFSET_PX)
+    return [...dimension.index_to_position(i)].map(j=>Math.floor(j*CELL_SIZE_PX)+BORDER_OFFSET_PX).slice(0,2)
 }
 
 
