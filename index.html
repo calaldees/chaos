@@ -96,7 +96,7 @@ class ChaosTest extends CanvasAnimationBase {
         this.gfx_effects.draw(context, frame)
         
         //const [x,y] = [this.mouse_x,this.mouse_y].map((i)=>Math.floor(i-BORDER_OFFSET_PX)/CELL_SIZE_PX)
-        const [x,y] = [this.mouse_x,this.mouse_y].map((i)=>(Math.floor(i/CELL_SIZE_PX)*CELL_SIZE_PX))
+        const [x,y] = [this.mouse_x,this.mouse_y].map((i)=>(Math.floor((i-BORDER_OFFSET_PX)/CELL_SIZE_PX)*CELL_SIZE_PX)+BORDER_OFFSET_PX)
         //console.log(this.mouse_x,this.mouse_y, x,y)
         context.drawImage(this.cursor, x, y)
     }
