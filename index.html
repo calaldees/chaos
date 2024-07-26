@@ -25,7 +25,7 @@
     import {Map} from './model/map.js'
 
     import {GfxMap, BORDER_OFFSET_PX, CELL_SIZE_PX} from './gfx/map.js'
-    import {GfxEffects, SpriteEffect, HighlightEffect} from './gfx/effects.js'
+    import {GfxEffects, SpriteEffect, HighlightEffect, i_to_xy} from './gfx/effects.js'
 
     import {CanvasAnimationBase} from './gfx/animation_base.js'
 
@@ -89,16 +89,28 @@ class ChaosTest extends CanvasAnimationBase {
             new HighlightEffect(COLOR.yellow, [70,71,72,(71-15),(71+15)])
         )
 
+        this.mouse_index = undefined
 
     }
     loop(context, frame) {
         this.gfx_map.drawDirtyGfxUnits(context, frame)
         this.gfx_effects.draw(context, frame)
         
-        //const [x,y] = [this.mouse_x,this.mouse_y].map((i)=>Math.floor(i-BORDER_OFFSET_PX)/CELL_SIZE_PX)
-        const [x,y] = [this.mouse_x,this.mouse_y].map((i)=>(Math.floor((i-BORDER_OFFSET_PX)/CELL_SIZE_PX)*CELL_SIZE_PX)+BORDER_OFFSET_PX)
+        
         //console.log(this.mouse_x,this.mouse_y, x,y)
-        context.drawImage(this.cursor, x, y)
+        this.mouse_to_cell()
+        
+    }
+    mouse_to_cell() {
+        const i = this.gfx_map.map_model.dimension.position_to_index(...[this.mouse_x,this.mouse_y].map((i)=>Math.floor((i-BORDER_OFFSET_PX)/CELL_SIZE_PX)))
+        if (this.mouse_index!=i) {
+            this.gfx_map.markDirty(this.mouse_index)
+            this.mouse_index = i
+
+            // Hack
+            this.context.drawImage(this.cursor, ...i_to_xy(i))
+        }
+        
     }
 }
 new ChaosTest(undefined, 30).setRunning(true)

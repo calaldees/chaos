@@ -106,7 +106,7 @@ export class Dimension {
     get size() {return this.dimensions.reduce((prev, current) => prev * current)}
 
     normalise_position(x,y,z) {
-        return [mod(x, this.width), mod(y, this.height), mod(z, this.depth)]
+        return [mod(x||0, this.width), mod(y||0, this.height), mod(z||0, this.depth)]
     }
 
     index_to_position(i) {
@@ -125,6 +125,7 @@ export class Dimension {
 assertEqualsObject([
     [(new Dimension(3, 3, 3)).normalise_position(0,0,0), [0,0,0]],
     [(new Dimension(3, 3, 3)).normalise_position(-1,-1,-1), [2,2,2]],
+    [(new Dimension(3, 3, 3)).normalise_position(1,2), [1,2,0]],
 
     // index_to_position
     [(new Dimension(8, 8, 3)).index_to_position(0), [0,0,0]],

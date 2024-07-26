@@ -26,6 +26,10 @@ export class GfxMap {
         }
     }
 
+    markDirty(i) {
+        // todo
+    }
+
     // Dirty Animation ---------------------------------------------------------
 
     * _dirtyGfxUnits(frame) {
