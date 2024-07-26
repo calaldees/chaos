@@ -4,8 +4,9 @@ import { COLOR, shiftImage } from "./color.js"
 import { gfx_units } from "./units.js"
 
 const CORPSE_FRAME = -1
-const BORDER_OFFSET_PX = 8  // Probably needs to be passed rather than a constant? Maybe the context can be transposed?
-const CELL_SIZE_PX = 16
+export const BORDER_OFFSET_PX = 8  // Probably needs to be passed rather than a constant? Maybe the context can be transposed?
+export const CELL_SIZE_PX = 16
+
 
 export class GfxMap {
     constructor(map_model) {

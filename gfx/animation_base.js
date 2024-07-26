@@ -14,66 +14,19 @@ class CanvasAnimationBase {
         this.mouse_x = 0
         this.mouse_y = 0
         this.canvas.addEventListener('mousemove', (e) => {
-            /*
-            // The mouse x needs correcting to the amount of x visible
-            // I have no idea how this aspect ratio correction works - I just messed about with it until I get something looking reasonable
-            const canvas_aspect_ratio = (this.w / this.h)
-            const view_aspect_ratio = (window.innerWidth / window.innerHeight);
-            const aspect_x_correction = view_aspect_ratio/canvas_aspect_ratio;
-            const x_offset = Math.floor((this.w/window.innerWidth/2)*this.w/2);
-            This works when the width is cropped
-                Math.floor((event.layerX*aspect_x_correction/window.innerWidth)*this.w)+x_offset, 
-            */
-            // Mouse pos only works with full screen and correct aspect ratio
-            //[this.mouse_x, this.mouse_y] = [
-            //    Math.floor((e.layerX/window.innerWidth)*this.w), 
-            //    Math.floor((e.layerY/window.innerHeight)*this.h)
-            //]
-
-            let y_offset = 0
-            let x_offset = 0
-            let canvas_display_width = window.innerWidth
-            let canvas_display_height = window.innerHeight
-            if (this.canvas_aspect_ratio > this.window_aspect_ratio) { // window is taller
-                canvas_display_height = this.h * (window.innerWidth / this.window_aspect_ratio)
+            // js/web has behavior where the display area may not fill the window
+            // I sat down with a piece of paper for over an hour to work this out
+            let [y_offset, x_offset] = [0, 0]
+            let [canvas_display_width, canvas_display_height] = [window.innerWidth, window.innerHeight]
+            if (this.canvas_aspect_ratio > this.window_aspect_ratio) {
+                canvas_display_height = window.innerWidth / this.canvas_aspect_ratio  // window is taller
                 y_offset = (window.innerHeight - canvas_display_height) / 2
-            } else { // window is wider
-                canvas_display_width = this.w * (window.innerHeight * this.window_aspect_ratio)
+            } else {
+                canvas_display_width = window.innerHeight * this.canvas_aspect_ratio  // window is wider
                 x_offset = (window.innerWidth - canvas_display_width) / 2
             }
             this.mouse_x = ((e.layerX-x_offset)/(window.innerWidth-(x_offset*2)))*this.w
             this.mouse_y = ((e.layerY-y_offset)/(window.innerHeight-(y_offset*2)))*this.h
-            console.log(this.mouse_x, this.mouse_y)
-
-            /*
-
-            |
-            |100
-            |
-            1000
-
-            100 / 1000 = 0.1
-
-            |
-            |1000
-            |
-            100
-
-            1000 / 100 = 10
-
-            aspect 1:1 = 100x100
-            Actual res 10x10 and enlarged
-
-
-            (1000 - 100)/2 = 450 y_offset
-
-            if canvas_aspect > window_aspect (== taller than)
-              y_off = - (window.height - canvas.height) / 2   // remove the excess y
-              or
-              x_off = - (window.width - canvas.width) / 2
-            tx = ((ex-x_off)/(window.width-(x_off*2)))*canvas.width
-            ty = (ey-y_off/(window.height-(y_off*2))*canvas.height
-            */
         }, true)
 
         this.frame = 0

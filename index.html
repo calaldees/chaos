@@ -24,7 +24,7 @@
     import {Unit} from './model/unit.js'
     import {Map} from './model/map.js'
 
-    import {GfxMap} from './gfx/map.js'
+    import {GfxMap, BORDER_OFFSET_PX, CELL_SIZE_PX} from './gfx/map.js'
     import {GfxEffects, SpriteEffect, HighlightEffect} from './gfx/effects.js'
 
     import {CanvasAnimationBase} from './gfx/animation_base.js'
@@ -49,6 +49,7 @@ class ChaosTest extends CanvasAnimationBase {
         //}
 
         c.drawImage(sprites.animation.twirl[8], 10*16,7*16)
+        this.cursor = sprites.cursor[0]
 
         drawFont_color(c, `This is a test of word wrap, I hope it works, I sure do!`, 16, 78, 128)
 
@@ -93,6 +94,11 @@ class ChaosTest extends CanvasAnimationBase {
     loop(context, frame) {
         this.gfx_map.drawDirtyGfxUnits(context, frame)
         this.gfx_effects.draw(context, frame)
+        
+        //const [x,y] = [this.mouse_x,this.mouse_y].map((i)=>Math.floor(i-BORDER_OFFSET_PX)/CELL_SIZE_PX)
+        const [x,y] = [this.mouse_x,this.mouse_y].map((i)=>(Math.floor(i/CELL_SIZE_PX)*CELL_SIZE_PX))
+        //console.log(this.mouse_x,this.mouse_y, x,y)
+        context.drawImage(this.cursor, x, y)
     }
 }
 new ChaosTest(undefined, 30).setRunning(true)
