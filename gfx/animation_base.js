@@ -9,8 +9,8 @@ class CanvasAnimationBase {
 	    window.addEventListener("blur" , () => {this.setRunning(false)}, false)
 
         this.keys_pressed = new Set()
-        window.addEventListener('keydown', (e) => this.keys_pressed.add(event.key), true)
-        window.addEventListener('keyup'  , (e) => this.keys_pressed.delete(event.key), true)
+        window.addEventListener('keydown', (e) => this.keys_pressed.add(e.key), true)
+        window.addEventListener('keyup'  , (e) => this.keys_pressed.delete(e.key), true)
         this.mouse_x = 0
         this.mouse_y = 0
         this.canvas.addEventListener('mousemove', (e) => {
@@ -25,10 +25,55 @@ class CanvasAnimationBase {
                 Math.floor((event.layerX*aspect_x_correction/window.innerWidth)*this.w)+x_offset, 
             */
             // Mouse pos only works with full screen and correct aspect ratio
-            [this.mouse_x, this.mouse_y] = [
-                Math.floor((event.layerX/window.innerWidth)*this.w), 
-                Math.floor((event.layerY/window.innerHeight)*this.h)
-            ]
+            //[this.mouse_x, this.mouse_y] = [
+            //    Math.floor((e.layerX/window.innerWidth)*this.w), 
+            //    Math.floor((e.layerY/window.innerHeight)*this.h)
+            //]
+
+            let y_offset = 0
+            let x_offset = 0
+            let canvas_display_width = window.innerWidth
+            let canvas_display_height = window.innerHeight
+            if (this.canvas_aspect_ratio > this.window_aspect_ratio) { // window is taller
+                canvas_display_height = this.h * (window.innerWidth / this.window_aspect_ratio)
+                y_offset = (window.innerHeight - canvas_display_height) / 2
+            } else { // window is wider
+                canvas_display_width = this.w * (window.innerHeight * this.window_aspect_ratio)
+                x_offset = (window.innerWidth - canvas_display_width) / 2
+            }
+            this.mouse_x = ((e.layerX-x_offset)/(window.innerWidth-(x_offset*2)))*this.w
+            this.mouse_y = ((e.layerY-y_offset)/(window.innerHeight-(y_offset*2)))*this.h
+            console.log(this.mouse_x, this.mouse_y)
+
+            /*
+
+            |
+            |100
+            |
+            1000
+
+            100 / 1000 = 0.1
+
+            |
+            |1000
+            |
+            100
+
+            1000 / 100 = 10
+
+            aspect 1:1 = 100x100
+            Actual res 10x10 and enlarged
+
+
+            (1000 - 100)/2 = 450 y_offset
+
+            if canvas_aspect > window_aspect (== taller than)
+              y_off = - (window.height - canvas.height) / 2   // remove the excess y
+              or
+              x_off = - (window.width - canvas.width) / 2
+            tx = ((ex-x_off)/(window.width-(x_off*2)))*canvas.width
+            ty = (ey-y_off/(window.height-(y_off*2))*canvas.height
+            */
         }, true)
 
         this.frame = 0
@@ -39,6 +84,8 @@ class CanvasAnimationBase {
 
     get w() {return this.canvas.width}
     get h() {return this.canvas.height}
+    get canvas_aspect_ratio() {return this.w / this.h}
+    get window_aspect_ratio() {return window.innerWidth / window.innerHeight}
 
     clear = () => {
         this.context.clearRect(0, 0, this.w, this.h)
