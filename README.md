@@ -8,5 +8,4 @@ An experiment to recreate Julian Gollop's - [Chaos: The Battle of Wizards](https
 Unsorted
 ========
 
-https://stackoverflow.com/questions/45706829/change-color-image-in-canvas
-https://www.youtube.com/watch?v=gGvyCI_4CQE
+* [YouTube: Chaos gameplay footage](https://www.youtube.com/watch?v=gGvyCI_4CQE)

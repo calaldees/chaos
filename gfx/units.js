@@ -402,7 +402,7 @@ class GfxUnit {
     }
 
     color_background() {
-        return this.template.colorBackground || COLOR.black
+        return this.template.colorBackground //|| COLOR.black
     }
 
 }

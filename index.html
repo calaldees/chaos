@@ -24,8 +24,9 @@
     import {Unit} from './model/unit.js'
     import {Map} from './model/map.js'
 
-    import {GfxMap, BORDER_OFFSET_PX, CELL_SIZE_PX} from './gfx/map.js'
-    import {GfxEffects, SpriteEffect, HighlightEffect, i_to_xy} from './gfx/effects.js'
+    import {GfxDispatch, BORDER_OFFSET_PX, CELL_SIZE_PX, i_to_xy} from './gfx/gfx_dispatch.js'
+    import {GfxMap} from './gfx/gfx_map.js'
+    import {GfxEffects, SpriteEffect, HighlightEffect} from './gfx/gfx_effects.js'
 
     import {CanvasAnimationBase} from './gfx/animation_base.js'
 
@@ -36,9 +37,14 @@ class ChaosTest extends CanvasAnimationBase {
 
         const c = this.context
 
+        this.mouse_index = undefined
+        this.cursor = sprites.cursor[0]
+
         // Sprite tests
         drawBorder(c,COLOR.blue,0,0,this.w,this.h-16)
         drawFont_color(c, `Chaos \\033[91;103mMobile\\033[0m Test`, 0, 176)
+        c.drawImage(sprites.animation.twirl[8], 10*16,7*16)
+        drawFont_color(c, `This is a test of word wrap, I hope it works, I sure do!`, 16, 78, 128)
 
         // Early draw tests without model or animation
         //for (let i=0 ; i<sprites.wizard.length ; i++) {
@@ -48,63 +54,48 @@ class ChaosTest extends CanvasAnimationBase {
         //    c.drawImage(shiftImage(monster_sprites[i], COLOR.white) , (i%16)*16, 32+(Math.floor(i/16)*16))
         //}
 
-        c.drawImage(sprites.animation.twirl[8], 10*16,7*16)
-        this.cursor = sprites.cursor[0]
-
-        drawFont_color(c, `This is a test of word wrap, I hope it works, I sure do!`, 16, 78, 128)
-
         // Model
         const map = new Map()
         for (let [i, unit_name] of enumerate(Object.keys(unit_data))) {
             map.setUnit(new Unit(unit_data[unit_name]), i)
         }
-
         map.getUnit(0).status.add("corpse")
         map.getUnit(3).setPos(5) // HACK - test sprite flipping
 
         // Gfx Map
         this.gfx_map = new GfxMap(map)
-        this.gfx_map.draw(this.context)
+        this.gfx_effects = new GfxEffects(map.dimension.size)
+        this.gfx_dispatch = new GfxDispatch([this.gfx_map, this.gfx_effects])
 
         // Gfx Effects
-        this.gfx_effects = new GfxEffects()
+        this.gfx_effects.addEffect(15*5+10, new SpriteEffect(sprites.animation.twirl))
+        this.gfx_effects.addEffect(15*5+11, new SpriteEffect(sprites.animation.dragon_breath))
+        this.gfx_effects.addEffect(15*5+12, new SpriteEffect(sprites.animation.attack_effect))
+        this.gfx_effects.addEffect(15*5+13, new SpriteEffect(sprites.animation.explosion))
+        this.gfx_effects.addEffect(15*5+14, new SpriteEffect(sprites.animation.woop))
+        for (let i of [70,71,72,(71-15),(71+15)]) {
+            this.gfx_effects.addEffect(i, new HighlightEffect())
+        }
 
-        this.gfx_effects.addEffect(
-            new SpriteEffect(sprites.animation.twirl, 15*5+10)
-        )
-        this.gfx_effects.addEffect(
-            new SpriteEffect(sprites.animation.dragon_breath, 15*5+11)
-        )
-        this.gfx_effects.addEffect(
-            new SpriteEffect(sprites.animation.attack_effect, 15*5+12)
-        )
-        this.gfx_effects.addEffect(
-            new SpriteEffect(sprites.animation.explosion, 15*5+13)
-        )
-        this.gfx_effects.addEffect(
-            new SpriteEffect(sprites.animation.woop, 15*5+14)
-        )
-
-        this.gfx_effects.addEffect(
-            new HighlightEffect(COLOR.yellow, [70,71,72,(71-15),(71+15)])
-        )
-
-        this.mouse_index = undefined
-
+        // Draw whole screen on first start
+        this.gfx_dispatch.draw(c, 0)
     }
     loop(context, frame) {
-        this.gfx_map.drawDirtyGfxUnits(context, frame)
-        this.gfx_effects.draw(context, frame)
-        
-        
+        const dirty = [
+            ...this.gfx_map.dirtyIndexes(frame), 
+            ...this.gfx_effects.dirtyIndexes(frame),
+        ]
+        //console.log(dirty.length)
+        this.gfx_dispatch.markDirty(...dirty)
+        this.gfx_dispatch.drawDirty(context, frame)
+
         //console.log(this.mouse_x,this.mouse_y, x,y)
         this.mouse_to_cell()
-        
     }
     mouse_to_cell() {
         const i = this.gfx_map.map_model.dimension.position_to_index(...[this.mouse_x,this.mouse_y].map((i)=>Math.floor((i-BORDER_OFFSET_PX)/CELL_SIZE_PX)))
         if (this.mouse_index!=i) {
-            this.gfx_map.markDirty(this.mouse_index)
+            this.gfx_dispatch.markDirty(this.mouse_index)
             this.mouse_index = i
 
             // Hack
