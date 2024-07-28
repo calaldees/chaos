@@ -44,7 +44,6 @@ class ChaosTest extends CanvasAnimationBase {
         drawBorder(c,COLOR.blue,0,0,this.w,this.h-16)
         drawFont_color(c, `Chaos \\033[91;103mMobile\\033[0m Test`, 0, 176)
         c.drawImage(sprites.animation.twirl[8], 10*16,7*16)
-        drawFont_color(c, `This is a test of word wrap, I hope it works, I sure do!`, 16, 78, 128)
 
         // Early draw tests without model or animation
         //for (let i=0 ; i<sprites.wizard.length ; i++) {
@@ -79,15 +78,19 @@ class ChaosTest extends CanvasAnimationBase {
 
         // Draw whole screen on first start
         this.gfx_dispatch.draw(c, 0)
+        drawFont_color(c, `This is a test of word wrap, I hope it works, I sure do!`, 16, 78, 128)
     }
     loop(context, frame) {
+        //this.clear()  // debug for dirty
+
         const dirty = [
-            ...this.gfx_map.dirtyIndexes(frame), 
+            ...this.gfx_map.dirtyIndexes(frame),
             ...this.gfx_effects.dirtyIndexes(frame),
         ]
-        //console.log(dirty.length)
+        
         this.gfx_dispatch.markDirty(...dirty)
         this.gfx_dispatch.drawDirty(context, frame)
+        this.gfx_dispatch.clearDirty()
 
         //console.log(this.mouse_x,this.mouse_y, x,y)
         this.mouse_to_cell()

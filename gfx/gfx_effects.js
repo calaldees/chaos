@@ -10,10 +10,9 @@ export class _GfxEffect {
 }
 
 export class SpriteEffect extends _GfxEffect {
-    constructor(sprites, i) {
+    constructor(sprites) {
         super()
         this.sprites = sprites
-        this.i = i
     }
     isDirty(frame) {
         return frame % 16 == 0  // hack

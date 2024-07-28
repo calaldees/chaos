@@ -1,10 +1,9 @@
-import { enumerate} from '../core.js'
+import { enumerate } from '../core.js'
 
-import { COLOR, shiftImage } from "./color.js"
+import { shiftImage } from "./color.js"
 import { gfx_units } from "./units.js"
 
 const CELL_SIZE_PX = 16
-const CORPSE_FRAME = -1
 
 
 export class GfxMap {
@@ -35,16 +34,9 @@ export class GfxMap {
     // Dirty Animation ---------------------------------------------------------
 
     * dirtyIndexes(frame) {
-        for (let [i,] of this.dirtyGfxUnits(frame)) {
-            yield i
-        }
-    }
-
-    * dirtyGfxUnits(frame) {
-        for (let _ of this._indexed_gfx_units()) {
-            const [i, gfx_unit, unit] = _
+        for (let [i, gfx_unit, unit] of this._indexed_gfx_units()) {
             if (gfx_unit.isDirty(frame) && !unit.status.has("corpse")) {
-                yield _
+                yield i
             }
         }
     }
