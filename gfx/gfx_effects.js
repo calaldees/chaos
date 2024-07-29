@@ -18,7 +18,6 @@ export class SpriteEffect extends _GfxEffect {
         return frame % 16 == 0  // hack
     }
     draw(c, frame) {
-        debugger
         const f = Math.floor(frame/16)%this.sprites.length
         c.drawImage(this.sprites[f], 0, 0)  // can the 0,0 be left out? are the defaults 0?
     }
@@ -49,6 +48,19 @@ export class VectorEffect extends _GfxEffect {
     draw(c, frame) {}
 }
 
+export class InvertEffect extends _GfxEffect {
+    isDirty(frame) {
+        return frame % 300
+    }
+    draw(c, frame) {
+        c.save()
+        c.globalCompositeOperation='difference'
+        c.fillStyle='white'
+        c.fillRect(0, 0, CELL_SIZE_PX, CELL_SIZE_PX)
+        c.restore()
+    }
+}
+
 export class GfxEffects {
     constructor(size) {
         this.data = new Array(size)
@@ -56,7 +68,7 @@ export class GfxEffects {
     clear() {
         throw Error()
     }
-    addEffect(effect, i) {
+    addEffect(i, effect) {
         // assert is _GfxEffect?
         this.data[i] = effect
     }

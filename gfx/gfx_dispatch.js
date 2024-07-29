@@ -11,10 +11,9 @@ export function i_to_xy(i) {
 
 export class GfxDispatch {
     constructor(gfx_layers) {
-        // gfx_layers are objects that implement `draw(i)` and ``
+        // gfx_layers are objects that implement `draw(c, frame)`
         this.gfx_layers = gfx_layers
-        this.clearDirty()
-        //this.dirty_indexes = new Set()
+        this.resetDirty()
     }
     draw(c, frame) {
         for (let i of range(dimension.size)) {
@@ -38,7 +37,7 @@ export class GfxDispatch {
     markDirty(...i) {
         this.dirty_indexes = new Set([...this.dirty_indexes, ...i])
     }
-    clearDirty() {
+    resetDirty() {
         this.dirty_indexes = new Set()
     }
 }

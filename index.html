@@ -26,7 +26,7 @@
 
     import {GfxDispatch, BORDER_OFFSET_PX, CELL_SIZE_PX, i_to_xy} from './gfx/gfx_dispatch.js'
     import {GfxMap} from './gfx/gfx_map.js'
-    import {GfxEffects, SpriteEffect, HighlightEffect} from './gfx/gfx_effects.js'
+    import {GfxEffects, SpriteEffect, HighlightEffect, InvertEffect} from './gfx/gfx_effects.js'
 
     import {CanvasAnimationBase} from './gfx/animation_base.js'
 
@@ -75,22 +75,16 @@ class ChaosTest extends CanvasAnimationBase {
         for (let i of [70,71,72,(71-15),(71+15)]) {
             this.gfx_effects.addEffect(i, new HighlightEffect())
         }
+        this.gfx_effects.addEffect(48, new InvertEffect())
 
         // Draw whole screen on first start
         this.gfx_dispatch.draw(c, 0)
         drawFont_color(c, `This is a test of word wrap, I hope it works, I sure do!`, 16, 78, 128)
     }
     loop(context, frame) {
-        //this.clear()  // debug for dirty
-
-        const dirty = [
-            ...this.gfx_map.dirtyIndexes(frame),
-            ...this.gfx_effects.dirtyIndexes(frame),
-        ]
-        
-        this.gfx_dispatch.markDirty(...dirty)
+        this.gfx_dispatch.markDirty(...this.gfx_map.dirtyIndexes(frame), ...this.gfx_effects.dirtyIndexes(frame))
         this.gfx_dispatch.drawDirty(context, frame)
-        this.gfx_dispatch.clearDirty()
+        this.gfx_dispatch.resetDirty()
 
         //console.log(this.mouse_x,this.mouse_y, x,y)
         this.mouse_to_cell()
@@ -98,7 +92,7 @@ class ChaosTest extends CanvasAnimationBase {
     mouse_to_cell() {
         const i = this.gfx_map.map_model.dimension.position_to_index(...[this.mouse_x,this.mouse_y].map((i)=>Math.floor((i-BORDER_OFFSET_PX)/CELL_SIZE_PX)))
         if (this.mouse_index!=i) {
-            this.gfx_dispatch.markDirty(this.mouse_index)
+            this.gfx_dispatch.markDirty(this.mouse_index || 0)
             this.mouse_index = i
 
             // Hack
