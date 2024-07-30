@@ -85,25 +85,24 @@ class ChaosTest extends CanvasAnimationBase {
         drawFont_color(c, `This is a test of word wrap, I hope it works, I sure do!`, 16, 78, 128)
     }
     loop(context, frame) {
-        this.mouse_to_cell()
+        this.handle_mouse()
         this.gfx_dispatch.markDirty(
             ...this.gfx_map.dirtyIndexes(frame),
             ...this.gfx_effects.dirtyIndexes(frame),
         )
         this.gfx_effects.expireInactive()
         this.gfx_dispatch.drawDirty(context, frame)
-        this.gfx_dispatch.resetDirty()
+        this.gfx_dispatch.resetDirtyIndexes()
     }
-    mouse_to_cell() {
+    handle_mouse() {
         const i = this.gfx_map.map_model.dimension.position_to_index(...[this.mouse_x,this.mouse_y].map((i)=>Math.floor((i-BORDER_OFFSET_PX)/CELL_SIZE_PX)))
-        if (this.mouse_index!=i) {
-            this.gfx_dispatch.markDirty(this.mouse_index || 0, i)
-            this.mouse_index = i
-            this.mouse_effect.active = false
-            this.mouse_effect = new SpriteEffect(this.cursor)
-            this.gfx_effects.addEffect(this.mouse_index, this.mouse_effect)
-        }
-        
+        if (this.mouse_index == i) {return}
+        // Mouse moved - redraw
+        this.gfx_dispatch.markDirty(this.mouse_index || 0, i)
+        this.mouse_index = i
+        this.mouse_effect.active = false
+        this.mouse_effect = new SpriteEffect(this.cursor)
+        this.gfx_effects.addEffect(this.mouse_index, this.mouse_effect)
     }
 }
 new ChaosTest(undefined, 30).setRunning(true)

@@ -1,4 +1,4 @@
-import { enumerate } from "../core.js"
+import { enumerate, hasIterationProtocol } from "../core.js"
 import { COLOR, shiftImage } from "./color.js"
 
 // These are duplicated in 'map' and 'map_model' - I am sad at this
@@ -78,13 +78,12 @@ export class InvertEffect extends _GfxEffect {
 
 export class GfxEffects {
     constructor(size) {
-        this.data = new Array(size)
+        this.clear()
     }
     clear() {
-        throw Error()
+        this.data = new Array(size)
     }
     addEffect(i, effect) {
-        // assert is _GfxEffect?
         this.data[i] = effect
     }
     expireInactive() {

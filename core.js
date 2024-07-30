@@ -95,6 +95,11 @@ assertEqualsObject([
 
 
 
+// https://stackoverflow.com/a/44586654/3356840
+export const hasIterationProtocol = variable => variable !== null && Symbol.iterator in Object(variable);
+
+
+
 export class Dimension {
     constructor(width, height, depth=1) {
         this.dimensions = [width, height, depth]
