@@ -1,5 +1,5 @@
 import { enumerate } from "../core.js"
-import { COLOR } from "./color.js"
+import { COLOR, shiftImage } from "./color.js"
 
 // These are duplicated in 'map' and 'map_model' - I am sad at this
 const CELL_SIZE_PX = 16
@@ -9,7 +9,22 @@ export class _GfxEffect {
     get active() {return true}
 }
 
-export class SpriteEffect extends _GfxEffect {
+export class SpriteEffect {
+    constructor(sprite, color) {
+        this.sprite = sprite
+        this.color
+        this.active = true
+    }
+    isDirty(frame) {
+        return false
+    }
+    draw(c, frame) {
+        c.drawImage(shiftImage(this.sprite, this.color || COLOR.white), 0, 0)
+    }
+}
+
+
+export class SpriteAnimationEffect extends _GfxEffect {
     constructor(sprites) {
         super()
         this.sprites = sprites
@@ -71,6 +86,13 @@ export class GfxEffects {
     addEffect(i, effect) {
         // assert is _GfxEffect?
         this.data[i] = effect
+    }
+    expireInactive() {
+        for (let [i, effect] of enumerate(this.data)) {
+            if (effect && !effect.active) {
+                this.data[i] = undefined
+            }
+        }
     }
     * dirtyIndexes(frame) {
         for (let [i, gfx_effect] of enumerate(this.data)) {

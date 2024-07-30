@@ -26,7 +26,7 @@
 
     import {GfxDispatch, BORDER_OFFSET_PX, CELL_SIZE_PX, i_to_xy} from './gfx/gfx_dispatch.js'
     import {GfxMap} from './gfx/gfx_map.js'
-    import {GfxEffects, SpriteEffect, HighlightEffect, InvertEffect} from './gfx/gfx_effects.js'
+    import {GfxEffects, SpriteEffect, SpriteAnimationEffect, HighlightEffect, InvertEffect} from './gfx/gfx_effects.js'
 
     import {CanvasAnimationBase} from './gfx/animation_base.js'
 
@@ -38,6 +38,7 @@ class ChaosTest extends CanvasAnimationBase {
         const c = this.context
 
         this.mouse_index = undefined
+        this.mouse_effect = {}
         this.cursor = sprites.cursor[0]
 
         // Sprite tests
@@ -67,36 +68,40 @@ class ChaosTest extends CanvasAnimationBase {
         this.gfx_dispatch = new GfxDispatch([this.gfx_map, this.gfx_effects])
 
         // Gfx Effects
-        this.gfx_effects.addEffect(15*5+10, new SpriteEffect(sprites.animation.twirl))
-        this.gfx_effects.addEffect(15*5+11, new SpriteEffect(sprites.animation.dragon_breath))
-        this.gfx_effects.addEffect(15*5+12, new SpriteEffect(sprites.animation.attack_effect))
-        this.gfx_effects.addEffect(15*5+13, new SpriteEffect(sprites.animation.explosion))
-        this.gfx_effects.addEffect(15*5+14, new SpriteEffect(sprites.animation.woop))
+        
+        this.gfx_effects.addEffect(15*5+10, new SpriteAnimationEffect(sprites.animation.twirl))
+        this.gfx_effects.addEffect(15*5+11, new SpriteAnimationEffect(sprites.animation.dragon_breath))
+        this.gfx_effects.addEffect(15*5+12, new SpriteAnimationEffect(sprites.animation.attack_effect))
+        this.gfx_effects.addEffect(15*5+13, new SpriteAnimationEffect(sprites.animation.explosion))
+        this.gfx_effects.addEffect(15*5+14, new SpriteAnimationEffect(sprites.animation.woop))
         for (let i of [70,71,72,(71-15),(71+15)]) {
             this.gfx_effects.addEffect(i, new HighlightEffect())
         }
         this.gfx_effects.addEffect(48, new InvertEffect())
+        
 
         // Draw whole screen on first start
         this.gfx_dispatch.draw(c, 0)
         drawFont_color(c, `This is a test of word wrap, I hope it works, I sure do!`, 16, 78, 128)
     }
     loop(context, frame) {
-        this.gfx_dispatch.markDirty(...this.gfx_map.dirtyIndexes(frame), ...this.gfx_effects.dirtyIndexes(frame))
+        this.mouse_to_cell()
+        this.gfx_dispatch.markDirty(
+            ...this.gfx_map.dirtyIndexes(frame),
+            ...this.gfx_effects.dirtyIndexes(frame),
+        )
+        this.gfx_effects.expireInactive()
         this.gfx_dispatch.drawDirty(context, frame)
         this.gfx_dispatch.resetDirty()
-
-        //console.log(this.mouse_x,this.mouse_y, x,y)
-        this.mouse_to_cell()
     }
     mouse_to_cell() {
         const i = this.gfx_map.map_model.dimension.position_to_index(...[this.mouse_x,this.mouse_y].map((i)=>Math.floor((i-BORDER_OFFSET_PX)/CELL_SIZE_PX)))
         if (this.mouse_index!=i) {
-            this.gfx_dispatch.markDirty(this.mouse_index || 0)
+            this.gfx_dispatch.markDirty(this.mouse_index || 0, i)
             this.mouse_index = i
-
-            // Hack
-            this.context.drawImage(this.cursor, ...i_to_xy(i))
+            this.mouse_effect.active = false
+            this.mouse_effect = new SpriteEffect(this.cursor)
+            this.gfx_effects.addEffect(this.mouse_index, this.mouse_effect)
         }
         
     }
