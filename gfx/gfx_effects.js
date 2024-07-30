@@ -78,10 +78,11 @@ export class InvertEffect extends _GfxEffect {
 
 export class GfxEffects {
     constructor(size) {
+        this.size = size
         this.clear()
     }
     clear() {
-        this.data = new Array(size)
+        this.data = new Array(this.size)
     }
     addEffect(i, effect) {
         this.data[i] = effect
