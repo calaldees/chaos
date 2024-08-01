@@ -1,4 +1,4 @@
-import { enumerate, hasIterationProtocol } from "../core.js"
+import { enumerate, filterInPlace } from "../core.js"
 import { COLOR, shiftImage } from "./color.js"
 
 // These are duplicated in 'map' and 'map_model' - I am sad at this
@@ -83,26 +83,26 @@ export class GfxEffects {
     }
     clear() {
         this.data = new Array(this.size)
+        for (let i=0 ; i<this.data.length ; i++) {this.data[i]=new Array()}
     }
     addEffect(i, effect) {
-        this.data[i] = effect
+        this.data[i].push(effect)
     }
     expireInactive() {
-        for (let [i, effect] of enumerate(this.data)) {
-            if (effect && !effect.active) {
-                this.data[i] = undefined
-            }
+        for (let effects of this.data) {
+            filterInPlace(effects, (effect)=>effect && effect.active)
         }
     }
     * dirtyIndexes(frame) {
-        for (let [i, gfx_effect] of enumerate(this.data)) {
-            if (!gfx_effect) {continue}
-            if (gfx_effect.isDirty(frame)) {
+        for (let [i, effects] of enumerate(this.data)) {
+            if (effects.some((effect)=>effect.isDirty(frame))) {
                 yield i
             }
         }
     }
     draw(c, frame, i) {
-        this.data[i]?.draw(c, frame)
+        for (let effect of this.data[i]) {
+            effect.draw(c, frame)
+        }
     }
 }
