@@ -39,7 +39,7 @@ export class SpriteAnimationEffect extends _GfxEffect {
 }
 
 export class HighlightEffect extends _GfxEffect {
-    constructor(color=COLOR.yellow, alpha=0.1, frame_duration=16, frame_alpha_multiplier=0.05) {
+    constructor(color=COLOR.yellow, alpha=0.4, frame_duration=16, frame_alpha_multiplier=0.05) {
         super()
         this.color = color
         //this.indexes = indexes

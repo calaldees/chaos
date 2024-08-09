@@ -37,6 +37,13 @@ class ChaosTest extends CanvasAnimationBase {
 
         const c = this.context
 
+        this.data = this.persistentData
+        if (!this.data.id) {
+            this.data.id = Math.random()
+            this.persistentData = this.data
+        }
+
+        // Mouse
         this.mouse_index = undefined
         this.mouse_effect = {}
         this.cursor = sprites.cursor[0]
@@ -104,6 +111,12 @@ class ChaosTest extends CanvasAnimationBase {
         this.mouse_effect = new SpriteEffect(this.cursor)
         this.gfx_effects.addEffect(this.mouse_index, this.mouse_effect)
     }
+
+    // Persistent Storage -----------------------------------------------------------------
+    get persistentData() {return JSON.parse(window.localStorage.getItem("chaos") || "{}")}
+    set persistentData(data) {window.localStorage.setItem("chaos", JSON.stringify(data))}
+
+
 }
 new ChaosTest(undefined, 30).setRunning(true)
 

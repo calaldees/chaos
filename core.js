@@ -166,3 +166,9 @@ assertEqualsObject([
     [(new Dimension(3, 3, 3)).position_to_index(1,1,1), 13],
     [(new Dimension(3, 3, 3)).position_to_index(3,3,0), 0],
 ]);
+
+
+// https://stackoverflow.com/a/8831937/3356840
+export function hashString(str) {
+    return Array.from(str).reduce((hash, char) => 0 | (31 * hash + char.charCodeAt(0)), 0)
+}
