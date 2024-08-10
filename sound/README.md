@@ -1,0 +1,92 @@
+I don't know how they did it, but the reverse engineer masters created an mp3 of the sound effects form the binary data
+I need to ask them how they did it
+
+
+https://zxnet.co.uk/spectrum/chaos/sounds/sound_effect_04.mp3
+$01,$01,$01,$02,$03,$02,$00,$00
+$00,$00
+
+https://zxnet.co.uk/spectrum/chaos/sounds/sound_effect_05.mp3
+$0A,$05,$01,$05,$1E,$08,$03,$07
+$FD,$F6
+
+https://zxnet.co.uk/spectrum/chaos/sounds/sound_effect_06.mp3
+$14,$03,$28,$28,$46,$64,$02,$03
+$3C,$64
+
+
+https://zxnet.co.uk/spectrum/chaos/sounds/sound_effect_07.mp3
+$14,$03,$01,$02,$03,$04,$01,$01 	
+$01,$01
+
+
+Key Boop
+https://zxnet.co.uk/spectrum/chaos/sounds/S60.mp3
+$04,$0C,$04,$03,$02,$01,$01,$07 	
+$50,$22
+
+New spell
+https://zxnet.co.uk/spectrum/chaos/sounds/S61.mp3
+$14,$06,$02,$07,$14,$03,$FB,$14
+
+https://zxnet.co.uk/spectrum/chaos/sounds/engaged_sound_effect.mp3
+$20,$04,$FF,$FF,$1E,$3C,$FA,$FA 	
+$28,$50
+
+https://zxnet.co.uk/spectrum/chaos/sounds/S10.mp3
+$06,$03,$01,$01,$14,$1E,$04,$04 	
+$11,$17
+
+
+https://zxnet.co.uk/spectrum/chaos/asm/C33A.html
+C33A: sound_playback_delay_routine
+Used by the routine at play_sound_effect_pointer.
+calling routine takes 17 T-states, loop for (13*(B-1))+8 T-states, and return takes 10 T-states
+sound_playback_delay_routine 	C33A 	DJNZ sound_playback_delay_routine 	loop to self B-1 times then return
+	C33C 	RET
+
+https://zxnet.co.uk/spectrum/chaos/asm/C2E8.html
+C2E8: sound effect data
+Sound effects are copied here by play_sound_effect_in_HL and the bytes read directly to save calculating offsets at the original location.
+sound_effect_temp 	C2E8 	DEFB $3F 	Outer loop counter.
+	C2E9 	DEFB $04 	Middle loop counter.
+	C2EA 	DEFB $FD,$FD,$C6,$93 	Delay counters.
+	C2EE 	DEFB $04,$04,$E2,$B0 	Values to add to delay.
+
+https://zxnet.co.uk/spectrum/chaos/asm/C2F6.html#C2F9
+
+sound_effect_playback 	C301 	DI 	disable interrupts
+	C302 	LD HL,sound_effect_temp 	load first byte of sound effect playback data into B
+	C305 	LD B,(HL)
+outer_sound_loop 	C306 	PUSH BC 	preserve BC (outer loop counter)
+	C307 	LD HL,$C2E9 	load second byte of sound_effect_temp data into B
+	C30A 	LD B,(HL)
+middle_sound_loop 	C30B 	PUSH BC 	preserve BC (middle loop counter)
+	C30C 	LD B,$04 	set B to four as loop counter
+	C30E 	LD HL,$C2EA 	set HL to third byte of sound_effect_temp data
+inner_sound_loop 	C311 	PUSH BC 	preserve inner loop counter
+	C312 	PUSH HL 	preserve HL
+	C313 	LD B,(HL) 	load byte at HL into B as delay
+	C314 	CALL sound_playback_delay_routine 	call sound_playback_delay_routine
+	C317 	LD A,(port_FE_output_byte) 	load port_FE_output_byte into A
+	C31A 	XOR $30 	XOR with 00110000 (flip bits 4 and 5)
+	C31C 	LD (port_FE_output_byte),A 	write result back to port_FE_output_byte
+	C31F 	OUT ($FE),A 	output value to port $FE (ULA sound and border)
+	C321 	POP HL 	restore HL
+	C322 	INC HL 	increment HL to point to the next byte in the data block
+	C323 	POP BC 	restore inner loop counter
+	C324 	DJNZ inner_sound_loop 	loop back to inner_sound_loop for 4 iterations
+	C326 	POP BC 	restore middle loop counter
+	C327 	DJNZ middle_sound_loop 	loop back to middle_sound_loop
+	C329 	LD B,$04 	set B to four
+	C32B 	EX DE,HL 	swap HL and DE (so DE = C2EE)
+	C32C 	LD HL,$C2EA 	set HL to C2EA
+sound_delay_addition_loop 	C32F 	LD A,(DE) 	add byte at address in HL to byte at address in DE and store result at address in HL
+	C330 	ADD A,(HL)
+	C331 	LD (HL),A
+	C332 	INC DE 	increment DE and HL
+	C333 	INC HL
+	C334 	DJNZ sound_delay_addition_loop 	loop back to sound_delay_addition_loop three times
+	C336 	POP BC 	restore outer loop counter
+	C337 	DJNZ outer_sound_loop 	loop back to outer_sound_loop
+	C339 	RET 	return
