@@ -3,6 +3,15 @@ class CanvasAnimationBase {
         this.canvas = canvas || document.getElementById('canvas')
         this.context = this.canvas.getContext('2d')
 
+        this.audio = document.getElementById('audio')
+        if (!this.audio) {
+            this.audio = new Audio()
+            document.body.appendChild(this.audio)
+        }        
+        this.audio.addEventListener("loadeddata", (e) => {
+            this.audio.play()
+        })
+
         this.images = {}
 
         window.addEventListener("focus", () => {this.setRunning(true)} , false)
@@ -62,6 +71,11 @@ class CanvasAnimationBase {
         images[name] = new Image()
         images[name].onload = function() {images[name] = this}
         images[name].src = url
+    }
+
+    play_audio = (url) => {
+        // https://developer.mozilla.org/en-US/docs/Web/API/HTMLAudioElement
+        this.audio.src = url
     }
 
     run = (time) => {
