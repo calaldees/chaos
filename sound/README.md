@@ -1,6 +1,34 @@
 I don't know how they did it, but the reverse engineer masters created an mp3 of the sound effects form the binary data
 I need to ask them how they did it
 
+skoolkit is a tool to disassemble spectrum games. It has a routine for rendering audio from delays. This is similar to what I want to do.
+https://github.com/skoolkid/skoolkit/blob/7d578b689a888b6dcd8ec089369c452954b8d922/skoolkit/audio.py#L138
+```python
+    def _delays_to_samples(self, delays, options):
+        sample_delay = options[CLOCK_SPEED] / options[SAMPLE_RATE]
+        samples = []
+        direction = 1
+        i = 0
+        d = delays[0]
+        t = 0
+        while 1:
+            while t >= d:
+                i += 1
+                if i >= len(delays):
+                    break
+                d += delays[i]
+                direction *= -1
+            if i >= len(delays):
+                break
+            if direction > 0:
+                samples.append(32767)
+            else:
+                samples.append(32768)
+            t += sample_delay
+        return samples
+```
+
+http://z80-heaven.wikidot.com/the-registers-and-memory
 
 
 https://zxnet.co.uk/spectrum/chaos/asm/C33A.html

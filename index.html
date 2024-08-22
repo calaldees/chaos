@@ -102,10 +102,10 @@ class ChaosTest extends CanvasAnimationBase {
         this.gfx_dispatch.drawDirty(context, frame)
         this.gfx_dispatch.resetDirtyIndexes()
 
-        if (frame % 600 == 0) {
+        if (frame % 100 == 0) {
             //playSound(this.audio, 'engaged_sound_effect')
             const name = 'engaged_sound_effect'
-            this.play_audio(`sound/${name}.mp3`)
+            //this.play_audio(`sound/${name}.mp3`)
         }
     }
     handle_mouse() {
