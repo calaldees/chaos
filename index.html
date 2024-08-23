@@ -20,7 +20,7 @@
 
     import {sprites} from './gfx/sprites.js'  // temp for testing drawing in index
     import {unit_data} from './data/unit_data.js'
-    import {playSound} from './sound/sounds.js'
+    import {sounds, drawAudioFloatStream} from './sound/sounds.js'
 
     import {Unit} from './model/unit.js'
     import {Map} from './model/map.js'
@@ -91,6 +91,12 @@ class ChaosTest extends CanvasAnimationBase {
         // Draw whole screen on first start
         this.gfx_dispatch.draw(c, 0)
         drawFont_color(c, `This is a test of word wrap, I hope it works, I sure do!`, 16, 78, 128)
+
+        // sound temp visualization
+        c.save()
+        c.translate(0,100)
+        drawAudioFloatStream(c, sounds['engaged_sound_effect'])
+        c.restore()
     }
     loop(context, frame) {
         this.handle_mouse()

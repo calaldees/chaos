@@ -1,7 +1,7 @@
 export const sound_data = {
     // https://zxnet.co.uk/spectrum/chaos/sounds/sound_effect_07.mp3
     S60            : `$04,$0C,$04,$03,$02,$01,$01,$07,$50,$22`, //Key Boop
-    S61            : `$14,$06,$02,$07,$14,$03,$FB,$14`,   // New spell
+    //S61            : `$14,$06,$02,$07,$14,$03,$FB,$14`,   // New spell   (?not 10 bytes?)
     sound_effect_01: `$04,$03,$0A,$0A,$28,$46,$02,$02,$46,$28`,
     sound_effect_02: `$06,$0C,$00,$14,$28,$3C,$02,$06,$0C,$28`,
     sound_effect_03: `$0C,$04,$0A,$0A,$28,$07,$02,$02,$46,$1E`,
@@ -25,11 +25,11 @@ export const sound_data = {
     sound_effect_20: `$14,$03,$FF,$FF,$FF,$FF,$FF,$FF,$F9,$E9`,
     sound_effect_21: `$5A,$01,$FF,$FF,$FF,$FF,$00,$FF,$FF,$FE`,
     sound_effect_22: `$18,$0C,$0C,$2E,$50,$A0,$18,$2F,$65,$9A`,
-    sound_effect_23: `$14,$04,$17,$2D,$38`,  // This overlaps sound_effect_temp with the result that when copied the same 5 bytes are repeated.
+    sound_effect_23: `$14,$04,$17,$2D,$38 - $14,$04,$17,$2D,$38`,  // This overlaps sound_effect_temp with the result that when copied the same 5 bytes are repeated.
 
     //sound_effect_temp
     //C2E8 	DEFB $3F 	Outer loop counter.
-	//C2E9 	DEFB $04 	Middle loop counter.
-	//C2EA 	DEFB $FD,$FD,$C6,$93 	Delay counters.
-	//C2EE 	DEFB $04,$04,$E2,$B0 	Values to add to delay.
+    //C2E9 	DEFB $04 	Middle loop counter.
+    //C2EA 	DEFB $FD,$FD,$C6,$93 	Delay counters.
+    //C2EE 	DEFB $04,$04,$E2,$B0 	Values to add to delay.
 }
