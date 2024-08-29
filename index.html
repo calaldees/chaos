@@ -20,7 +20,7 @@
 
     import {sprites} from './gfx/sprites.js'  // temp for testing drawing in index
     import {unit_data} from './data/unit_data.js'
-    import {sounds, drawAudioFloatStream} from './sound/sounds.js'
+    import {sounds, drawAudioFloatStream, playSound} from './sound/sounds.js'
 
     import {Unit} from './model/unit.js'
     import {Map} from './model/map.js'
@@ -109,7 +109,7 @@ class ChaosTest extends CanvasAnimationBase {
         this.gfx_dispatch.resetDirtyIndexes()
 
         if (frame % 100 == 0) {
-            //playSound(this.audio, 'engaged_sound_effect')
+            //playSound(new AudioContext(), 'engaged_sound_effect')
             const name = 'engaged_sound_effect'
             //this.play_audio(`sound/${name}.mp3`)
         }

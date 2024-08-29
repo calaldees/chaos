@@ -54,7 +54,38 @@ function* chaosSoundDelayData_to_timecodes(data) {
     //    Else, jump to specified label
 }
 
-function* timecodes_to_floatStream(timecodes, attack=0.01, decay=0.01) {
+function* timecodes_to_floatStream(timecodes) {
+    yield* timecodes_to_floatStream__mass_velocity(timecodes)
+}
+
+function* timecodes_to_floatStream__mass_velocity(timecodes, friction=0.99, gravity=0.01, force=0.05, mass=0.3) {
+    let a = 0
+    let vel = 0
+    let last_t = 0
+    for (let [i, t] of enumerate(timecodes)) {
+        t = Math.floor(t/1000)  // convert processor Mhz to Khz - originally the sample was SUPER long
+        //console.log(i,t)
+        const up_down = i % 2 ? +1 : -1
+        for (let _t = last_t ; _t<t ; _t++) {
+            vel += (force * up_down)/mass  // apply force in direction of motion
+            vel += -vel*gravity  // attract towards centre
+            vel *= friction  // create terminal velocity
+            a += vel
+            if (a>1 || a<-1) {
+                a = Math.max(Math.min(a, 1), -1)  // limit to range -1 to 1
+                vel = 0
+            }
+            yield a
+        }
+        last_t = t
+    }
+    // fade to 0
+    while (Math.abs(a)>0.001) {
+        yield a *= 0.9
+    }
+}
+
+function* timecodes_to_floatStream__linear_test(timecodes, attack=0.01, decay=0.01) {
     let a = 0
     let last_t = 0
     for (let [i, t] of enumerate(timecodes)) {
@@ -68,12 +99,13 @@ function* timecodes_to_floatStream(timecodes, attack=0.01, decay=0.01) {
 
 
 // https://developer.mozilla.org/en-US/docs/Web/API/AudioBuffer
-
-function timecodes_list_to_audioBuffer(audioCtx, timecodes, sampleRate=11050) {
-    const audioBuffer = audioCtx.createBuffer(1, sampleRate * 3, sampleRate)    // 3 seconds
+function floatSteam_to_audioBuffer(audioCtx, floatSteam, sampleRate=11050) {
+    const audioBuffer = audioCtx.createBuffer(1, floatSteam.length, sampleRate)    // 3 seconds
     const b = audioBuffer.getChannelData(0)
-    for (let i=0 ; i<b.length ; i++) {
-        b[i] = Math.random() * 2 - 1  // Random audio test
+    for (let [i, d] of enumerate(floatSteam)) {
+    //for (let i=0 ; i<b.length ; i++) {
+       //b[i] = Math.random() * 2 - 1  // Random audio test
+       b[i] = d
     }
     return audioBuffer
 }
@@ -86,10 +118,10 @@ function playAudioBuffer(audioCtx, audioBuffer) {
 }
 
 export function playSound(audioContext, name) {
-
+    playAudioBuffer(audioContext, floatSteam_to_audioBuffer(audioContext, sounds[name]))
 }
 
-export function drawAudioFloatStream(c, floatStream, scaleFactor=50, xScale=1024) {
+export function drawAudioFloatStream(c, floatStream, yScaleFactor=50, xScale=1) {
     c.strokeStyle = 'cyan'
     c.fillStyle = 'magenta'
     c.lineWidth = 1
@@ -97,7 +129,7 @@ export function drawAudioFloatStream(c, floatStream, scaleFactor=50, xScale=1024
     let [i, v] = [0,0]
     for ([i, v] of enumerate(floatStream)) {
         if (i%xScale) {continue}
-        c.lineTo(i/xScale, Math.min(Math.max(v*scaleFactor, -scaleFactor),scaleFactor))
+        c.lineTo(i/xScale, Math.min(Math.max(v*yScaleFactor, -yScaleFactor),yScaleFactor))
     }
     c.lineTo(i, 0)
     c.lineTo(0, 0)
