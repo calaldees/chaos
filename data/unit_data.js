@@ -663,30 +663,122 @@ export const unit_data = {
         "status": ["wizardMod"],
     },
 
-
+    // https://zxnet.co.uk/spectrum/chaos/asm/EA39.html
     "Wizard JULIAN": {
         "name": "Wizard JULIAN",
+        "properties": {
+            "mov": 1,
+            "com": 1,
+            "rcm": 0,
+            "rng": 0,
+            "def": 1,
+            "mnv": 3,
+            "res": 7,
+
+            "spells": 11,
+        },
     },
     "Wizard GANDALF": {
         "name": "Wizard GANDALF",
+        "properties": {
+            "mov": 1,
+            "com": 1,
+            "rcm": 0,
+            "rng": 0,
+            "def": 1,
+            "mnv": 3,
+            "res": 6,
+
+            "spells": 15,
+        },
+
     },
     "Wizard GREATFOGEY": {
         "name": "Wizard GREATFOGEY",
+        "properties": {
+            "mov": 1,
+            "com": 3,
+            "rcm": 0,
+            "rng": 0,
+            "def": 3,
+            "mnv": 5,
+            "res": 6,
+
+            "spells": 0,  // default?
+        },
+
     },
     "Wizard DYERARTI": {
         "name": "Wizard DYERARTI",
+        "properties": {
+            "mov": 1,
+            "com": 1,
+            "rcm": 0,
+            "rng": 0,
+            "def": 2,
+            "mnv": 6,
+            "res": 7,
+
+            "spells": 0,  // default?
+        },
+
     },
     "Wizard GOWIN": {
         "name": "Wizard GOWIN",
+        "properties": {
+            "mov": 1,
+            "com": 2,
+            "rcm": 0,
+            "rng": 0,
+            "def": 2,
+            "mnv": 5,
+            "res": 0,  // default?
+
+            "spells": 0,  // default?
+        },
     },
     "Wizard MERLIN": {
         "name": "Wizard MERLIN",
+        "properties": {
+            "mov": 1,
+            "com": 1,
+            "rcm": 0,
+            "rng": 0,
+            "def": 4,
+            "mnv": 4,
+            "res": 0,  // default?
+
+            "spells": 0,  // default?
+        },
     },
     "Wizard ILIAN RANE": {
         "name": "Wizard ILIAN RANE",
+        "properties": {
+            "mov": 1,
+            "com": 1,
+            "rcm": 0,
+            "rng": 0,
+            "def": 2,
+            "mnv": 4,
+            "res": 0,  // default?
+
+            "spells": 0,  // default?
+        },
     },
     "Wizard ASIMONO ZARK": {
+        // Combat=3, Ranged combat=0, Range=0, Defence=2, Movement allowance=1, Manoeuvre rating=6, Magic resistance=0, Spells=0, Ability=0, Animation delay=30
         "name": "Wizard ASIMONO ZARK",
+        "properties": {
+            "mov": 1,
+            "com": 3,
+            "rcm": 0,
+            "rng": 0,
+            "def": 2,
+            "mnv": 6,
+            "res": 0,  // default?
+
+            "spells": 0,  // default?
+        },
     },
 
 

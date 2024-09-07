@@ -23,7 +23,9 @@
     import {sounds, drawAudioFloatStream, playSound} from './sound/sounds.js'
 
     import {Unit} from './model/unit.js'
-    import {Map} from './model/map.js'
+    //import {Map} from './model/map.js'
+    import {Game} from './model/game.js'
+    import {Player} from './model/player.js'
 
     import {GfxDispatch, BORDER_OFFSET_PX, CELL_SIZE_PX, i_to_xy} from './gfx/gfx_dispatch.js'
     import {GfxMap} from './gfx/gfx_map.js'
@@ -62,17 +64,22 @@ class ChaosTest extends CanvasAnimationBase {
         //    c.drawImage(shiftImage(monster_sprites[i], COLOR.white) , (i%16)*16, 32+(Math.floor(i/16)*16))
         //}
 
+        const game = new Game([
+            new Player("Player1", new Unit(unit_data["Wizard JULIAN"])),
+            new Player("Player2", new Unit(unit_data["Wizard GANDALF"])),
+        ])
+
+
         // Model
-        const map = new Map()
-        for (let [i, unit_name] of enumerate(Object.keys(unit_data))) {
-            map.setUnit(new Unit(unit_data[unit_name]), i)
-        }
-        map.getUnit(0).status.add("corpse")
-        map.getUnit(3).setPos(5) // HACK - test sprite flipping
+        //for (let [i, unit_name] of enumerate(Object.keys(unit_data))) {
+        //    game.map.setUnit(new Unit(unit_data[unit_name]), i)
+        //}
+        //game.map.getUnit(0).status.add("corpse")
+        //game.map.getUnit(3).setPos(5) // HACK - test sprite flipping
 
         // Gfx Map
-        this.gfx_map = new GfxMap(map)
-        this.gfx_effects = new GfxEffects(map.dimension.size)
+        this.gfx_map = new GfxMap(game.map)
+        this.gfx_effects = new GfxEffects(game.map.dimension.size)
         this.gfx_dispatch = new GfxDispatch([this.gfx_map, this.gfx_effects])
 
         // Gfx Effects
@@ -93,10 +100,10 @@ class ChaosTest extends CanvasAnimationBase {
         drawFont_color(c, `This is a test of word wrap, I hope it works, I sure do!`, 16, 78, 128)
 
         // sound temp visualization
-        c.save()
-        c.translate(0,100)
-        drawAudioFloatStream(c, sounds['engaged_sound_effect'])
-        c.restore()
+        //c.save()
+        //c.translate(0,100)
+        //drawAudioFloatStream(c, sounds['engaged_sound_effect'])
+        //c.restore()
     }
     loop(context, frame) {
         this.handle_mouse()
@@ -109,7 +116,7 @@ class ChaosTest extends CanvasAnimationBase {
         this.gfx_dispatch.resetDirtyIndexes()
 
         if (frame % 100 == 0) {
-            //playSound(new AudioContext(), 'engaged_sound_effect')
+            //playSound(this.audioContext, 'engaged_sound_effect')
             const name = 'engaged_sound_effect'
             //this.play_audio(`sound/${name}.mp3`)
         }

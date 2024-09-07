@@ -5,6 +5,7 @@ export class Unit {
         this.status = new Set()
         this.positions = []
         this.moves_remaining = 0
+        this.animColorsOverride = []
     }
     get pos() {
         return this.positions[0]

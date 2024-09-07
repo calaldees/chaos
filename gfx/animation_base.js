@@ -3,11 +3,12 @@ class CanvasAnimationBase {
         this.canvas = canvas || document.getElementById('canvas')
         this.context = this.canvas.getContext('2d')
 
+        this.audioContext = undefined
         this.audio = document.getElementById('audio')
         if (!this.audio) {
             this.audio = new Audio()
             document.body.appendChild(this.audio)
-        }        
+        }
         this.audio.addEventListener("loadeddata", (e) => {
             this.audio.play()
         })
@@ -15,11 +16,14 @@ class CanvasAnimationBase {
         this.images = {}
 
         window.addEventListener("focus", () => {this.setRunning(true)} , false)
-	    window.addEventListener("blur" , () => {this.setRunning(false)}, false)
+        window.addEventListener("blur" , () => {this.setRunning(false)}, false)
+        window.addEventListener("mousedown", (e) => this.init_audio(), false)
 
         this.keys_pressed = new Set()
-        window.addEventListener('keydown', (e) => this.keys_pressed.add(e.key), true)
-        window.addEventListener('keyup'  , (e) => this.keys_pressed.delete(e.key), true)
+        window.addEventListener('keydown'  , (e) => this.keys_pressed.add(e.key), true)
+        window.addEventListener('keyup'    , (e) => this.keys_pressed.delete(e.key), true)
+        window.addEventListener("mousedown", (e) => this.keys_pressed.add(`mouse${e.button}`), true)
+        window.addEventListener("mouseup"  , (e) => this.keys_pressed.delete(`mouse${e.button}`), true)
         this.mouse_x = 0
         this.mouse_y = 0
         this.canvas.addEventListener('mousemove', (e) => {
@@ -73,6 +77,9 @@ class CanvasAnimationBase {
         images[name].src = url
     }
 
+    init_audio = () => {
+        this.audioContext = this.audioContext || new AudioContext()
+    }
     play_audio = (url) => {
         // https://developer.mozilla.org/en-US/docs/Web/API/HTMLAudioElement
         this.audio.src = url

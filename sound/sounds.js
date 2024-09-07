@@ -43,8 +43,6 @@ function* chaosSoundDelayData_to_timecodes(data) {
         }
         t += 0
     }
-    
-
 
     // http://z80-heaven.wikidot.com/control-structures
     // DJNZ does these things (in this order):
@@ -55,16 +53,17 @@ function* chaosSoundDelayData_to_timecodes(data) {
 }
 
 function* timecodes_to_floatStream(timecodes) {
+    return
     yield* timecodes_to_floatStream__mass_velocity(timecodes)
 }
 
-function* timecodes_to_floatStream__mass_velocity(timecodes, friction=0.99, gravity=0.01, force=0.05, mass=0.3) {
+function* timecodes_to_floatStream__mass_velocity(timecodes, friction=0.99, gravity=0.01, force=0.005, mass=10) {
     let a = 0
     let vel = 0
     let last_t = 0
     for (let [i, t] of enumerate(timecodes)) {
-        t = Math.floor(t/1000)  // convert processor Mhz to Khz - originally the sample was SUPER long
-        //console.log(i,t)
+        //t = Math.floor(t/1000)  // convert processor Mhz to Khz - originally the sample was SUPER long
+        console.log(i,t)
         const up_down = i % 2 ? +1 : -1
         for (let _t = last_t ; _t<t ; _t++) {
             vel += (force * up_down)/mass  // apply force in direction of motion
@@ -114,14 +113,16 @@ function playAudioBuffer(audioCtx, audioBuffer) {
     const source = audioCtx.createBufferSource()
     source.buffer = audioBuffer
     source.connect(audioCtx.destination)
-    source.start()
+    //source.start()
 }
 
 export function playSound(audioContext, name) {
+    if (!audioContext) {console.warn("no audioContext - click something"); return}
+    console.log("playSound", name)
     playAudioBuffer(audioContext, floatSteam_to_audioBuffer(audioContext, sounds[name]))
 }
 
-export function drawAudioFloatStream(c, floatStream, yScaleFactor=50, xScale=1) {
+export function drawAudioFloatStream(c, floatStream, yScaleFactor=50, xScale=4) {
     c.strokeStyle = 'cyan'
     c.fillStyle = 'magenta'
     c.lineWidth = 1

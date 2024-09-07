@@ -22,8 +22,9 @@ export class GfxMap {
         const unit = this.map_model.data[i]
         if (!unit) {return}
         const gfx_unit = gfx_units[unit.template.name]
-        const sprite_color = gfx_unit[unit.status.has("corpse") ? 'sprite_and_color_corpse':'sprite_and_color'](frame)
-        const image = shiftImage(...sprite_color, unit.flip)
+        const sprite_color_tuple = gfx_unit[unit.status.has("corpse") ? 'sprite_and_color_corpse':'sprite_and_color'](frame)
+        // TODO override sprite_color_tuple[1] for unit?  unit.animColorsOverride[gfx_unit._animation_frame(frame) % unit.animColorsOverride.length]]
+        const image = shiftImage(...sprite_color_tuple, unit.flip)
         if (gfx_unit.color_background()) {
             c.fillStyle = gfx_unit.color_background()
             c.fillRect(0, 0, CELL_SIZE_PX, CELL_SIZE_PX)

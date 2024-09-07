@@ -1,7 +1,8 @@
 export const sound_data = {
-    engaged_sound_effect: `$20,$04,$FF,$FF,$1E,$3C,$FA,$FA,$28,$50`, 
-}
-export const sound_data2 = {
+//    engaged_sound_effect: `$01,$04,$01,$02,$03,$04,$01,$01,$01,$01`, 
+//}
+//export const sound_data2 = {
+
     // https://zxnet.co.uk/spectrum/chaos/sounds/sound_effect_07.mp3
     S60            : `$04,$0C,$04,$03,$02,$01,$01,$07,$50,$22`, //Key Boop
     //S61            : `$14,$06,$02,$07,$14,$03,$FB,$14`,   // New spell   (?not 10 bytes?)
