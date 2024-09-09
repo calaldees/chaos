@@ -172,3 +172,40 @@ assertEqualsObject([
 export function hashString(str) {
     return Array.from(str).reduce((hash, char) => 0 | (31 * hash + char.charCodeAt(0)), 0)
 }
+
+
+// https://stackoverflow.com/a/49479174/3356840
+// combined with   `Object.defineProperty(photo, '_key', {enumerable: false, value: 1});`
+// https://d7k.medium.com/avoid-serializing-dynamic-json-properties-dfbcdc143ec9
+export class Serializer{
+    // This is not sufficent - I need
+    //   recursive objects
+    //   excluding some fields (enumerable false?)
+    //   maybe objects have Serialiazable property? or deserialazie method (because null constructor may be problematic)
+
+    constructor(types){this.types = types;}
+    serialize(object) {
+        let idx = this.types.findIndex((e)=> {return e.name == object.constructor.name});
+        if (idx == -1) throw "type  '" + object.constructor.name + "' not initialized";
+        return JSON.stringify([idx, Object.entries(object)]);
+    }
+    deserialize(jstring) {
+        let array = JSON.parse(jstring);
+        let object = new this.types[array[0]]();
+        array[1].map(e=>{object[e[0]] = e[1];});
+        return object;
+    }
+    /*
+    Example use case
+    class MyClass {
+        constructor(foo) {this.foo = foo;}
+        getFoo(){return this.foo;}
+    }
+    var serializer = new Serializer([MyClass]);
+    console.log(serializer.serialize(new MyClass(42)));
+    //[0,[["foo",42]]]
+    console.log(serializer.deserialize('[0,[["foo",42]]]').getFoo());
+    //42
+    */
+}
+

@@ -23,7 +23,7 @@ export class GfxMap {
         if (!unit) {return}
         const gfx_unit = gfx_units[unit.template.name]
         const sprite_color_tuple = gfx_unit[unit.status.has("corpse") ? 'sprite_and_color_corpse':'sprite_and_color'](frame)
-        // TODO override sprite_color_tuple[1] for unit?  unit.animColorsOverride[gfx_unit._animation_frame(frame) % unit.animColorsOverride.length]]
+        sprite_color_tuple[1] = unit.getAnimColorsOverride(frame) || sprite_color_tuple[1]  // UnitModel may override color (e.g. a wizard/player has selected their color) or maybe undead versions of some monsters can be cyan?
         const image = shiftImage(...sprite_color_tuple, unit.flip)
         if (gfx_unit.color_background()) {
             c.fillStyle = gfx_unit.color_background()
