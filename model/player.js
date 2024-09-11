@@ -1,11 +1,17 @@
 import { COLOR } from "../gfx/color.js"
+import { Unit } from "./unit.js"
 
 export class Player {
-    constructor(name, unit, color=COLOR.yellow) {
-        if (!name || !unit) {throw Error()}
+    constructor(name, starting_unit_name, color=COLOR.yellow) {
+        if (!name || !starting_unit_name) {throw Error()}
         this.name = name
-        this.unit = unit
+        this.unit = new Unit(starting_unit_name, this)
         this.unit.animColorsOverride.push(color)
         this.units = []
+    }
+    newUnit(unit_name) {
+        const unit = new Unit(unit_name, this)
+        this.units.push(unit)
+        return unit
     }
 }

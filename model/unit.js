@@ -1,18 +1,23 @@
+import {unit_data} from '../data/unit_data.js'
+
 export class Unit {
-    constructor(template, owner) {
-        this.template = template  // data template for model (not gfx template)
+    constructor(unit_name, owner) {
+        console.assert(unit_data.hasOwnProperty(unit_name), `unit_name: ${unit_name} not in unit_data`)
+        this.unit_name = unit_name
+
+        //this.template = template  // data template for model (not gfx template) // do not serialize? and relink. But it's only data, so maybe serialise is ok
         this.owner = owner
         this.status = new Set()
         this.positions = []
         this.moves_remaining = 0
         this.animColorsOverride = []
     }
-    get pos() {
-        return this.positions[0]
-    }
-    setPos(i) {
-        this.positions.unshift(i)
-    }
+
+    get template() {return unit_data[this.unit_name]}
+
+    get pos() {return this.positions[0]}
+    setPos(i) {this.positions.unshift(i)}  // use setter?
+
     get flip() {
         if (this.positions.length<2) {return 0}
         return (this.positions[0] > this.positions[1]) ? 1 : 0  // not correct, but a close hack

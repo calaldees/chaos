@@ -1,5 +1,5 @@
 
-import {zip, hasIterationProtocol, all} from '../core.js'
+import {zip, hasIterationProtocol} from '../core.js'
 
 import {Map} from './map.js'
 
