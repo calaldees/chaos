@@ -1,4 +1,4 @@
-import { enumerate } from '../core.js'
+import { range } from '../core.js'
 
 import { shiftImage } from "./color.js"
 import { gfx_units } from "./units.js"
@@ -12,16 +12,18 @@ export class GfxMap {
     }
 
     * _indexed_gfx_units() {
-        for (let [i, unit] of enumerate(this.map_model.data)) {
+        for (let i of range(this.map_model.dimension.size)) {
+            const unit = this.map_model.getUnit(i)
             if (!unit) {continue}
             yield [i, gfx_units[unit.template.name], unit]
         }
     }
 
     draw(c, frame, i) {
-        const unit = this.map_model.data[i]
+        const unit = this.map_model.getUnit(i)
         if (!unit) {return}
         const gfx_unit = gfx_units[unit.template.name]
+
         const sprite_color_tuple = gfx_unit[unit.status.has("corpse") ? 'sprite_and_color_corpse':'sprite_and_color'](frame)
         sprite_color_tuple[1] = unit.getAnimColorsOverride(frame) || sprite_color_tuple[1]  // UnitModel may override color (e.g. a wizard/player has selected their color) or maybe undead versions of some monsters can be cyan?
         const image = shiftImage(...sprite_color_tuple, unit.flip)

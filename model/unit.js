@@ -1,12 +1,12 @@
 import {unit_data} from '../data/unit_data.js'
 
 export class Unit {
-    constructor(unit_name, owner) {
+    constructor(unit_name, player_name) {
         console.assert(unit_data.hasOwnProperty(unit_name), `unit_name: ${unit_name} not in unit_data`)
+        console.assert(player_name)
         this.unit_name = unit_name
+        this.player_name = player_name
 
-        //this.template = template  // data template for model (not gfx template) // do not serialize? and relink. But it's only data, so maybe serialise is ok
-        this.owner = owner
         this.status = new Set()
         this.positions = []
         this.moves_remaining = 0

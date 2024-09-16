@@ -173,6 +173,9 @@ export function hashString(str) {
     return Array.from(str).reduce((hash, char) => 0 | (31 * hash + char.charCodeAt(0)), 0)
 }
 
+export function isNumber(n){
+    return Number(n)=== n;
+}
 
 // https://stackoverflow.com/a/49479174/3356840
 // combined with   `Object.defineProperty(photo, '_key', {enumerable: false, value: 1});`
