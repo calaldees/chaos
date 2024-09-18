@@ -1,7 +1,10 @@
 
 import {zip, hasIterationProtocol} from '../core.js'
 
-import {Map} from './map.js'
+import { Unit } from "./unit.js"
+import { Map } from './map.js'
+import { Registry } from './registry.js'
+
 
 const START_LOCATIONS = [
     16,  // top left
@@ -13,28 +16,24 @@ const START_LOCATIONS = [
 ]
 
 export class Game {
-    static player_registry = {}
-    static unit_registry = []
-    static {
-        //Game.player_registry = {}
-        //Game.unit_registry = []
-    }
-
     constructor(players) {
+        Object.defineProperty(this, "registry", {writable: false, enumerable: true, value: new Registry()})
         if (!hasIterationProtocol(players)) {throw TypeError()}
         for (let player of players) {
-            Game.player_registry[player.name] = player
+            this.registry.players[player.id] = player
         }
-        this.map = new Map()
+        this.map = new Map(this.registry)
         for (let [player, start_location] of zip(players, START_LOCATIONS)) {
             if (!player) {continue}
-            Game.unit_registry.push(player.unit)
-            this.map.setUnit(player.unit, start_location)
+            const unit = this.newUnit(player.unit_type, player.id, start_location)
+            unit.animColorsOverride.push(player.color)
         }
     }
-
-    getPlayer(unit) {
-        return Game.player_registry[unit.player_name]
+    newUnit(unit_type, player_id, i) {
+        const unit = new Unit(unit_type, player_id)
+        const unit_id = this.registry.units.push(unit)-1
+        this.map.setUnit(unit_id, i)
+        return unit
     }
 
     // used for serialiseing the state of the whole game and sending it over the network or disk
