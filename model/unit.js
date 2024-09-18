@@ -1,7 +1,13 @@
 import {unit_data} from '../data/unit_data.js'
 
 export class Unit {
-    constructor(unit_type, player_id) {
+    static fromState(state) {
+        const unit = new Unit(state.unit_type, state.player_id)
+        console.warn("TODO: state over attrs")
+        return unit
+    }
+
+    constructor(unit_type, player_id, state={}) {
         console.assert(unit_data.hasOwnProperty(unit_type), `unit_type: ${unit_type} not in unit_data`)
         console.assert(player_id)
         this.unit_type = unit_type
@@ -16,7 +22,7 @@ export class Unit {
     get template() {return unit_data[this.unit_type]}
 
     get pos() {return this.positions[0]}
-    set pos(i) {this.positions.unshift(i)}  // use setter?
+    set pos(i) {this.positions.unshift(i)}
 
     get flip() {
         if (this.positions.length<2) {return 0}

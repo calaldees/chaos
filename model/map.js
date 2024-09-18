@@ -20,4 +20,12 @@ export class Map {
         if (!isNumber(unit_id)) {return}
         return this.registry.units[unit_id]
     }
+
+
+    get state() {return this}
+    set state(data) {
+        this.dimension.dimensions = data.dimension.dimensions
+        this.map_data = data.map_data
+    }
+
 }

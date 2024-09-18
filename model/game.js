@@ -37,8 +37,12 @@ export class Game {
     }
 
     // used for serialiseing the state of the whole game and sending it over the network or disk
-    get state() {return this}
-    set state(data) {throw new Error("not implemented")}
     get stateJSON() {return JSON.stringify(this.state)}
     set stateJSON(data) {this.state = JSON.parse(data)}
+    get state() {return this}
+    set state(data) {
+        this.registry.state = data.registry
+        this.map.state = data.map
+    }
+
 }

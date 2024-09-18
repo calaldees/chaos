@@ -177,6 +177,15 @@ export function isNumber(n){
     return Number(n)=== n;
 }
 
+// https://www.freecodecamp.org/news/check-if-an-object-is-empty-in-javascript/
+export function isObjectEmpty(objectName) {
+    for (let prop in objectName) {
+        if (objectName.hasOwnProperty(prop)) {return false}
+    }
+    return true
+}
+
+
 // https://stackoverflow.com/a/49479174/3356840
 // combined with   `Object.defineProperty(photo, '_key', {enumerable: false, value: 1});`
 // https://d7k.medium.com/avoid-serializing-dynamic-json-properties-dfbcdc143ec9
