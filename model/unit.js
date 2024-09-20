@@ -2,8 +2,7 @@ import {unit_data} from '../data/unit_data.js'
 
 export class Unit {
     static fromState(state) {
-        const unit = new Unit(state.unit_type, state.player_id)
-        console.warn("TODO: state over attrs")
+        const unit = new Unit(state.unit_type, state.player_id, state)
         return unit
     }
 
@@ -13,10 +12,11 @@ export class Unit {
         this.unit_type = unit_type
         this.player_id = player_id
 
-        this.status = new Set()
-        this.positions = []
-        this.moves_remaining = 0
-        this.animColorsOverride = []
+        console.log(state)
+        this.status = new Set(state.status)
+        this.positions = state.positions || []
+        this.moves_remaining = state.moves_remaining || 0
+        this.animColorsOverride = state.animColorsOverride || []
     }
 
     get template() {return unit_data[this.unit_type]}

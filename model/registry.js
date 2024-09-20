@@ -14,7 +14,6 @@ export class Registry {
     get state() {return this}
     set state(data) {
         this.units = data.units.map(Unit.fromState)
-        debugger
-        this.players = Object.fromEntries(data.players.map(Player.fromState).map((player)=>[player.id, player]))
+        this.players = Object.fromEntries(Object.entries(data.players).map(([player_name, data])=>[player_name, Player.fromState(data)]))
     }
 }

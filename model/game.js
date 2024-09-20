@@ -37,7 +37,13 @@ export class Game {
     }
 
     // used for serialiseing the state of the whole game and sending it over the network or disk
-    get stateJSON() {return JSON.stringify(this.state)}
+    get stateJSON() {
+        function replacer(key, value) {
+            if (value instanceof Set) {return [...value]}
+            return value
+        }
+        return JSON.stringify(this.state, replacer)
+    }
     set stateJSON(data) {this.state = JSON.parse(data)}
     get state() {return this}
     set state(data) {
