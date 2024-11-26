@@ -33,6 +33,7 @@
 
     import {CanvasAnimationBase} from './gfx/animation_base.js'
 
+    import {getId} from './network/id.js'
 
 class ChaosTest extends CanvasAnimationBase {
     constructor() {
@@ -40,11 +41,13 @@ class ChaosTest extends CanvasAnimationBase {
 
         const c = this.context
 
-        this.data = this.persistentData
-        if (!this.data.id) {
-            this.data.id = Math.random()
-            this.persistentData = this.data
-        }
+        const id = getId()
+        console.log("id", id)
+        // this.data = this.persistentData
+        // if (!this.data.id) {
+        //     this.data.id = Math.random()
+        //     this.persistentData = this.data
+        // }
 
         // Mouse
         this.mouse_index = undefined
