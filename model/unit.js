@@ -12,7 +12,6 @@ export class Unit {
         this.unit_type = unit_type
         this.player_id = player_id
 
-        console.log(state)
         this.status = new Set(state.status)
         this.positions = state.positions || []
         this.moves_remaining = state.moves_remaining || 0

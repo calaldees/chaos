@@ -10,3 +10,26 @@ onConnect - hello with id -
 
     send state update
 */
+
+window.addEventListener("hashchange", (event)=>{})
+window.location.hash.replace('#','')
+
+const urlParams = new URLSearchParams(window.location.search);
+const websocket_url = urlParams.get('websocket_url') || `${window.location.protocol.startsWith("https")?"wss":"ws"}://${window.location.host}/ws`
+
+const socket = new WebSocket(websocket_url)
+socket.addEventListener("open", (event) => {
+    //socket.send("Hello Server!")
+})
+socket.addEventListener("message", (msg)=>{
+    const data = JSON.parse(msg.data)
+    console.log("websocket", data)
+})
+socket.addEventListener("close", (event) => {
+    console.log("closed")
+})
+
+
+
+    // if (socket.readyState!=WebSocket.OPEN) {return}
+    // socket.send(JSON.stringify({}))
