@@ -129,3 +129,18 @@ set persistentData(data) {window.localStorage.setItem("chaos", JSON.stringify(da
 
 
 }
+
+
+// Dialog
+const dialogJoinOrCreate = document.getElementById("dialogJoinOrCreate")
+dialogJoinOrCreate.addEventListener("close", (e) => {
+    const action = e.target.returnValue
+    const channel = action == "join" ? dialogJoinOrCreate.querySelector("input[name='channel']").value : getId()
+    console.log(action, channel)
+})
+dialogJoinOrCreate.querySelector("button[action='create']").addEventListener("click", (e)=>{
+    dialogJoinOrCreate.close("create")
+})
+dialogJoinOrCreate.querySelector("button[action='join']").addEventListener("click", (e)=>{
+    dialogJoinOrCreate.close("join")
+})
