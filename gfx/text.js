@@ -36,7 +36,7 @@ export function drawFont(c, string, x, y) {
 // https://ss64.com/nt/syntax-ansi.html
 
 const REGEX_ansi_color = /\\033\[([0-9;]+)m/d
-function extract_ansi_colors(text) {
+export function extract_ansi_colors(text) {
     const pos_ansi = []
     let match
     while ((match = REGEX_ansi_color.exec(text))) {

@@ -21,6 +21,9 @@ import {CanvasAnimationBase} from './gfx/animation_base.js'
 
 import {getId} from './network/id.js'
 
+import {dialogJoinOrCreate} from './ui/dialogs.js'
+import {messaging} from './messaging/messaging.js'
+
 export class ChaosTest extends CanvasAnimationBase {
 constructor() {
     super(...arguments)
@@ -40,9 +43,13 @@ constructor() {
     this.mouse_effect = {}
     this.cursor = sprites.cursor[0]
 
+    messaging.registerHandler("map", (level, message)=>drawFont_color(c, message, 0, 176))
+
     // Sprite tests
     drawBorder(c,COLOR.blue,0,0,this.w,this.h-16)
-    drawFont_color(c, `Chaos \\033[91;103mMobile\\033[0m Test`, 0, 176)
+    //drawFont_color(c, `Chaos \\033[91;103mMobile\\033[0m Test`, 0, 176)
+    messaging.info(`Chaos \\033[91;103mMobile\\033[0m Test`)
+    console.log(messaging.handlers)
     c.drawImage(sprites.animation.twirl[8], 10*16,7*16)
 
     // Early draw tests without model or animation
@@ -129,18 +136,3 @@ set persistentData(data) {window.localStorage.setItem("chaos", JSON.stringify(da
 
 
 }
-
-
-// Dialog
-const dialogJoinOrCreate = document.getElementById("dialogJoinOrCreate")
-dialogJoinOrCreate.addEventListener("close", (e) => {
-    const action = e.target.returnValue
-    const channel = action == "join" ? dialogJoinOrCreate.querySelector("input[name='channel']").value : getId()
-    console.log(action, channel)
-})
-dialogJoinOrCreate.querySelector("button[action='create']").addEventListener("click", (e)=>{
-    dialogJoinOrCreate.close("create")
-})
-dialogJoinOrCreate.querySelector("button[action='join']").addEventListener("click", (e)=>{
-    dialogJoinOrCreate.close("join")
-})
