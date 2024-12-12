@@ -49,7 +49,6 @@ constructor() {
     drawBorder(c,COLOR.blue,0,0,this.w,this.h-16)
     //drawFont_color(c, `Chaos \\033[91;103mMobile\\033[0m Test`, 0, 176)
     messaging.info(`Chaos \\033[91;103mMobile\\033[0m Test`)
-    console.log(messaging.handlers)
     c.drawImage(sprites.animation.twirl[8], 10*16,7*16)
 
     // Early draw tests without model or animation

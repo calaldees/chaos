@@ -2,6 +2,7 @@ import { enumerate } from '../core.js'
 import { extract_ansi_colors } from '../gfx/text.js'
 
 const MessageType = Object.freeze({
+    log: Symbol("log"),
 	info: Symbol("info"),
 	debug: Symbol("debug"),
 	warning: Symbol("warning"),
@@ -11,16 +12,19 @@ const MessageType = Object.freeze({
 class Messaging {
     constructor() {
         Object.defineProperty(this, "handlers", {writable: false, enumerable: true, value: {}})
+        Object.defineProperty(this, "history", {writable: false, enumerable: true, value: []})
     }
     registerHandler = (name, handler) => {
-        console.assert(typeof handler === 'function', "handler must be a function")
+        console.assert(typeof handler === 'function', "message handler must be a function")
         this.handlers[name] = handler
     }
+    log = (m) => {this.message(MessageType.log, m)}
     info = (m) => {this.message(MessageType.info, m)}
     debug = (m) => {this.message(MessageType.debug, m)}
     warning = (m) => {this.message(MessageType.warning, m)}
     error = (m) => {this.message(MessageType.error, m)}
     message = (level, message) => {
+        this.history.push([Math.floor(Date.now() / 1000), level, message])
         Object.values(this.handlers).forEach((h)=>h(level, message))
     }
 }
@@ -48,6 +52,7 @@ const MAP_ansi_color_to_css = {
     "97": 'color: white;',         "107": 'background-color: white;',
 }
 messaging.registerHandler('console', (level, message)=>{
+    // https://developer.mozilla.org/en-US/docs/Web/API/console#outputting_text_to_the_console
     let [text, pos_ansi] = extract_ansi_colors(message)
     const css_styles = []
     for (let [i, [pos, [foreground_color_index, background_color_index]]] of enumerate(pos_ansi)) {
@@ -55,7 +60,5 @@ messaging.registerHandler('console', (level, message)=>{
         text = `${text.substring(0,i)}%c${text.substring(i, text.length)}`
         css_styles.push(`${MAP_ansi_color_to_css[foreground_color_index]} ${MAP_ansi_color_to_css[background_color_index]}`)
     }
-    // TODO: Use '%c' and css to style the log text
-    // https://developer.mozilla.org/en-US/docs/Web/API/console#outputting_text_to_the_console
     console[level.description](text, ...css_styles)
 })
