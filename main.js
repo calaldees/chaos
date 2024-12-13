@@ -23,6 +23,9 @@ import {getId} from './network/id.js'
 
 import {dialogJoinOrCreate} from './ui/dialogs.js'
 import {messaging} from './messaging/messaging.js'
+import {} from './messaging/console.js'
+import {} from './messaging/log_canvas.js'
+
 
 export class ChaosTest extends CanvasAnimationBase {
 constructor() {
