@@ -39,6 +39,6 @@ export function shiftImage(imageBitmap, color, flip=0) {
     c.globalCompositeOperation = "source-in"
     c.fillStyle = color
     c.fillRect(0,0,w,h)
-    
+
     return o.transferToImageBitmap()
 }

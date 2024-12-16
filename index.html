@@ -6,9 +6,9 @@
     <title>Chaos</title>
     <style>
         html, body {margin: 0; padding: 0; height: 100%; overflow: hidden; background-color: black;}
-        canvas {image-rendering: pixelated;}
+        canvas {image-rendering: pixelated; display: block;}
         #canvas_screen {object-fit: contain; width:100%; max-width: 100%; height: 100%; max-height: 100%;}
-        #canvas_log {display: block; border: 1px solid greenyellow;}
+        #canvas_log {border: 1px dashed green;}
     </style>
 </head>
 <body>
@@ -29,6 +29,9 @@
 <script type="module">
 import { Log } from './messaging/log_canvas.js'
 new Log(document.getElementById('canvas_log'))
+
+import { UI } from './ui/ui_canvas.js'
+new UI(document.getElementById('canvas_ui'))
 
 import { ChaosTest } from './main.js'
 new ChaosTest(document.getElementById('canvas_map'), 30).setRunning(true)
