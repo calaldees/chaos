@@ -9,11 +9,20 @@
         canvas {image-rendering: pixelated; display: block;}
         #canvas_screen {object-fit: contain; width:100%; max-width: 100%; height: 100%; max-height: 100%;}
         #canvas_log {border: 1px dashed green;}
+
+        dialog::backdrop {
+            background-color: rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(0.1em);
+            /*transition:
+                backdrop-filter 5.0s blur(0.0em),
+                background-color 5.0s rgba(0, 0, 0, 1)
+            ;*/
+        }
     </style>
 </head>
 <body>
 
-<dialog open id="dialogJoinOrCreate">
+<dialog id="dialogJoinOrCreate">
     <p>Chaos</p>
     <form method="dialog">
         <input type="text" name="name" size="10" placeholder="name">
@@ -35,6 +44,8 @@ new UI(document.getElementById('canvas_ui'))
 
 import { ChaosTest } from './main.js'
 new ChaosTest(document.getElementById('canvas_map'), 30).setRunning(true)
+
+document.getElementById("dialogJoinOrCreate").showModal()
 </script>
 </body>
 </html>
