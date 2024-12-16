@@ -96,7 +96,7 @@ assertEqualsObject([
     [ [...pos_ansi_to_color_lookup(3, [[1,[91,41]],[2,[102]]])], [["#FFF","#000"],["#F00","#D00"],["#F00","#0F0"]]],
 ])
 
-const [FONT_WIDTH, FONT_HEIGHT] = [8, 16]
+export const [FONT_WIDTH, FONT_HEIGHT] = [8, 16]
 export function drawFont_color(c, string, x, y, x_width=Infinity) {
     let [text, pos_ansi] = extract_ansi_colors(string)
     let color_lookup = [...pos_ansi_to_color_lookup(text.length, pos_ansi)]
