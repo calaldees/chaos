@@ -1,7 +1,7 @@
 import { Dimension } from "../core.js"
 import { COLOR } from '../gfx/color.js'
 import { drawBorder } from '../gfx/border.js'
-import { drawFont_color, extract_ansi_colors, FONT_WIDTH, FONT_HEIGHT } from '../gfx/text.js'
+import { drawFont, extract_ansi_colors, FONT_WIDTH, FONT_HEIGHT } from '../gfx/text.js'
 
 class UIItem {
     constructor(action, text) {
@@ -18,42 +18,53 @@ export class UI {
         this.map_data = new Array(this.dimension.size)
         this._items = []
 
-        this.setColorBackground(COLOR.red)
-        this.setColorBorder(COLOR.yellow)
+        this.clear()
 
         this.title = 'Galactium!'
+
+        this.canvas.addEventListener("mousedown", this.mouseDown)
+        //this.canvas.addEventListener("mousemove", this.mouseDown)
+        this.canvas.addEventListener("click", this.mouseClick)
     }
 
     get w() {return this.canvas.width}
     get h() {return this.canvas.height}
 
-    setColorBackground = (color) => {
-        this.backgroundColor = color
-        this.c.fillStyle = color
-        this.c.fillRect(0,0,this.w,this.h)
+    mouseDown = (event) => {
+        //if (event.type=='mousedown' || (event.type=='mousemove' && event.buttons)) {
+        console.log('mousedown', event)
+        //}
     }
-    setColorBorder = (color) => {
-        this.colorBorder = color
-        drawBorder(this.c, color, 0, 0, this.w, this.h)
-    }
-    clear() {
-        this._items = []
-        this.setColorBackground(this.colorBackground)
-        this.setColorBorder(this.colorBorder)
+    mouseClick = (event) => {
+        console.log('click', event)
     }
 
-    get title() {return this._title}
-    set title(title) {
-        this._title = title
-        let [title_no_color, _] = extract_ansi_colors(this._title)
-        const start_x_center = (Math.floor(this.dimension.width/2) - Math.floor(title_no_color.length/2)) * FONT_WIDTH
-        console.log(start_x_center, this._title)
-        drawFont_color(this.c, this._title, start_x_center, 8)
+    setBorder = (color_foreground, color_background=null) => {
+        this.border = [color_foreground, color_background]
+        drawBorder(this.c, 0, 0, this.w, this.h, ...this.colorBorder)
     }
+    clear = (color) => {
+        this.backgroundColor = color || COLOR.black
+        this.c.fillStyle = this.backgroundColor
+        this.c.fillRect(0,0,this.w,this.h)
+        this._items = []
+        this.border = null
+    }
+
+    //get title() {return this._title}
+    //set title(title) {
+    //    this._title = title
+    //    let [title_no_color, _] = extract_ansi_colors(this._title)
+    //    const start_x_center = (this.dimension.width - Math.floor(title_no_color.length/2)) * FONT_WIDTH
+    //    drawFont(this.c, this._title, start_x_center, this.border?8:0)
+    //}
 
     get items() {}
     set items(items) {
+        this.items = items
+        for (let [i, key, action, text] of items) {
 
+        }
     }
 
     getItemAt = (i) => {return this.map_data[i]}

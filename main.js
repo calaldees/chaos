@@ -49,7 +49,7 @@ constructor() {
     messaging.registerHandler("map", (level, message)=>drawFont_color(c, message, 0, 176))
 
     // Sprite tests
-    drawBorder(c,COLOR.blue,0,0,this.w,this.h-16)
+    drawBorder(c,0,0,this.w,this.h-16,COLOR.blue)
     //drawFont_color(c, `Chaos \\033[91;103mMobile\\033[0m Test`, 0, 176)
     messaging.info(`Chaos \\033[91;103mMobile\\033[0m Test`)
     c.drawImage(sprites.animation.twirl[8], 10*16,7*16)

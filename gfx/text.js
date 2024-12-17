@@ -22,9 +22,9 @@ for (let [i,char] of enumerate(FONT_ORDER)) {
     fontImageBitMaps[char] = imageDataToImageBitmap(fontImageData[i], fontImageData[i+FONT_ORDER.length])
 }
 
-export function drawFont(c, string, x, y) {
+export function drawFont(c, string, x, y, color_foreground=COLOR.white_bright) {
     for (let [i, char] of enumerate(string)) {
-        c.drawImage(fontImageBitMaps[char], x+(i*8), y)
+        c.drawImage(shiftImage(fontImageBitMaps[char], color_foreground), x+(i*8), y)
     }
 }
 

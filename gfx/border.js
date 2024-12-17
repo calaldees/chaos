@@ -6,8 +6,14 @@ const borders = Object.fromEntries(Object.entries(border_data).map(
     ([key, image_hex_data]) => [key, loadImage(image_hex_data)]
 ))
 
-function drawBorder(c, color, x1, y1, x2, y2) {
-    function d(i,x,y) {c.drawImage(shiftImage(i, color),x,y)}
+function drawBorder(c, x1, y1, x2, y2, color_foreground, color_background=null) {
+    function d(i,x,y) {
+        if (color_background) {
+            c.fillStyle = color_background
+            c.fillRect(x,y,8,8)
+        }
+        c.drawImage(shiftImage(i, color_foreground),x,y)
+    }
     d(borders.top_left, x1, y1)
     d(borders.bottom_left, x1, y2-8)
     d(borders.top_right, x2-8, y1)
