@@ -29,6 +29,7 @@ class CanvasAnimationBase {
         this.canvas.addEventListener('mousemove', (e) => {
             // js/web has behavior where the display area may not fill the window
             // I sat down with a piece of paper for over an hour to work this out
+            // TODO: Maybe this can be replaced with https://stackoverflow.com/a/42111623/3356840 ?
             let [y_offset, x_offset] = [0, 0]
             let [canvas_display_width, canvas_display_height] = [window.innerWidth, window.innerHeight]
             if (this.canvas_aspect_ratio > this.window_aspect_ratio) {
