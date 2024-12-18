@@ -15,16 +15,20 @@ export class UI {
         this.c = this.canvas.getContext('2d')
 
         this.dimension = new Dimension(this.w/FONT_WIDTH, this.h/FONT_HEIGHT)  // 32, 12 (without border)
-        this.map_data = new Array(this.dimension.size)
-        this._items = []
 
-        this.clear()
-
-        this.title = 'Galactium!'
+        //this.title = 'Galactium!'
 
         this.canvas.addEventListener("mousedown", this.mouseDown)
-        //this.canvas.addEventListener("mousemove", this.mouseDown)
+        this.canvas.addEventListener("mousemove", this.mouseDown)
         this.canvas.addEventListener("click", this.mouseClick)
+        this.canvas.addEventListener("keydown", this.keyDown)
+
+        this.clear(COLOR.red)
+
+        this.items = [
+            {i:0, key:'a', action:'test1', text:'*test-item'},
+            {i:32, key:'b', action:'test2', text:'^test-item2'},
+        ]
     }
 
     get w() {return this.canvas.width}
@@ -32,31 +36,34 @@ export class UI {
 
     xyFromMouseEvent(event) {
         // x and y in the mouse event don't relate to the parent element. Thanks javascript.
-        const rect = event.target.getBoundingClientRect()
-        return [event.clientX - rect.left, event.clientY - rect.top]
+        const r = event.target.getBoundingClientRect()
+        return [event.clientX - r.left, event.clientY - r.top]
     }
     mouseDown = (event) => {
-        //if (event.type=='mousedown' || (event.type=='mousemove' && event.buttons)) {
-        console.log('mousedown', event)
-        //}
+        if (event.type=='mousedown' || (event.type=='mousemove' && event.buttons)) {
+            this.highlightItem(this.getItemAt(this.xy_to_i(...this.xyFromMouseEvent(event))))
+        }
     }
     mouseClick = (event) => {
-        const item = getItemAt(this.xy_to_i(...this.xyFromMouseEvent(event)))
-        //console.log('click', event)
+        const item = this.getItemAt(this.xy_to_i(...this.xyFromMouseEvent(event)))
+        console.log(item)
+    }
+    keyDown = (event) => {
+        console.log(event)
     }
 
     setBorder = (color_foreground, color_background=null) => {
         this.border = [color_foreground, color_background]
         drawBorder(this.c, 0, 0, this.w, this.h, ...this.colorBorder)
     }
-    get border_offset_px() {this.border?8:0}
+    get border_offset_px() {return this.border?8:0}
 
     clear = (color) => {
         this.backgroundColor = color || COLOR.black
         this.c.fillStyle = this.backgroundColor
         this.c.fillRect(0,0,this.w,this.h)
-        this._items = []
         this.border = null
+        this._items = []
     }
 
     //get title() {return this._title}
@@ -78,21 +85,41 @@ export class UI {
         )
     }
 
-    get items() {}
+    get items() {return this._items}
     set items(items) {
-        this.items = items
-        for (let [i, key, action, text] of items) {
-            const [x, y] = this.i_to_xy(i)
-            drawFont(this.c, text, x, y)
-        }
+        this._items = items
+        this._items.forEach(this._drawItem)
     }
 
-    getItemAt = (i) => {return this.map_data[i]}
+    //{i, key, action, text}
+    _drawItem = (item) => {
+        console.log(item)
+        const {i, key, text} = item
+        const [x, y] = this.i_to_xy(i)
+        drawFont(this.c, key+text, x, y)
+    }
+
+    getItemAt = (i) => {
+        const wrap = this.dimension.width
+        for (let item of this._items) {
+            const {i:j, text} = item
+            if ((i>=j && i<=j+text.length) || (i>=j+wrap && i<=j+wrap+text.length)) {return item}
+        }
+    }
     highlightItem = (item) => {
-        c.save()
-        c.globalCompositeOperation='difference'
-        c.fillStyle='white'
-        c.fillRect(0, 0, CELL_SIZE_PX, CELL_SIZE_PX)
-        c.restore()
+        if (!item || item.highlighted) {return}
+        this._items.forEach((item)=>{
+            if (item.highlighted) {
+                item.highlighted = false
+                this._drawItem(item)
+            }
+        })
+        item.highlighted = true
+        const [x,y] = this.i_to_xy(item.i)
+        this.c.save()
+        this.c.globalCompositeOperation='difference'
+        this.c.fillStyle='white'
+        this.c.fillRect(x, y, item.text.length*FONT_WIDTH, FONT_HEIGHT)
+        this.c.restore()
     }
 }
