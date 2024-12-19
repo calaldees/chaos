@@ -20,41 +20,46 @@ export class UI {
 
         this.canvas.addEventListener("mousedown", this.mouseDown)
         this.canvas.addEventListener("mousemove", this.mouseDown)
-        this.canvas.addEventListener("click", this.mouseClick)
+        this.canvas.addEventListener("click", this.mouseUp)
         this.canvas.addEventListener("keydown", this.keyDown)
+        this.canvas.addEventListener("keyup", this.keyUp)
 
         this.clear(COLOR.red)
+        this.setBorder(COLOR.yellow)
 
         this.items = [
             {i:0, key:'a', action:'test1', text:'*test-item'},
             {i:32, key:'b', action:'test2', text:'^test-item2'},
         ]
+        this.callback = (item) => {console.log('UISelected', item)}
     }
 
     get w() {return this.canvas.width}
     get h() {return this.canvas.height}
 
-    xyFromMouseEvent(event) {
+    _xyFromMouseEvent(event) {
         // x and y in the mouse event don't relate to the parent element. Thanks javascript.
         const r = event.target.getBoundingClientRect()
         return [event.clientX - r.left, event.clientY - r.top]
     }
     mouseDown = (event) => {
         if (event.type=='mousedown' || (event.type=='mousemove' && event.buttons)) {
-            this.highlightItem(this.getItemAt(this.xy_to_i(...this.xyFromMouseEvent(event))))
+            this.highlightItem(this.getItemAt(this.xy_to_i(...this._xyFromMouseEvent(event))))
         }
     }
-    mouseClick = (event) => {
-        const item = this.getItemAt(this.xy_to_i(...this.xyFromMouseEvent(event)))
-        console.log(item)
-    }
-    keyDown = (event) => {
-        console.log(event)
+    mouseUp = (event) => {this.itemSelected(this.getItemAt(this.xy_to_i(...this._xyFromMouseEvent(event))))}
+    keyDown = (event) => {this.highlightItem(this.getItemFromKey(event.key))}
+    keyUp = (event) => {this.itemSelected(this.getItemFromKey(event.key))}
+
+    itemSelected = (item) => {
+        this.highlightNone()
+        if (!item) {return}
+        this.callback(item)
     }
 
     setBorder = (color_foreground, color_background=null) => {
         this.border = [color_foreground, color_background]
-        drawBorder(this.c, 0, 0, this.w, this.h, ...this.colorBorder)
+        drawBorder(this.c, 0, 0, this.w, this.h, ...this.border)
     }
     get border_offset_px() {return this.border?8:0}
 
@@ -84,6 +89,17 @@ export class UI {
             Math.floor((y-this.border_offset_px)/FONT_HEIGHT),
         )
     }
+    getItemAt = (i) => {
+        for (let item of this._items) {
+            const {i:j, text} = item
+            if (i>=j && i<=j+text.length) {return item}
+        }
+    }
+    getItemFromKey(key) {
+        for (let item of this._items) {
+            if (key == item.key) {return item}
+        }
+    }
 
     get items() {return this._items}
     set items(items) {
@@ -93,33 +109,30 @@ export class UI {
 
     //{i, key, action, text}
     _drawItem = (item) => {
-        console.log(item)
         const {i, key, text} = item
         const [x, y] = this.i_to_xy(i)
         drawFont(this.c, key+text, x, y)
     }
-
-    getItemAt = (i) => {
-        const wrap = this.dimension.width
-        for (let item of this._items) {
-            const {i:j, text} = item
-            if ((i>=j && i<=j+text.length) || (i>=j+wrap && i<=j+wrap+text.length)) {return item}
-        }
-    }
-    highlightItem = (item) => {
-        if (!item || item.highlighted) {return}
-        this._items.forEach((item)=>{
-            if (item.highlighted) {
-                item.highlighted = false
-                this._drawItem(item)
-            }
-        })
-        item.highlighted = true
+    _drawInvertItem = (item) => {
         const [x,y] = this.i_to_xy(item.i)
         this.c.save()
         this.c.globalCompositeOperation='difference'
         this.c.fillStyle='white'
-        this.c.fillRect(x, y, item.text.length*FONT_WIDTH, FONT_HEIGHT)
+        this.c.fillRect(x, y, (item.text.length+1)*FONT_WIDTH, FONT_HEIGHT)
         this.c.restore()
+    }
+    highlightNone() {
+        this._items.forEach((item)=>{
+            if (item.highlighted) {
+                item.highlighted = false
+                this._drawInvertItem(item)
+            }
+        })
+    }
+    highlightItem = (item) => {
+        if (!item || item.highlighted) {return}
+        this.highlightNone()
+        item.highlighted = true
+        this._drawInvertItem(item)
     }
 }
