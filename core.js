@@ -98,6 +98,16 @@ assertEqualsObject([
 // https://stackoverflow.com/a/44586654/3356840
 export const hasIterationProtocol = variable => variable !== null && Symbol.iterator in Object(variable);
 
+export const setIntersect = (set1, set2) => [...set1].filter(num => set2.has(num))
+
+export const hasAllProperties = (obj, keys) => setIntersect(Object.getOwnPropertyNames(obj), new Set(keys)).length == keys.length
+assertEqualsObject([
+    [ hasAllProperties({a:1, b:2},['a']), true ],
+    [ hasAllProperties({a:1, b:2},['b', 'a']), true ],
+    [ hasAllProperties({a:1, b:2},['b', 'a', 'c']), false ],
+    [ hasAllProperties({a:1, b:2},['d']), false ],
+])
+
 
 
 export class Dimension {

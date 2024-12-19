@@ -1,4 +1,4 @@
-import { Dimension } from "../core.js"
+import { Dimension, hasAllProperties, all } from "../core.js"
 import { COLOR } from '../gfx/color.js'
 import { drawBorder } from '../gfx/border.js'
 import { drawFont, extract_ansi_colors, FONT_WIDTH, FONT_HEIGHT } from '../gfx/text.js'
@@ -28,14 +28,24 @@ export class UI {
         this.setBorder(COLOR.yellow)
 
         this.items = [
-            {i:0, key:'a', action:'test1', text:'*test-item'},
-            {i:32, key:'b', action:'test2', text:'^test-item2'},
+            {i:0, key:'A', action:'test1', text:'*test-item', color: COLOR.white},
+            {i:32, key:'B', action:'test2', text:'^test-item2', color: COLOR.cyan},
         ]
         this.callback = (item) => {console.log('UISelected', item)}
     }
 
     get w() {return this.canvas.width}
     get h() {return this.canvas.height}
+
+    get items() {return this._items}
+    set items(items) {
+        this._items = items
+        const ITEM_REQUIRED_KEYS = ['i', 'key', 'action', 'text', 'color']
+        this._items.forEach((item)=>{
+            if (!hasAllProperties(item, ITEM_REQUIRED_KEYS)) {throw `ui items must have ${ITEM_REQUIRED_KEYS}, obj_properties:${Object.getOwnPropertyNames(item)}`}
+        })
+        this._items.forEach(this._drawItem)
+    }
 
     _xyFromMouseEvent(event) {
         // x and y in the mouse event don't relate to the parent element. Thanks javascript.
@@ -49,7 +59,7 @@ export class UI {
     }
     mouseUp = (event) => {this.itemSelected(this.getItemAt(this.xy_to_i(...this._xyFromMouseEvent(event))))}
     keyDown = (event) => {this.highlightItem(this.getItemFromKey(event.key))}
-    keyUp = (event) => {this.itemSelected(this.getItemFromKey(event.key))}
+    keyUp = (event) => {this.itemSelected(this.getItemFromKey(event.key))}  // FIX BUG: handle multiple keypress items gracefully
 
     itemSelected = (item) => {
         this.highlightNone()
@@ -97,21 +107,15 @@ export class UI {
     }
     getItemFromKey(key) {
         for (let item of this._items) {
-            if (key == item.key) {return item}
+            if (key.toLocaleLowerCase() == item.key.toLocaleLowerCase()) {return item}
         }
-    }
-
-    get items() {return this._items}
-    set items(items) {
-        this._items = items
-        this._items.forEach(this._drawItem)
     }
 
     //{i, key, action, text}
     _drawItem = (item) => {
-        const {i, key, text} = item
+        const {i, key, text, color} = item
         const [x, y] = this.i_to_xy(i)
-        drawFont(this.c, key+text, x, y)
+        drawFont(this.c, key+text, x, y, color)
     }
     _drawInvertItem = (item) => {
         const [x,y] = this.i_to_xy(item.i)
