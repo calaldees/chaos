@@ -1,11 +1,11 @@
-# chaos
-An experiment to recreate Julian Gollop's - [Chaos: The Battle of Wizards](https://en.wikipedia.org/wiki/Chaos:_The_Battle_of_Wizards) - with a web mobile phone interface
+Chaos: The Battle of Wizards
+============================
 
+An attempt to recreate Julian Gollop's seminal classic - [Chaos: The Battle of Wizards](https://en.wikipedia.org/wiki/Chaos:_The_Battle_of_Wizards) - with a web mobile phone interface
+
+* [WorldOfSpectrum: Original Instructions (GamesWorkshop BigBox 1984).txt](https://worldofspectrum.net/pub/sinclair/games-info/c/Chaos.txt)
 * [The incomplete commented Chaos disassembly](https://zxnet.co.uk/spectrum/chaos/index.html)
-* [lewster32/archaos](https://github.com/lewster32/archaos)
-
-
-Unsorted
-========
-
-* [YouTube: Chaos gameplay footage](https://www.youtube.com/watch?v=gGvyCI_4CQE)
+* Gameplay footage
+  * [YouTube: Chaos： The Battle of Wizards Walkthrough ｜ 1985 ｜ Games Workshop ｜ ZX Spectrum [sh97mNYpsIw]](https://www.youtube.com/watch?v=sh97mNYpsIw)
+* Other remakes
+  * [lewster32/archaos](https://github.com/lewster32/archaos)
