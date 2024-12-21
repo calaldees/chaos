@@ -1,4 +1,4 @@
-import { Dimension, hasAllProperties, all } from "../core.js"
+import { Dimension, hasAllProperties, range, zip } from "../core.js"
 import { COLOR } from '../gfx/color.js'
 import { drawBorder } from '../gfx/border.js'
 import { drawFont, extract_ansi_colors, FONT_WIDTH, FONT_HEIGHT } from '../gfx/text.js'
@@ -24,14 +24,17 @@ export class UI {
         this.canvas.addEventListener("keydown", this.keyDown)
         this.canvas.addEventListener("keyup", this.keyUp)
 
-        this.clear(COLOR.red)
-        this.setBorder(COLOR.yellow)
+        this.clear(COLOR.black)
+        //this.setBorder(COLOR.yellow)
 
-        this.items = [
-            {i:0, key:'A', action:'test1', text:'*test-item', color: COLOR.white},
-            {i:32, key:'B', action:'test2', text:'^test-item2', color: COLOR.cyan},
-        ]
+        this.items = [...this.mergeItemsAndLayout([
+            {action:'test1', text:'*test-item', color: COLOR.white},
+            {action:'test2', text:'^test-item2', color: COLOR.cyan},
+            {action:'test3', text:'-test-item2', color: COLOR.yellow},
+        ], this.UI_INDEXES_2COLS), {i:352, key: '0', action:'cancel', text: "Press '0' to return to main menu".toUpperCase(), color: COLOR.yellow, hide_key_prefix: true}]
         this.callback = (item) => {console.log('UISelected', item)}
+
+        this.drawFont("allan'S SPELLS", 0,0, COLOR.yellow)
     }
 
     get w() {return this.canvas.width}
@@ -111,18 +114,20 @@ export class UI {
         }
     }
 
-    //{i, key, action, text}
+    drawFont = (text, x, y, color=COLOR.white) => {
+        drawFont(this.c, text, x*FONT_WIDTH, y*FONT_HEIGHT, color)
+    }
     _drawItem = (item) => {
-        const {i, key, text, color} = item
+        const {i, key, text, color, hide_key_prefix} = item
         const [x, y] = this.i_to_xy(i)
-        drawFont(this.c, key+text, x, y, color)
+        drawFont(this.c, (hide_key_prefix?'':key)+text, x, y, color)
     }
     _drawInvertItem = (item) => {
         const [x,y] = this.i_to_xy(item.i)
         this.c.save()
         this.c.globalCompositeOperation='difference'
         this.c.fillStyle='white'
-        this.c.fillRect(x, y, (item.text.length+1)*FONT_WIDTH, FONT_HEIGHT)
+        this.c.fillRect(x, y, ((item.hide_key_prefix?0:1)+item.text.length)*FONT_WIDTH, FONT_HEIGHT)
         this.c.restore()
     }
     highlightNone() {
@@ -134,9 +139,23 @@ export class UI {
         })
     }
     highlightItem = (item) => {
-        if (!item || item.highlighted) {return}
         this.highlightNone()
+        if (!item || item.highlighted) {return}
         item.highlighted = true
         this._drawInvertItem(item)
+    }
+
+    get UI_INDEXES_2COLS() {
+        const start_row = 1
+        return [...range(20)].map((r)=>{return {
+            'i': r*(this.dimension.width/2)+(this.dimension.width*start_row),
+            'key': String.fromCharCode(r+65),
+        }})
+    }
+    *mergeItemsAndLayout(items, layout) {
+        for (let [i, l] of zip(items, layout)) {
+            if (!i || !l) {return}
+            yield {...i, ...l}
+        }
     }
 }
