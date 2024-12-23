@@ -1,3 +1,7 @@
+
+volumes:
+    logs:
+
 services:
 
   nginx:
@@ -8,6 +12,9 @@ services:
       - 80:80
     links:
       - channel-server
+    volumes:
+        - logs:/var/log
+
 
   channel-server:
     build:

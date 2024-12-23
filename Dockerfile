@@ -17,9 +17,9 @@ FROM node:alpine as build
     #  ? Single html file with all js gziped?
 
 FROM nginx:alpine as nginx
-    WORKDIR /app/www/
+    WORKDIR /usr/share/nginx/html/
+    COPY nginx.conf /etc/nginx/nginx.conf
     COPY ./src .
-    #COPY nginx.conf /etc/nginx/nginx.conf
         # ws proxy
         # pre-gzipped static serving of main.js.gz
     #COPY --from=build /build/*.gz main.js.gz

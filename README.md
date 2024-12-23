@@ -1,4 +1,4 @@
-Chaos: The Battle of Wizards
+Chaos: The Battle of Wizards (Remake)
 ============================
 
 * [src/index.html](./src/index.html)
