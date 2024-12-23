@@ -3,11 +3,6 @@ import { COLOR } from '../gfx/color.js'
 import { drawBorder } from '../gfx/border.js'
 import { drawFont, extract_ansi_colors, FONT_WIDTH, FONT_HEIGHT } from '../gfx/text.js'
 
-class UIItem {
-    constructor(action, text) {
-
-    }
-}
 
 export class UI {
     constructor(canvas) {
@@ -16,8 +11,6 @@ export class UI {
 
         this.dimension = new Dimension(this.w/FONT_WIDTH, this.h/FONT_HEIGHT)  // 32, 12 (without border)
 
-        //this.title = 'Galactium!'
-
         this.canvas.addEventListener("mousedown", this.mouseDown)
         this.canvas.addEventListener("mousemove", this.mouseDown)
         this.canvas.addEventListener("click", this.mouseUp)
@@ -25,16 +18,6 @@ export class UI {
         this.canvas.addEventListener("keyup", this.keyUp)
 
         this.clear(COLOR.black)
-        //this.setBorder(COLOR.yellow)
-
-        this.items = [...this.mergeItemsAndLayout([
-            {action:'test1', text:'*test-item', color: COLOR.white},
-            {action:'test2', text:'^test-item2', color: COLOR.cyan},
-            {action:'test3', text:'-test-item2', color: COLOR.yellow},
-        ], this.UI_INDEXES_2COLS), {i:352, key: '0', action:'cancel', text: "Press '0' to return to main menu".toUpperCase(), color: COLOR.yellow, hide_key_prefix: true}]
-        this.callback = (item) => {console.log('UISelected', item)}
-
-        this.drawFont("allan'S SPELLS", 0,0, COLOR.yellow)
     }
 
     get w() {return this.canvas.width}
@@ -145,13 +128,6 @@ export class UI {
         this._drawInvertItem(item)
     }
 
-    get UI_INDEXES_2COLS() {
-        const start_row = 1
-        return [...range(20)].map((r)=>{return {
-            'i': r*(this.dimension.width/2)+(this.dimension.width*start_row),
-            'key': String.fromCharCode(r+65),
-        }})
-    }
     *mergeItemsAndLayout(items, layout) {
         for (let [i, l] of zip(items, layout)) {
             if (!i || !l) {return}
