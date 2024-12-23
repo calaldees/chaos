@@ -1,0 +1,15 @@
+services:
+
+  nginx:
+    build:
+      context: ./
+      target: nginx
+    ports:
+      - 80:80
+    links:
+      - channelServer
+
+  channelServer:
+    build:
+      context: ./channelServer/
+      target: channelServer

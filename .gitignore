@@ -2,3 +2,7 @@
 
 data/classicspells.json
 data/classicunits.json
+
+channelServer/
+
+temp.js
