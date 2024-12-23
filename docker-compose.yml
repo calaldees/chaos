@@ -7,9 +7,10 @@ services:
     ports:
       - 80:80
     links:
-      - channelServer
+      - channel-server
 
-  channelServer:
+  channel-server:
     build:
       context: ./channelServer/
-      target: channelServer
+      target: production
+    command: [ '--log_level=10', '--first_peer' ]

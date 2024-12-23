@@ -1,1 +1,3 @@
-channelServer/
+**/node_modules
+
+channelServer

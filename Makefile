@@ -15,4 +15,4 @@ channelServer:
 #build: channelServer
 #	docker build --tag ${DOCKER_IMAGE} .
 run: channelServer
-	docker compose up --build nginx
+	docker compose up --build

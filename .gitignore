@@ -1,8 +1,8 @@
 .DS_Store
+**/node_modules
+
+channelServer
 
 data/classicspells.json
 data/classicunits.json
-
-channelServer/
-
 temp.js
