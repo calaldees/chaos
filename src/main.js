@@ -54,7 +54,7 @@ constructor() {
     document.getElementById("dialogJoinOrCreate").showModal()
 
     // Network test
-    const network = new NetworkManager()
+    const network = new NetworkManager("test1")
     network.addOnMessageListener((data)=>console.log("socket recv", data))
 
     // Mouse

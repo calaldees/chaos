@@ -3,9 +3,10 @@ import { getId } from './id.js'
 const id = getId()
 
 export class NetworkManager {
-    constructor() {
+    constructor(channel) {
         const urlParams = new URLSearchParams(window.location.search);
-        this.websocket_url = urlParams.get('websocket_url') || `${window.location.protocol.startsWith("https")?"wss":"ws"}://${window.location.host}/channel-server/`
+        this.websocket_url = urlParams.get('websocket_url') || `${window.location.protocol.startsWith("https")?"wss":"ws"}://${window.location.host}/`
+        this.websocket_url += `${channel}.ws`
         this.onMessageListeners = new Set()
         this.connect()
     }
