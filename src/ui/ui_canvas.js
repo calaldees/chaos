@@ -4,6 +4,13 @@ import { drawBorder } from '../gfx/border.js'
 import { drawFont, extract_ansi_colors, FONT_WIDTH, FONT_HEIGHT } from '../gfx/text.js'
 
 
+export function* mergeItemsAndLayout(items, layout) {
+    for (let [i, l] of zip(items, layout)) {
+        if (!i || !l) {return}
+        yield {...i, ...l}
+    }
+}
+
 export class UI {
     constructor(canvas) {
         this.canvas = canvas || document.getElementById('canvas')
@@ -79,7 +86,7 @@ export class UI {
         const [x,y,z] = this.dimension.index_to_position(i)
         return [x*FONT_WIDTH+this.border_offset_px, y*FONT_HEIGHT+this.border_offset_px]
     }
-    xy_to_i(x,y) {
+    xy_to_i = (x,y) => {
         return this.dimension.position_to_index(
             Math.floor((x-this.border_offset_px)/FONT_WIDTH),
             Math.floor((y-this.border_offset_px)/FONT_HEIGHT),
@@ -91,7 +98,7 @@ export class UI {
             if (i>=j && i<=j+text.length) {return item}
         }
     }
-    getItemFromKey(key) {
+    getItemFromKey = (key) => {
         for (let item of this._items) {
             if (key.toLocaleLowerCase() == item.key.toLocaleLowerCase()) {return item}
         }
@@ -113,7 +120,7 @@ export class UI {
         this.c.fillRect(x, y, ((item.hide_key_prefix?0:1)+item.text.length)*FONT_WIDTH, FONT_HEIGHT)
         this.c.restore()
     }
-    highlightNone() {
+    highlightNone = () => {
         this._items.forEach((item)=>{
             if (item.highlighted) {
                 item.highlighted = false
@@ -128,10 +135,4 @@ export class UI {
         this._drawInvertItem(item)
     }
 
-    *mergeItemsAndLayout(items, layout) {
-        for (let [i, l] of zip(items, layout)) {
-            if (!i || !l) {return}
-            yield {...i, ...l}
-        }
-    }
 }

@@ -1,6 +1,7 @@
 import { range } from '../core.js'
 import { COLOR } from '../gfx/color.js'
 
+import {mergeItemsAndLayout} from './ui_canvas.js'
 
 export class UICharacterSelect {
     constructor(ui) {
@@ -17,7 +18,7 @@ export class UICharacterSelect {
 
         ui.drawFont("Which colour?", 0, 7, COLOR.magenta)
 
-        ui.items = [...ui.mergeItemsAndLayout([
+        ui.items = [...mergeItemsAndLayout([
             {action:'test1', text:'**', color: COLOR.cyan},
             {action:'test2', text:'**', color: COLOR.cyan},
             {action:'test2', text:'**', color: COLOR.cyan},
