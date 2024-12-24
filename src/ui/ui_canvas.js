@@ -9,8 +9,6 @@ export class UI {
         this.canvas = canvas || document.getElementById('canvas')
         this.c = this.canvas.getContext('2d')
 
-        this.dimension = new Dimension(this.w/FONT_WIDTH, this.h/FONT_HEIGHT)  // 32, 12 (without border)
-
         this.canvas.addEventListener("mousedown", this.mouseDown)
         this.canvas.addEventListener("mousemove", this.mouseDown)
         this.canvas.addEventListener("click", this.mouseUp)
@@ -53,17 +51,19 @@ export class UI {
         this.callback(item)
     }
 
-    setBorder = (color_foreground, color_background=null) => {
+    setBorder = (color_foreground, color_background=null, border_offset_px=8) => {
         this.border = [color_foreground, color_background]
         drawBorder(this.c, 0, 0, this.w, this.h, ...this.border)
+        this.border_offset_px = border_offset_px
+        this.dimension = new Dimension((this.w-this.border_offset_px*2)/FONT_WIDTH, (this.h-this.border_offset_px*2)/FONT_HEIGHT)  // 32, 12 (without border)
     }
-    get border_offset_px() {return this.border?8:0}
+    //get border_offset_px() {return this.border?8:0}
 
     clear = (color) => {
+        this.setBorder(null, null, 0)
         this.backgroundColor = color || COLOR.black
         this.c.fillStyle = this.backgroundColor
         this.c.fillRect(0,0,this.w,this.h)
-        this.border = null
         this._items = []
     }
 
@@ -98,7 +98,7 @@ export class UI {
     }
 
     drawFont = (text, x, y, color=COLOR.white) => {
-        drawFont(this.c, text, x*FONT_WIDTH, y*FONT_HEIGHT, color)
+        drawFont(this.c, text, (x*FONT_WIDTH)+this.border_offset_px, (y*FONT_HEIGHT)+this.border_offset_px, color)
     }
     _drawItem = (item) => {
         const {i, key, text, color, hide_key_prefix} = item

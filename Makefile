@@ -16,3 +16,7 @@ channelServer:
 #	docker build --tag ${DOCKER_IMAGE} .
 run: channelServer
 	docker compose up --build
+
+debug_minify:
+	docker build --tag ${DOCKER_IMAGE} --target build .
+	docker run --rm -it ${DOCKER_IMAGE} /bin/sh

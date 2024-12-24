@@ -36,14 +36,20 @@
 <canvas id="canvas_log" width="256" height="192"></canvas>
 
 <script type="module">
+import { ChaosTest } from './main.js'
+new ChaosTest(document.getElementById('canvas_map'), 30).setRunning(true)
+
+import { UI } from './ui/ui_canvas.js'
+import { UISpells } from './ui/spells.js'
+import { UICharacterSelect } from './ui/character_select.js'
+const ui = new UI(document.getElementById('canvas_ui'))
+//new UISpells(ui)
+new UICharacterSelect(ui)
+
+
 import { Log } from './messaging/log_canvas.js'
 new Log(document.getElementById('canvas_log'))
 
-import { UI } from './ui/ui_canvas.js'
-new UI(document.getElementById('canvas_ui'))
-
-import { ChaosTest } from './main.js'
-new ChaosTest(document.getElementById('canvas_map'), 30).setRunning(true)
 
 document.getElementById("dialogJoinOrCreate").showModal()
 </script>

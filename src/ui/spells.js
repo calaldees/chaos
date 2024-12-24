@@ -1,8 +1,9 @@
+import { range } from '../core.js'
 import { COLOR } from '../gfx/color.js'
 
 export class UISpells {
     constructor(ui) {
-        console.assert(typeof(ui) == "UI")
+        console.assert(ui.constructor.name == "UI", 'must pass ui obj')
         this.ui = ui
         ui.items = [...ui.mergeItemsAndLayout([
             {action:'test1', text:'*test-item', color: COLOR.white},
