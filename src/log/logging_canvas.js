@@ -1,4 +1,4 @@
-import { messaging } from './messaging.js'
+import { logging } from './logging.js'
 import { drawFont_color, FONT_HEIGHT } from '../gfx/text.js'
 
 /*
@@ -8,13 +8,13 @@ window.addEventListener('resize', () => {
 }, false);
 */
 
-export class Log {
+export class LoggingCanvas {
     constructor(canvas) {
         this.canvas = canvas || document.getElementById('canvas')
         this.context = this.canvas.getContext('2d')
 
         this.pos = 0
-        messaging.registerHandler("log", this._log)
+        logging.registerHandler("log", this._log)
     }
     _log = (level, message) => {
         drawFont_color(this.context, message, 0, this.pos)

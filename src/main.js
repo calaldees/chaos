@@ -22,9 +22,16 @@ import {CanvasAnimationBase} from './gfx/animation_base.js'
 import {getId} from './network/id.js'
 
 import {dialogJoinOrCreate} from './ui/dialogs.js'
-import {messaging} from './messaging/messaging.js'
-import {} from './messaging/console.js'
-import {} from './messaging/log_canvas.js'
+import {logging} from './log/logging.js'
+
+import { UI } from './ui/ui_canvas.js'
+import { UISpells } from './ui/spells.js'
+import { UICharacterSelect } from './ui/character_select.js'
+
+import {} from './log/console.js'
+import { LoggingCanvas } from './log/logging_canvas.js'
+
+import { NetworkManager } from './network/network.js'
 
 
 export class ChaosTest extends CanvasAnimationBase {
@@ -34,24 +41,33 @@ constructor() {
     const c = this.context
 
     const id = getId()
-    console.log("id", id)
-    // this.data = this.persistentData
-    // if (!this.data.id) {
-    //     this.data.id = Math.random()
-    //     this.persistentData = this.data
-    // }
+
+    // UI Test
+    const ui = new UI(document.getElementById('canvas_ui'))
+    //new UISpells(ui)
+    new UICharacterSelect(ui)
+
+    // Log test
+    new LoggingCanvas(document.getElementById('canvas_log'))
+
+    // Dialog Test
+    document.getElementById("dialogJoinOrCreate").showModal()
+
+    // Network test
+    const network = new NetworkManager()
+    network.addOnMessageListener((data)=>console.log("socket recv", data))
 
     // Mouse
     this.mouse_index = undefined
     this.mouse_effect = {}
     this.cursor = sprites.cursor[0]
 
-    messaging.registerHandler("map", (level, message)=>drawFont_color(c, message, 0, 176))
+    logging.registerHandler("map", (level, message)=>drawFont_color(c, message, 0, 176))
 
     // Sprite tests
     drawBorder(c,0,0,this.w,this.h-16,COLOR.blue)
     //drawFont_color(c, `Chaos \\033[91;103mMobile\\033[0m Test`, 0, 176)
-    messaging.info(`Chaos \\033[91;103mMobile\\033[0m Test`)
+    logging.info(`Chaos \\033[91;103mMobile\\033[0m Test`)
     c.drawImage(sprites.animation.twirl[8], 10*16,7*16)
 
     // Early draw tests without model or animation

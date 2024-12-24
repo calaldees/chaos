@@ -1,4 +1,4 @@
-import { messaging } from "./messaging.js"
+import { logging } from "./logging.js"
 
 import { enumerate } from '../core.js'
 import { extract_ansi_colors } from '../gfx/text.js'
@@ -24,7 +24,7 @@ const MAP_ansi_color_to_css = {
     "96": 'color: cyan;',          "106": 'background-color: cyan;',
     "97": 'color: white;',         "107": 'background-color: white;',
 }
-messaging.registerHandler('console', (level, message)=>{
+logging.registerHandler('console', (level, message)=>{
     // https://developer.mozilla.org/en-US/docs/Web/API/console#outputting_text_to_the_console
     let [text, pos_ansi] = extract_ansi_colors(message)
     const css_styles = []

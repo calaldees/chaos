@@ -6,7 +6,7 @@ const MessageType = Object.freeze({
     error: Symbol("error"),
 })
 
-class Messaging {
+class Logging {
     constructor() {
         Object.defineProperty(this, "handlers", {writable: false, enumerable: true, value: {}})
         Object.defineProperty(this, "history", {writable: false, enumerable: true, value: []})
@@ -26,4 +26,4 @@ class Messaging {
     }
 }
 
-export const messaging = new Messaging()
+export const logging = new Logging()

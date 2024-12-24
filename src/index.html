@@ -38,25 +38,6 @@
 <script type="module">
 import { ChaosTest } from './main.js'
 new ChaosTest(document.getElementById('canvas_map'), 30).setRunning(true)
-
-import { UI } from './ui/ui_canvas.js'
-import { UISpells } from './ui/spells.js'
-import { UICharacterSelect } from './ui/character_select.js'
-const ui = new UI(document.getElementById('canvas_ui'))
-//new UISpells(ui)
-new UICharacterSelect(ui)
-
-
-import { Log } from './messaging/log_canvas.js'
-new Log(document.getElementById('canvas_log'))
-
-document.getElementById("dialogJoinOrCreate").showModal()
-
-import { NetworkManager } from './network/network.js'
-const isHostCallback = ()=>console.log('Host ennit!')
-const network = new NetworkManager(isHostCallback)
-network.addOnMessageListener((data)=>console.log("socket recv", data))
-
 </script>
 </body>
 </html>
