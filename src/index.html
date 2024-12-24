@@ -50,8 +50,13 @@ new UICharacterSelect(ui)
 import { Log } from './messaging/log_canvas.js'
 new Log(document.getElementById('canvas_log'))
 
-
 document.getElementById("dialogJoinOrCreate").showModal()
+
+import { NetworkManager } from './network/network.js'
+const isHostCallback = ()=>console.log('Host ennit!')
+const network = new NetworkManager(isHostCallback)
+network.addOnMessageListener((data)=>console.log("socket recv", data))
+
 </script>
 </body>
 </html>

@@ -1,35 +1,48 @@
-/*
+import { getId } from './id.js'
 
-OnBoot - gen random id - persist this in offline storage
-Id is alphanumeric base (lowercase+numbers? base 36? always 4 digets - gen number between min and max)
+const id = getId()
 
-onConnect - hello with id -
-    get state with id in -
-    if no response "we are the server!"
-      - if game in offline_state - send over network
+export class NetworkManager {
+    constructor() {
+        const urlParams = new URLSearchParams(window.location.search);
+        this.websocket_url = urlParams.get('websocket_url') || `${window.location.protocol.startsWith("https")?"wss":"ws"}://${window.location.host}/channel-server/`
+        this.onMessageListeners = new Set()
+        this.connect()
+    }
 
-    send state update
-*/
+    addOnMessageListener = (listener) => {this.onMessageListeners.add(listener)}
+    removeOnMessageListener = (listener) => {this.onMessageListeners.delete(listener)}
 
-window.addEventListener("hashchange", (event)=>{})
-window.location.hash.replace('#','')
-
-const urlParams = new URLSearchParams(window.location.search);
-const websocket_url = urlParams.get('websocket_url') || `${window.location.protocol.startsWith("https")?"wss":"ws"}://${window.location.host}/ws`
-
-const socket = new WebSocket(websocket_url)
-socket.addEventListener("open", (event) => {
-    //socket.send("Hello Server!")
-})
-socket.addEventListener("message", (msg)=>{
-    const data = JSON.parse(msg.data)
-    console.log("websocket", data)
-})
-socket.addEventListener("close", (event) => {
-    console.log("closed")
-})
-
-
-
-    // if (socket.readyState!=WebSocket.OPEN) {return}
-    // socket.send(JSON.stringify({}))
+    connect = () => {
+        if (this.socket) {return console.warning("socket already connected")}
+        console.log("socket connecting", this.websocket_url)
+        this.socket = new WebSocket(this.websocket_url)
+        this.socket.addEventListener("open", this.open)
+        this.socket.addEventListener("message", this.message)
+        this.socket.addEventListener("close", this.close)
+    }
+    open = (event) => {
+        console.log('socket open')
+        this.send({"action": "join"})
+    }
+    close = (event) => {
+        console.error('socket close')
+        this.socket = undefined
+    }
+    message = (msg) => {
+        let data
+        try {data = JSON.parse(msg.data)}
+        catch (ex) {return console.error("socket failed recv - json-decode", ex)}
+        console.log("COME ON!", data)
+        if (data.from == id) {return console.error('socket - message from self - not possible - !?')}
+        for (let listener of this.onMessageListeners) {listener(data)}
+    }
+    send = (data) => {
+        if (!this.socket || this.socket.readyState!=WebSocket.OPEN) {
+            return console.warning("socket failed send - not connected", data)
+        }
+        data.from = id  // append from:id to every message
+        try {this.socket.send(JSON.stringify(data))}
+        catch (ex) {console.warning("socket failed send - JSON.stringify", ex)}
+    }
+}
