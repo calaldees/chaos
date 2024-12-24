@@ -1,6 +1,6 @@
 FROM node:alpine as build
     WORKDIR /build/
-    RUN npm install --no-package-lock \
+    RUN npm install --no-package-lock --global \
         rollup \
     && true
     COPY ./src/ .
@@ -19,7 +19,5 @@ FROM node:alpine as build
 FROM nginx:alpine as nginx
     WORKDIR /usr/share/nginx/html/
     COPY nginx.conf /etc/nginx/nginx.conf
-    COPY ./src .
-        # ws proxy
-        # pre-gzipped static serving of main.js.gz
-    #COPY --from=build /build/*.gz main.js.gz
+    #COPY ./src .
+    COPY --from=build /build/*.gz .
