@@ -1,25 +1,19 @@
-DOCKER_IMAGE:=chaos
+run: channelServer
+	docker compose up --build
 
-serve_local: #data/classicspells.json data/classicunits.json
+serve_files_for_local:
 	python3 -m http.server
+serve_channelServer_for_local: channelServer
+	docker compose run --service-ports channel-server
 
 src/data/classicspells.json:
 	curl -o $@ "https://raw.githubusercontent.com/lewster32/archaos/main/assets/data/classicspells.json"
-
 src/data/classicunits.json:
 	curl -o $@ "https://raw.githubusercontent.com/lewster32/archaos/main/assets/data/classicunits.json"
 
-
 channelServer:
 	git clone https://github.com/calaldees/channelServer.git
-#build: channelServer
-#	docker build --tag ${DOCKER_IMAGE} .
-run: channelServer
-	docker compose up --build
-run_channelServer:
-	docker compose run --service-ports channel-server
 
-
-debug_minify:
-	docker build --tag ${DOCKER_IMAGE} --target build .
-	docker run --rm -it ${DOCKER_IMAGE} /bin/sh
+shell_debug_minify:
+	docker build --tag debug_minify --target build .
+	docker run --rm -it debug_minify /bin/sh
