@@ -1,6 +1,7 @@
 import { range } from '../core.js'
-import { COLOR } from '../gfx/color.js'
+import { COLOR, shiftImage } from '../gfx/color.js'
 
+import {gfx_units} from '../gfx/units.js'
 import {mergeItemsAndLayout} from './ui_canvas.js'
 
 export class UICharacterSelect {
@@ -19,15 +20,22 @@ export class UICharacterSelect {
         ui.drawFont("Which colour?", 0, 7, COLOR.magenta)
 
         ui.items = [...mergeItemsAndLayout([
-            {action:'test1', text:'**', color: COLOR.cyan},
-            {action:'test2', text:'**', color: COLOR.cyan},
-            {action:'test2', text:'**', color: COLOR.cyan},
-            {action:'test2', text:'**', color: COLOR.cyan},
-            {action:'test2', text:'**', color: COLOR.cyan},
-            {action:'test2', text:'**', color: COLOR.cyan},
-            {action:'test2', text:'**', color: COLOR.cyan},
-            {action:'test2', text:'**', color: COLOR.cyan},
+            {action:"Wizard JULIAN", text:'  ', color: COLOR.cyan},
+            {action:"Wizard GANDALF", text:'  ', color: COLOR.cyan},
+            {action:"Wizard GREATFOGEY", text:'  ', color: COLOR.cyan},
+            {action:"Wizard DYERARTI", text:'  ', color: COLOR.cyan},
+            {action:"Wizard GOWIN", text:'  ', color: COLOR.cyan},
+            {action:"Wizard MERLIN", text:'  ', color: COLOR.cyan},
+            {action:"Wizard ILIAN RANE", text:'  ', color: COLOR.cyan},
+            {action:"Wizard ASIMONO ZARK", text:'  ', color: COLOR.cyan},
         ], this.UI_INDEXES_ORIGINAL_CHAR_SELECT())]
+
+        for (let item of ui.items) {
+            this.ui.c.drawImage(
+                shiftImage(...gfx_units[item.action].sprite_and_color(0)),
+                ...this.ui.i_to_xy(item.i + 1)
+            )
+        }
     }
 
     UI_INDEXES_ORIGINAL_CHAR_SELECT(start_row=6) {
