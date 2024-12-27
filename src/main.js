@@ -27,11 +27,13 @@ import {logging} from './log/logging.js'
 import { UI } from './ui/ui_canvas.js'
 import { UISpells } from './ui/spells.js'
 import { UICharacterSelect } from './ui/character_select.js'
+import { UIStats } from './ui/stats.js'
 
 import {} from './log/console.js'
 import { LoggingCanvas } from './log/logging_canvas.js'
 
 import { NetworkManager } from './network/network.js'
+
 
 
 export class ChaosTest extends CanvasAnimationBase {
@@ -45,7 +47,9 @@ constructor() {
     // UI Test
     const ui = new UI(document.getElementById('canvas_ui'))
     //new UISpells(ui)
-    new UICharacterSelect(ui)
+    //new UICharacterSelect(ui)
+    const uis = new UIStats(ui)
+    uis.drawStats("King Cobra")
 
     // Log test
     new LoggingCanvas(document.getElementById('canvas_log'))
