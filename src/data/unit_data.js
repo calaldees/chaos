@@ -1,15 +1,15 @@
 // https://zxnet.co.uk/spectrum/chaos/asm/E440.html
 // https://github.com/lewster32/archaos/blob/main/assets/data/classicunits.json
 
-// com Combat=0, 
-// rcm Ranged combat=0, 
-// rng Range=0, 
-// def Defence=0, 
-// mov Movement allowance=0, 
-// mnv Manoeuvre rating=0, 
-// res Magic resistance=0, 
-// Casting chance=0, 
-// Chaos/Law=0, 
+// com Combat=0,
+// rcm Ranged combat=0,
+// rng Range=0,
+// def Defense=0,
+// mov Movement allowance=0,
+// mnv Manoeuver rating=0,
+// res Magic resistance=0,
+// Casting chance=0,
+// Chaos/Law=0,
 // Animation delay=1
 
 export const unit_data = {

@@ -28,6 +28,7 @@ import { UI } from './ui/ui_canvas.js'
 import { UISpells } from './ui/spells.js'
 import { UICharacterSelect } from './ui/character_select.js'
 import { UIStats } from './ui/stats.js'
+import { UIJoin } from './ui/join.js'
 
 import {} from './log/console.js'
 import { LoggingCanvas } from './log/logging_canvas.js'
@@ -51,6 +52,19 @@ constructor() {
     const uis = new UIStats(ui)
     uis.drawStats("King Cobra")
 
+    const ui_join = new UIJoin(this.canvas)
+    ui_join.players = [
+        {name: 'allan', unit_type: "Wizard JULIAN", color: COLOR.red_bright},
+        {name: 'dave', unit_type: "Wizard ILIAN RANE", color: COLOR.yellow},
+        {name: 'scotthope', unit_type: "Wizard GREATFOGEY", color: COLOR.green_bright},
+        {name: 'test1', unit_type: "Wizard GANDALF", color: COLOR.magenta_bright},
+        {name: 'test2', unit_type: "Wizard DYERARTI", color: COLOR.yellow_bright},
+        {name: 'test3', unit_type: "Wizard GOWIN", color: COLOR.cyan_bright},
+
+        //{name: 'thingy', unit_type: "Wizard MERLIN", color: COLOR.white_bright},
+        //{name: 'whotzit', unit_type: "Wizard ASIMONO ZARK", color: COLOR.white},
+    ]
+
     // Log test
     new LoggingCanvas(document.getElementById('canvas_log'))
 
@@ -72,7 +86,7 @@ constructor() {
     drawBorder(c,0,0,this.w,this.h-16,COLOR.blue)
     //drawFont_color(c, `Chaos \\033[91;103mMobile\\033[0m Test`, 0, 176)
     logging.info(`Chaos \\033[91;103mMobile\\033[0m Test`)
-    c.drawImage(sprites.animation.twirl[8], 10*16,7*16)
+    //c.drawImage(sprites.animation.twirl[8], 10*16,7*16)
 
     // Early draw tests without model or animation
     //for (let i=0 ; i<sprites.wizard.length ; i++) {
@@ -82,10 +96,10 @@ constructor() {
     //    c.drawImage(shiftImage(monster_sprites[i], COLOR.white) , (i%16)*16, 32+(Math.floor(i/16)*16))
     //}
 
-    const game = new Game([
-        new Player("Player1", "Wizard JULIAN", COLOR.yellow),
-        new Player("Player2", "Wizard GANDALF", COLOR.red),
-    ])
+    //const game = new Game([
+    //    new Player("Player1", "Wizard JULIAN", COLOR.yellow),
+    //    new Player("Player2", "Wizard GANDALF", COLOR.red),
+    //])
 
     // Expose to console
     window.game = game
@@ -103,7 +117,7 @@ constructor() {
     this.gfx_dispatch = new GfxDispatch([this.gfx_map, this.gfx_effects])
 
     // Gfx Effects
-    
+    /*
     this.gfx_effects.addEffect(15*5+10, new SpriteAnimationEffect(sprites.animation.twirl))
     this.gfx_effects.addEffect(15*5+11, new SpriteAnimationEffect(sprites.animation.dragon_breath))
     this.gfx_effects.addEffect(15*5+12, new SpriteAnimationEffect(sprites.animation.attack_effect))
@@ -113,11 +127,11 @@ constructor() {
         this.gfx_effects.addEffect(i, new HighlightEffect())
     }
     this.gfx_effects.addEffect(48, new InvertEffect())
-    
+    */
 
     // Draw whole screen on first start
-    this.gfx_dispatch.draw(c, 0)
-    drawFont_color(c, `This is a test of word wrap, I hope it works, I sure do!`, 16, 78, 128)
+    //this.gfx_dispatch.draw(c, 0)
+    //drawFont_color(c, `This is a test of word wrap, I hope it works, I sure do!`, 16, 78, 128)
 
     // sound temp visualization
     //c.save()

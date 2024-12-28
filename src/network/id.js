@@ -20,3 +20,8 @@ export function getId() {
     }
     return id
 }
+
+export function clearId() {
+    // just for development. Id is meant to be constant and identify a device.
+    window.localStorage.removeItem(KEY_ID)
+}
