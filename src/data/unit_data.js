@@ -668,28 +668,28 @@ export const unit_data = {
         "name": "Wizard JULIAN",
         "properties": {
             "mov": 1,
-            "com": 1,
+            "com": 1,  // 2
             "rcm": 0,
             "rng": 0,
-            "def": 1,
-            "mnv": 3,
-            "res": 7,
-
-            "spells": 11,
+            "def": 1,  // 3
+            "mnv": 3,  // 6
+            "res": 7,  // 7
+            // ability 1
+            "spells": 11,  // 13
         },
     },
     "Wizard GANDALF": {
         "name": "Wizard GANDALF",
         "properties": {
             "mov": 1,
-            "com": 1,
+            "com": 1,  // 3
             "rcm": 0,
             "rng": 0,
-            "def": 1,
-            "mnv": 3,
-            "res": 6,
-
-            "spells": 15,
+            "def": 1,  // 3
+            "mnv": 3,  // 4
+            "res": 6,  // 7
+            // ability 0
+            "spells": 15,  // 14
         },
 
     },
@@ -697,14 +697,14 @@ export const unit_data = {
         "name": "Wizard GREATFOGEY",
         "properties": {
             "mov": 1,
-            "com": 3,
+            "com": 3,  // 6
             "rcm": 0,
             "rng": 0,
-            "def": 3,
-            "mnv": 5,
-            "res": 6,
-
-            "spells": 0,  // default?
+            "def": 3,  // 2
+            "mnv": 5,  // 7
+            "res": 6,  // 6
+            // ability 0
+            "spells": 0,  // default?  // 14
         },
 
     },
@@ -712,14 +712,14 @@ export const unit_data = {
         "name": "Wizard DYERARTI",
         "properties": {
             "mov": 1,
-            "com": 1,
+            "com": 1,  // 4
             "rcm": 0,
             "rng": 0,
-            "def": 2,
-            "mnv": 6,
-            "res": 7,
-
-            "spells": 0,  // default?
+            "def": 2,  // 4
+            "mnv": 6,  // 7
+            "res": 7,  // 7
+            // ability 1
+            "spells": 0,  // default?  // 16
         },
 
     },
@@ -727,42 +727,42 @@ export const unit_data = {
         "name": "Wizard GOWIN",
         "properties": {
             "mov": 1,
-            "com": 2,
+            "com": 2,  // 3
             "rcm": 0,
             "rng": 0,
-            "def": 2,
-            "mnv": 5,
-            "res": 0,  // default?
-
-            "spells": 0,  // default?
+            "def": 2,  // 5
+            "mnv": 5,  // 7
+            "res": 0,  // default?  // 6
+            // ability 0
+            "spells": 0,  // default?  // 17
         },
     },
     "Wizard MERLIN": {
         "name": "Wizard MERLIN",
         "properties": {
             "mov": 1,
-            "com": 1,
+            "com": 1,  // 5
             "rcm": 0,
             "rng": 0,
-            "def": 4,
-            "mnv": 4,
-            "res": 0,  // default?
-
-            "spells": 0,  // default?
+            "def": 4,  // 2
+            "mnv": 4,  // 6
+            "res": 0,  // default?  // 6
+            // ability 0
+            "spells": 0,  // default?  // 14
         },
     },
     "Wizard ILIAN RANE": {
         "name": "Wizard ILIAN RANE",
         "properties": {
             "mov": 1,
-            "com": 1,
+            "com": 1,  // 5
             "rcm": 0,
             "rng": 0,
-            "def": 2,
-            "mnv": 4,
-            "res": 0,  // default?
-
-            "spells": 0,  // default?
+            "def": 2,  // 2
+            "mnv": 4,  // 7
+            "res": 0,  // default?  // 6
+            // ability 0
+            "spells": 0,  // default?  // 14
         },
     },
     "Wizard ASIMONO ZARK": {
@@ -770,14 +770,14 @@ export const unit_data = {
         "name": "Wizard ASIMONO ZARK",
         "properties": {
             "mov": 1,
-            "com": 3,
+            "com": 3,  // 3
             "rcm": 0,
             "rng": 0,
-            "def": 2,
-            "mnv": 6,
-            "res": 0,  // default?
-
-            "spells": 0,  // default?
+            "def": 2,  // 4
+            "mnv": 6,  // 6
+            "res": 0,  // default?  // 7
+            // ability 1
+            "spells": 0,  // default?  // 15
         },
     },
 
