@@ -5,6 +5,7 @@ FROM node:alpine as build
     && true
     COPY ./src/ .
     RUN rollup main.js --file bundle.js
+    # --format es
     RUN gzip -9 -k bundle.js && mv bundle.js.gz main.js.gz
     RUN gzip -9 -k index.html
     # TODO
