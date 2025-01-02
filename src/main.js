@@ -74,6 +74,7 @@ constructor() {
     // Network test
     const network = new NetworkManager("test1")
     network.addOnMessageListener((data)=>console.log("socket recv", data))
+    window.network = network
 
     // Mouse
     this.mouse_index = undefined
@@ -96,11 +97,10 @@ constructor() {
     //    c.drawImage(shiftImage(monster_sprites[i], COLOR.white) , (i%16)*16, 32+(Math.floor(i/16)*16))
     //}
 
-    //const game = new Game([
-    //    new Player("Player1", "Wizard JULIAN", COLOR.yellow),
-    //    new Player("Player2", "Wizard GANDALF", COLOR.red),
-    //])
-
+    const game = new Game([
+        new Player("Player1", "Wizard JULIAN", COLOR.yellow),
+        new Player("Player2", "Wizard GANDALF", COLOR.red),
+    ])
     // Expose to console
     window.game = game
 

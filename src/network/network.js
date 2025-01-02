@@ -31,19 +31,29 @@ export class NetworkManager {
         this.socket = undefined
     }
     message = (msg) => {
-        let data
-        try {data = JSON.parse(msg.data)}
-        catch (ex) {return console.error("socket failed recv - json-decode", ex)}
-        console.log("COME ON!", data)
-        if (data.from == id) {return console.error('socket - message from self - not possible - !?')}
-        for (let listener of this.onMessageListeners) {listener(data)}
+        (async () => {
+            let data = msg.data
+            if (typeof data == 'string') {return console.error('socket failed recv - expected binary - got string', data)}
+            try {data = await new Response(data.stream().pipeThrough(new DecompressionStream("gzip"))).text()}
+            catch (ex) {return console.error("socket failed recv - compress error", ex)}
+            try {data = JSON.parse(data)}
+            catch (ex) {return console.error("socket failed recv - json-decode", ex)}
+            //if (data.from == id) {return console.error('socket - message from self - not possible - !?')}
+            for (let listener of this.onMessageListeners) {listener(data)}
+        })()
     }
     send = (data) => {
-        if (!this.socket || this.socket.readyState!=WebSocket.OPEN) {
-            return console.warning("socket failed send - not connected", data)
-        }
-        data.from = id  // append from:id to every message
-        try {this.socket.send(JSON.stringify(data))}
-        catch (ex) {console.warning("socket failed send - JSON.stringify", ex)}
+        (async () => {
+            if (!this.socket || this.socket.readyState!=WebSocket.OPEN) {
+                return console.warn("socket failed send - not connected", data)
+            }
+            data.from = id  // append from:id to every message
+            try {data = JSON.stringify(data)}
+            catch (ex) {console.error("socket failed send - JSON.stringify", ex)}
+            try {data = await (new Response(new Blob([data]).stream().pipeThrough(new CompressionStream('gzip')))).blob()}
+            catch (ex) {console.error('socket failed send - compress error', ex)}
+            try {this.socket.send(data)}
+            catch (ex) {console.warn("socket failed send", ex)}
+        })()
     }
 }
