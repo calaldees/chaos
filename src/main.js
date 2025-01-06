@@ -65,11 +65,15 @@ constructor() {
         //{name: 'whotzit', unit_type: "Wizard ASIMONO ZARK", color: COLOR.white},
     ]
 
-    // Log test
+    // Logging
     new LoggingCanvas(document.getElementById('canvas_log'))
+    logging.registerHandler("map", (level, message)=>drawFont_color(c, message, 0, 176))
 
-    function connectNetwork(channel) {
-        const network = new NetworkManager(channel)
+    let network
+    const setupNetwork = (channel) => {
+        network = new NetworkManager(channel)
+        network.socket.addEventListener("open", () => {this.canvas.classList.remove('disconnected')})
+        network.socket.addEventListener("close", () => {this.canvas.classList.add('disconnected')})
         network.addOnMessageListener((data)=>console.log("socket recv", data))
         window.network = network
     }
@@ -78,14 +82,13 @@ constructor() {
     new DialogJoinOrCreate({
         'create': ()=>{
             const channel = generateStringId()
-            console.log('create', channel)
             logging.info(`Join: ${window.location.host} ${channel}`)
-            connectNetwork(channel)
-
+            setupNetwork(channel)
         },
         'join': (name, channel)=>{
             console.log('join', name, channel)
-            connectNetwork(channel)
+            setupNetwork(channel)
+            network.socket.addEventListener("open", () => {network.send({"action": "join", name, channel})})
         },
     })
 
@@ -94,7 +97,6 @@ constructor() {
     this.mouse_effect = {}
     this.cursor = sprites.cursor[0]
 
-    logging.registerHandler("map", (level, message)=>drawFont_color(c, message, 0, 176))
 
     // Sprite tests
     drawBorder(c,0,0,this.w,this.h-16,COLOR.blue)

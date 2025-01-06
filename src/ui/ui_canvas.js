@@ -22,7 +22,7 @@ export class UI {
         this.canvas.addEventListener("keydown", this.keyDown)
         this.canvas.addEventListener("keyup", this.keyUp)
 
-        this.clear(COLOR.black)
+        this.clear()
     }
 
     get w() {return this.canvas.width}
@@ -68,9 +68,13 @@ export class UI {
 
     clear = (color) => {
         this.setBorder(null, null, 0)
-        this.backgroundColor = color || COLOR.black
-        this.c.fillStyle = this.backgroundColor
-        this.c.fillRect(0,0,this.w,this.h)
+        if (color) {
+            this.backgroundColor = color || COLOR.black
+            this.c.fillStyle = this.backgroundColor
+            this.c.fillRect(0,0,this.w,this.h)
+        } else {
+            this.c.clearRect(0,0,this.w,this.h)
+        }
         this._items = []
     }
 

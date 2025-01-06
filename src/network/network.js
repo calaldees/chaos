@@ -3,11 +3,12 @@ import { getId } from './id.js'
 const id = getId()
 
 export class NetworkManager {
-    constructor(channel) {
+    constructor(channel, gzip_length_threshold=500) {
         const urlParams = new URLSearchParams(window.location.search);
         this.websocket_url = urlParams.get('websocket_url') || `${window.location.protocol.startsWith("https")?"wss":"ws"}://${window.location.host}/`
         this.websocket_url += `${channel}.ws`
         this.onMessageListeners = new Set()
+        this.gzip_length_threshold = gzip_length_threshold
         this.connect()
     }
 
@@ -24,7 +25,6 @@ export class NetworkManager {
     }
     open = (event) => {
         console.log('socket open')
-        this.send({"action": "join"})
     }
     close = (event) => {
         console.error('socket close')
@@ -33,9 +33,11 @@ export class NetworkManager {
     message = (msg) => {
         (async () => {
             let data = msg.data
-            if (typeof data == 'string') {return console.error('socket failed recv - expected binary - got string', data)}
-            try {data = await new Response(data.stream().pipeThrough(new DecompressionStream("gzip"))).text()}
-            catch (ex) {return console.error("socket failed recv - compress error", ex)}
+            //if (typeof data == 'string') {return console.error('socket failed recv - expected binary - got string', data)}
+            if (data.stream) {  // Only decompress binary messages (leave text as is)
+                try {data = await new Response(data.stream().pipeThrough(new DecompressionStream("gzip"))).text()}
+                catch (ex) {return console.error("socket failed recv - decompress error", ex)}
+            }
             try {data = JSON.parse(data)}
             catch (ex) {return console.error("socket failed recv - json-decode", ex)}
             //if (data.from == id) {return console.error('socket - message from self - not possible - !?')}
@@ -50,8 +52,10 @@ export class NetworkManager {
             data.from = id  // append from:id to every message
             try {data = JSON.stringify(data)}
             catch (ex) {console.error("socket failed send - JSON.stringify", ex)}
-            try {data = await (new Response(new Blob([data]).stream().pipeThrough(new CompressionStream('gzip')))).blob()}
-            catch (ex) {console.error('socket failed send - compress error', ex)}
+            if (data.length > this.gzip_length_threshold) {
+                try {data = await (new Response(new Blob([data]).stream().pipeThrough(new CompressionStream('gzip')))).blob()}
+                catch (ex) {console.error('socket failed send - compress error', ex)}
+            }
             try {this.socket.send(data)}
             catch (ex) {console.warn("socket failed send", ex)}
         })()
