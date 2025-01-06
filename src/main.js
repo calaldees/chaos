@@ -19,9 +19,9 @@ import {GfxEffects, SpriteEffect, SpriteAnimationEffect, HighlightEffect, Invert
 
 import {CanvasAnimationBase} from './gfx/animation_base.js'
 
-import {getId} from './network/id.js'
+import {getId, generateStringId} from './network/id.js'
 
-import {dialogJoinOrCreate} from './ui/dialogs.js'
+import {DialogJoinOrCreate} from './ui/dialogs.js'
 import {logging} from './log/logging.js'
 
 import { UI } from './ui/ui_canvas.js'
@@ -68,13 +68,26 @@ constructor() {
     // Log test
     new LoggingCanvas(document.getElementById('canvas_log'))
 
-    // Dialog Test
-    document.getElementById("dialogJoinOrCreate").showModal()
+    function connectNetwork(channel) {
+        const network = new NetworkManager(channel)
+        network.addOnMessageListener((data)=>console.log("socket recv", data))
+        window.network = network
+    }
 
-    // Network test
-    const network = new NetworkManager("test1")
-    network.addOnMessageListener((data)=>console.log("socket recv", data))
-    window.network = network
+    // Dialog Test
+    new DialogJoinOrCreate({
+        'create': ()=>{
+            const channel = generateStringId()
+            console.log('create', channel)
+            logging.info(`Join: ${window.location.host} ${channel}`)
+            connectNetwork(channel)
+
+        },
+        'join': (name, channel)=>{
+            console.log('join', name, channel)
+            connectNetwork(channel)
+        },
+    })
 
     // Mouse
     this.mouse_index = undefined
