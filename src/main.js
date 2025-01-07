@@ -28,12 +28,14 @@ import { UI } from './ui/ui_canvas.js'
 import { UISpells } from './ui/spells.js'
 import { UICharacterSelect } from './ui/character_select.js'
 import { UIStats } from './ui/stats.js'
-import { UIJoin } from './ui/join.js'
+
 
 import {} from './log/console.js'
 import { LoggingCanvas } from './log/logging_canvas.js'
 
 import { NetworkManager } from './network/network.js'
+
+import { JoinManager } from './manager/JoinManager.js'
 
 
 
@@ -52,18 +54,6 @@ constructor() {
     const uis = new UIStats(ui)
     uis.drawStats("King Cobra")
 
-    const ui_join = new UIJoin(this.canvas)
-    ui_join.players = [
-        {name: 'allan', unit_type: "Wizard JULIAN", color: COLOR.red_bright},
-        {name: 'dave', unit_type: "Wizard ILIAN RANE", color: COLOR.yellow},
-        {name: 'scotthope', unit_type: "Wizard GREATFOGEY", color: COLOR.green_bright},
-        {name: 'test1', unit_type: "Wizard GANDALF", color: COLOR.magenta_bright},
-        {name: 'test2', unit_type: "Wizard DYERARTI", color: COLOR.yellow_bright},
-        {name: 'test3', unit_type: "Wizard GOWIN", color: COLOR.cyan_bright},
-
-        //{name: 'thingy', unit_type: "Wizard MERLIN", color: COLOR.white_bright},
-        //{name: 'whotzit', unit_type: "Wizard ASIMONO ZARK", color: COLOR.white},
-    ]
 
     // Logging
     new LoggingCanvas(document.getElementById('canvas_log'))
@@ -71,6 +61,7 @@ constructor() {
 
     let network
     const setupNetwork = (channel) => {
+        this.canvas.classList.add('disconnected')
         network = new NetworkManager(channel)
         network.socket.addEventListener("open", () => {this.canvas.classList.remove('disconnected')})
         network.socket.addEventListener("close", () => {this.canvas.classList.add('disconnected')})
@@ -78,17 +69,20 @@ constructor() {
         window.network = network
     }
 
-    // Dialog Test
+
+    // DialogJoin
     new DialogJoinOrCreate({
         'create': ()=>{
             const channel = generateStringId()
             logging.info(`Join: ${window.location.host} ${channel}`)
             setupNetwork(channel)
+            new JoinManager(this.canvas, network)
         },
         'join': (name, channel)=>{
-            console.log('join', name, channel)
             setupNetwork(channel)
-            network.socket.addEventListener("open", () => {network.send({"action": "join", name, channel})})
+            network.socket.addEventListener("open", () => {
+                network.send({"action": "join", name})
+            })
         },
     })
 

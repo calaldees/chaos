@@ -1,3 +1,4 @@
+import { isObject } from '../core.js';
 import { getId } from './id.js'
 
 const id = getId()
@@ -38,8 +39,10 @@ export class NetworkManager {
                 try {data = await new Response(data.stream().pipeThrough(new DecompressionStream("gzip"))).text()}
                 catch (ex) {return console.error("socket failed recv - decompress error", ex)}
             }
-            try {data = JSON.parse(data)}
-            catch (ex) {return console.error("socket failed recv - json-decode", ex)}
+            if (typeof data == "string") {
+                try {data = JSON.parse(data)}
+                catch (ex) {return console.error("socket failed recv - json-decode", ex)}
+            }
             //if (data.from == id) {return console.error('socket - message from self - not possible - !?')}
             for (let listener of this.onMessageListeners) {listener(data)}
         })()
@@ -49,15 +52,19 @@ export class NetworkManager {
             if (!this.socket || this.socket.readyState!=WebSocket.OPEN) {
                 return console.warn("socket failed send - not connected", data)
             }
-            data.from = id  // append from:id to every message
-            try {data = JSON.stringify(data)}
-            catch (ex) {console.error("socket failed send - JSON.stringify", ex)}
+            if (isObject(data)) {
+                data.from = id  // append from:id to every message
+            }
+            if (typeof data != "string") {
+                try {data = JSON.stringify(data)}
+                catch (ex) {return console.error("socket failed send - JSON.stringify", ex)}
+            }
             if (data.length > this.gzip_length_threshold) {
                 try {data = await (new Response(new Blob([data]).stream().pipeThrough(new CompressionStream('gzip')))).blob()}
-                catch (ex) {console.error('socket failed send - compress error', ex)}
+                catch (ex) {return console.error('socket failed send - compress error', ex)}
             }
             try {this.socket.send(data)}
-            catch (ex) {console.warn("socket failed send", ex)}
+            catch (ex) {return console.warn("socket failed send", ex)}
         })()
     }
 }
