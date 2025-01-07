@@ -1,12 +1,17 @@
 import { COLOR } from '../gfx/color.js'
-import { UIJoin } from '../ui/join.js'
+import { UI } from '../ui/ui_canvas.js'
+import { UIPlayers } from '../ui/players.js'
+import { UICharacterSelect } from '../ui/character_select.js'
+
 
 export class JoinManager {
-    constructor(canvas, network) {
-        console.assert(canvas.constructor.name == 'HTMLCanvasElement')
+    constructor(canvas_map, ui, network) {
+        console.assert(canvas_map.constructor.name == 'HTMLCanvasElement')
+        console.assert(ui.constructor.name == 'UI')
         console.assert(network.constructor.name == 'NetworkManager')
-        this.ui = new UIJoin(canvas)
-        this.ui.players = [
+
+        this.ui_players = new UIPlayers(canvas_map)
+        this.ui_players.players = [
             {name: 'allan', unit_type: "Wizard JULIAN", color: COLOR.red_bright},
             {name: 'dave', unit_type: "Wizard ILIAN RANE", color: COLOR.yellow},
             {name: 'scotthope', unit_type: "Wizard GREATFOGEY", color: COLOR.green_bright},
@@ -17,6 +22,8 @@ export class JoinManager {
             //{name: 'thingy', unit_type: "Wizard MERLIN", color: COLOR.white_bright},
             //{name: 'whotzit', unit_type: "Wizard ASIMONO ZARK", color: COLOR.white},
         ]
+
+        this.ui_input = new UICharacterSelect(ui)
     }
     get state() {}
 }

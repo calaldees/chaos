@@ -45,19 +45,21 @@ constructor() {
 
     const c = this.context
 
-    const id = getId()
-
     // UI Test
-    const ui = new UI(document.getElementById('canvas_ui'))
+    this.ui = new UI(document.getElementById('canvas_ui'))
     //new UISpells(ui)
     //new UICharacterSelect(ui)
-    const uis = new UIStats(ui)
-    uis.drawStats("King Cobra")
+    //const uis = new UIStats(ui)
+    //uis.drawStats("King Cobra")
 
 
     // Logging
     new LoggingCanvas(document.getElementById('canvas_log'))
-    logging.registerHandler("map", (level, message)=>drawFont_color(c, message, 0, 176))
+    logging.registerHandler("map", (level, message)=>{
+        const message_xy = [0, 176]
+        this.context.clearRect(...message_xy, this.w, this.h)
+        drawFont_color(this.context, message, ...message_xy)
+    })
 
     let network
     const setupNetwork = (channel) => {
@@ -73,18 +75,22 @@ constructor() {
     // DialogJoin
     new DialogJoinOrCreate({
         'create': ()=>{
-            const channel = generateStringId()
+            const channel = generateStringId()  // getId()  // Ponder: does the creator always join the same channel? or a new channel?
             logging.info(`Join: ${window.location.host} ${channel}`)
             this.canvas.classList.add('full_screen')
             setupNetwork(channel)
-            new JoinManager(this.canvas, network)
+            new JoinManager(this.canvas, this.ui, network)
         },
         'join': (name, channel)=>{
+            logging.info(`Connecting: ${window.location.host} ${channel}`)
             this.canvas.classList.remove('full_screen')
             setupNetwork(channel)
             network.socket.addEventListener("open", () => {
                 network.send({"action": "join", name})
+                logging.info(`Joined: ${channel} as ${name}`)
+                // TODO: start timer for disconnect?
             })
+            new JoinManager(this.canvas, this.ui, network)
         },
     })
 

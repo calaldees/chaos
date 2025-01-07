@@ -23,7 +23,7 @@ const INDEX_LABEL_SHIFT = [
     // player 8?
 ]
 
-export class UIJoin {
+export class UIPlayers {
     constructor(canvas) {
         this.canvas = canvas
         this.c = this.canvas.getContext('2d')
