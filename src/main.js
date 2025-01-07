@@ -75,10 +75,12 @@ constructor() {
         'create': ()=>{
             const channel = generateStringId()
             logging.info(`Join: ${window.location.host} ${channel}`)
+            this.canvas.classList.add('full_screen')
             setupNetwork(channel)
             new JoinManager(this.canvas, network)
         },
         'join': (name, channel)=>{
+            this.canvas.classList.remove('full_screen')
             setupNetwork(channel)
             network.socket.addEventListener("open", () => {
                 network.send({"action": "join", name})

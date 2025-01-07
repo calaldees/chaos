@@ -1,8 +1,9 @@
-import { UIJoin } from './ui/join.js'
+import { COLOR } from '../gfx/color.js'
+import { UIJoin } from '../ui/join.js'
 
 export class JoinManager {
     constructor(canvas, network) {
-        console.assert(canvas.constructor.name == 'NetworkManager')
+        console.assert(canvas.constructor.name == 'HTMLCanvasElement')
         console.assert(network.constructor.name == 'NetworkManager')
         this.ui = new UIJoin(canvas)
         this.ui.players = [
