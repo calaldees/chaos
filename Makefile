@@ -9,7 +9,7 @@ run: channelServer  ## build and run whole stack with docker
 serve_files_for_local:  ##  serve static files on localhost:8000
 	python3 -m http.server
 serve_channelServer_for_local: channelServer  ##  channelServer on port localhost:9800
-	docker compose run --service-ports channel-server
+	docker compose run --rm --service-ports channel-server
 
 src/data/classicspells.json:
 	curl -o $@ "https://raw.githubusercontent.com/lewster32/archaos/main/assets/data/classicspells.json"

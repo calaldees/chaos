@@ -98,12 +98,12 @@ constructor() {
             setupNetwork(channel)
             new JoinManager(this.canvas, this.ui, network)
         },
-        'join': (name, channel)=>{
+        'join': (player_name, channel)=>{
             logging.info(`Connecting: ${window.location.host} ${channel}`)
             this.canvas.classList.remove('full_screen')
             setupNetwork(channel)
             setCanvasSizeForScreen()
-            new JoinManager(this.canvas, this.ui, network, name)
+            new JoinManager(this.canvas, this.ui, network, player_name)
         },
     })
 

@@ -13,7 +13,7 @@ export class UICharacterSelect {
 
         ui.drawFont("PLAYER 3", 0, 0, COLOR.yellow)
         ui.drawFont("Enter name (12 letters max.)", 0, 1, COLOR.magenta)
-        ui.drawFont("allan", 0, 2, COLOR.cyan)
+
         ui.drawFont("Computer controlled?", 0, 4, COLOR.magenta)
         ui.drawFont("NO", 21, 4, COLOR.yellow)
         ui.drawFont("Which character?", 0, 5, COLOR.magenta)
@@ -69,4 +69,10 @@ export class UICharacterSelect {
         }})
     }
 
+    get player_name() {return this._player_name}
+    set player_name(name) {
+        this._player_name = name
+        this.ui.clearFont(12, 0, 2)
+        this.ui.drawFont(name, 0, 2, COLOR.cyan)
+    }
 }

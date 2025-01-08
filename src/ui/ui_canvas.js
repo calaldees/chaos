@@ -86,6 +86,9 @@ export class UI {
     //    drawFont(this.c, this._title, start_x_center, this.border_offset_px)
     //}
 
+    colRow_to_xy = (col, row) => {
+        return [(col*FONT_WIDTH)+this.border_offset_px, (row*FONT_HEIGHT)+this.border_offset_px]
+    }
     i_to_xy = (i) => {
         const [x,y,z] = this.dimension.index_to_position(i)
         return [x*FONT_WIDTH+this.border_offset_px, y*FONT_HEIGHT+this.border_offset_px]
@@ -108,8 +111,12 @@ export class UI {
         }
     }
 
-    drawFont = (text, x, y, color=COLOR.white) => {
-        drawFont(this.c, text, (x*FONT_WIDTH)+this.border_offset_px, (y*FONT_HEIGHT)+this.border_offset_px, color)
+
+    clearFont = (chars,col,row) => {
+        this.c.clearRect(...this.colRow_to_xy(col,row), chars*FONT_WIDTH , FONT_HEIGHT)
+    }
+    drawFont = (text, col, row, color=COLOR.white) => {
+        drawFont(this.c, text, ...this.colRow_to_xy(col,row), color)
     }
     _drawItem = (item) => {
         const {i, key, text, color, hide_key_prefix} = item

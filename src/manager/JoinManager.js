@@ -33,10 +33,10 @@ export class JoinManager {
         ]
 
         this.ui_character_select = new UICharacterSelect(ui)
+        this.ui_character_select.player_name = player_name
         this.ui_character_select.ui.callback = (item) => {
-            //TODO: map/convert item in some way to player keys
-            console.log('character_select', item)
-            //this.player = item
+            if (item.action.indexOf('Color') == 0) {this.player = {color: COLOR[item.action.split(' ')[1]]}}
+            if (item.action.indexOf('Wizard') == 0) {this.player = {unit_type: item.action}}
         }
 
         network.socket.addEventListener("open", () => {
