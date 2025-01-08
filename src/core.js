@@ -196,6 +196,13 @@ export function isObjectEmpty(objectName) {
 }
 
 
+// https://stackoverflow.com/a/56592365/3356840
+export const pick = (obj, ...keys) => Object.fromEntries(keys.filter(key => key in obj).map(key => [key, obj[key]]))
+export const inclusivePick = (obj, ...keys) => Object.fromEntries(keys.map(key => [key, obj[key]]))
+export const omit = (obj, ...keys) => Object.fromEntries(Object.entries(obj).filter(([key]) => !keys.includes(key)))
+
+
+
 // https://stackoverflow.com/a/49479174/3356840
 // combined with   `Object.defineProperty(photo, '_key', {enumerable: false, value: 1});`
 // https://d7k.medium.com/avoid-serializing-dynamic-json-properties-dfbcdc143ec9

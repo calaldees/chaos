@@ -24,7 +24,10 @@ const INDEX_LABEL_SHIFT = [
 ]
 
 export class UIPlayers {
+    // This UI is a special case
+    // It attaches to the map canvas as a write-only-display for joined players
     constructor(canvas) {
+        console.assert(canvas.constructor.name == 'HTMLCanvasElement')
         this.canvas = canvas
         this.c = this.canvas.getContext('2d')
         this._players = []

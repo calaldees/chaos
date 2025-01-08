@@ -1,14 +1,23 @@
+import { pick } from '../core.js'
 import { COLOR } from '../gfx/color.js'
-import { UI } from '../ui/ui_canvas.js'
+import { logging } from '../log/logging.js'
 import { UIPlayers } from '../ui/players.js'
 import { UICharacterSelect } from '../ui/character_select.js'
 
 
 export class JoinManager {
-    constructor(canvas_map, ui, network) {
+    constructor(canvas_map, ui, network, player_name='host') {
         console.assert(canvas_map.constructor.name == 'HTMLCanvasElement')
         console.assert(ui.constructor.name == 'UI')
         console.assert(network.constructor.name == 'NetworkManager')
+
+        this.network = network
+
+        this._player = {
+            name: player_name,
+            unit_type: "Wizard JULIAN",
+            color: COLOR.white,
+        }
 
         this.ui_players = new UIPlayers(canvas_map)
         this.ui_players.players = [
@@ -23,7 +32,25 @@ export class JoinManager {
             //{name: 'whotzit', unit_type: "Wizard ASIMONO ZARK", color: COLOR.white},
         ]
 
-        this.ui_input = new UICharacterSelect(ui)
+        this.ui_character_select = new UICharacterSelect(ui)
+        this.ui_character_select.ui.callback = (item) => {
+            //TODO: map/convert item in some way to player keys
+            console.log('character_select', item)
+            //this.player = item
+        }
+
+        network.socket.addEventListener("open", () => {
+            logging.info(`Joined: ${network.channel} as ${this.player.name}`)
+            this.player = this.player  // sends the player state over network
+            // TODO: start timer for disconnect if no response
+        })
+
     }
     get state() {}
+
+    get player() {return this._player}
+    set player(player) {
+        this._player = {...this._player, ...pick(player, 'name', 'unit_type', 'color')}
+        this.network.send({action: "join", ...this.player})
+    }
 }

@@ -20,25 +20,28 @@ export class UICharacterSelect {
 
         ui.drawFont("Which colour?", 0, 7, COLOR.magenta)
 
-        ui.items = [...mergeItemsAndLayout([
-            {action:"Wizard JULIAN", text:'  ', color: COLOR.cyan},
-            {action:"Wizard GANDALF", text:'  ', color: COLOR.cyan},
-            {action:"Wizard GREATFOGEY", text:'  ', color: COLOR.cyan},
-            {action:"Wizard DYERARTI", text:'  ', color: COLOR.cyan},
-            {action:"Wizard GOWIN", text:'  ', color: COLOR.cyan},
-            {action:"Wizard MERLIN", text:'  ', color: COLOR.cyan},
-            {action:"Wizard ILIAN RANE", text:'  ', color: COLOR.cyan},
-            {action:"Wizard ASIMONO ZARK", text:'  ', color: COLOR.cyan},
-
-            {action:"Color red_bright", text:'  ', color: COLOR.cyan},
-            {action:"Color magenta_bright", text:'  ', color: COLOR.cyan},
-            {action:"Color green_bright", text:'  ', color: COLOR.cyan},
-            {action:"Color cyan_bright", text:'  ', color: COLOR.cyan},
-            {action:"Color yellow", text:'  ', color: COLOR.cyan},
-            {action:"Color yellow_bright", text:'  ', color: COLOR.cyan},
-            {action:"Color white", text:'  ', color: COLOR.cyan},
-            {action:"Color white_bright", text:'  ', color: COLOR.cyan},
-        ], [...this.UI_INDEXES_CHAR_SELECT(), ...this.UI_INDEXES_COLOR()])]
+        ui.items = [
+            ...mergeItemsAndLayout([
+                {action:"Wizard JULIAN", text:'  ', color: COLOR.cyan},
+                {action:"Wizard GANDALF", text:'  ', color: COLOR.cyan},
+                {action:"Wizard GREATFOGEY", text:'  ', color: COLOR.cyan},
+                {action:"Wizard DYERARTI", text:'  ', color: COLOR.cyan},
+                {action:"Wizard GOWIN", text:'  ', color: COLOR.cyan},
+                {action:"Wizard MERLIN", text:'  ', color: COLOR.cyan},
+                {action:"Wizard ILIAN RANE", text:'  ', color: COLOR.cyan},
+                {action:"Wizard ASIMONO ZARK", text:'  ', color: COLOR.cyan},
+            ], this.UI_INDEXES_CHAR_SELECT()),
+            ...mergeItemsAndLayout([
+                {action:"Color red_bright", text:'  ', color: COLOR.cyan},
+                {action:"Color magenta_bright", text:'  ', color: COLOR.cyan},
+                {action:"Color green_bright", text:'  ', color: COLOR.cyan},
+                {action:"Color cyan_bright", text:'  ', color: COLOR.cyan},
+                {action:"Color yellow", text:'  ', color: COLOR.cyan},
+                {action:"Color yellow_bright", text:'  ', color: COLOR.cyan},
+                {action:"Color white", text:'  ', color: COLOR.cyan},
+                {action:"Color white_bright", text:'  ', color: COLOR.cyan},
+            ], this.UI_INDEXES_COLOR())
+        ]
 
         for (let item of ui.items.slice(0,8)) {
             this.ui.c.drawImage(

@@ -42,16 +42,33 @@ import { JoinManager } from './manager/JoinManager.js'
 export class ChaosTest extends CanvasAnimationBase {
 constructor() {
     super(...arguments)
-
     const c = this.context
+    this.ui = new UI(document.getElementById('canvas_ui'))
+
+    const setCanvasSizeForScreen = (event) => {
+        const orientationVertical = this.window_aspect_ratio<=(2/3)
+        const orientationHorizontal = this.window_aspect_ratio>=(8/3)
+        if (orientationVertical) {
+            this.canvas.classList.remove('full_height')
+            this.ui.canvas.classList.remove('full_height')
+            this.canvas.classList.add('full_width')
+            this.ui.canvas.classList.add('full_width')
+        }
+        if (orientationHorizontal) {
+            this.canvas.classList.remove('full_width')
+            this.ui.canvas.classList.remove('full_width')
+            this.canvas.classList.add('full_height')
+            this.ui.canvas.classList.add('full_height')
+        }
+    }
+    window.addEventListener("resize", setCanvasSizeForScreen)
+
 
     // UI Test
-    this.ui = new UI(document.getElementById('canvas_ui'))
     //new UISpells(ui)
     //new UICharacterSelect(ui)
     //const uis = new UIStats(ui)
     //uis.drawStats("King Cobra")
-
 
     // Logging
     new LoggingCanvas(document.getElementById('canvas_log'))
@@ -67,15 +84,15 @@ constructor() {
         network = new NetworkManager(channel)
         network.socket.addEventListener("open", () => {this.canvas.classList.remove('disconnected')})
         network.socket.addEventListener("close", () => {this.canvas.classList.add('disconnected')})
+        window.network = network  // for debugging
         network.addOnMessageListener((data)=>console.log("socket recv", data))
-        window.network = network
     }
-
 
     // DialogJoin
     new DialogJoinOrCreate({
         'create': ()=>{
-            const channel = generateStringId()  // getId()  // Ponder: does the creator always join the same channel? or a new channel?
+            // Ponder? does the creator always join the same channel? or a new channel?
+            const channel = generateStringId()  // getId()
             logging.info(`Join: ${window.location.host} ${channel}`)
             this.canvas.classList.add('full_screen')
             setupNetwork(channel)
@@ -85,12 +102,8 @@ constructor() {
             logging.info(`Connecting: ${window.location.host} ${channel}`)
             this.canvas.classList.remove('full_screen')
             setupNetwork(channel)
-            network.socket.addEventListener("open", () => {
-                network.send({"action": "join", name})
-                logging.info(`Joined: ${channel} as ${name}`)
-                // TODO: start timer for disconnect?
-            })
-            new JoinManager(this.canvas, this.ui, network)
+            setCanvasSizeForScreen()
+            new JoinManager(this.canvas, this.ui, network, name)
         },
     })
 

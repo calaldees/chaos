@@ -9,6 +9,7 @@ export class NetworkManager {
         this.websocket_url = urlParams.get('websocket_url') || `${window.location.protocol.startsWith("https")?"wss":"ws"}://${window.location.host}/`
         this.websocket_url += `${channel}.ws`
         this.onMessageListeners = new Set()
+        this.channel = channel
         this.gzip_length_threshold = gzip_length_threshold
         this.connect()
     }
