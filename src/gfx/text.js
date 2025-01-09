@@ -70,7 +70,7 @@ const MAP_ansi_color_to_canvas_color = {
     "96": COLOR.cyan_bright,    "106": COLOR.cyan_bright,
     "97": COLOR.white_bright,   "107": COLOR.white_bright,
 }
-const DEFAULT_ANSI_COLORS = [COLOR.white_bright, COLOR.black]
+const DEFAULT_ANSI_COLORS = [COLOR.white_bright, null]  // COLOR.black
 function* pos_ansi_to_color_lookup(text_length, pos_ansi) {
     let [color_foreground, color_background] = DEFAULT_ANSI_COLORS
     let pos, ansi_codes
@@ -91,9 +91,9 @@ function* pos_ansi_to_color_lookup(text_length, pos_ansi) {
     }
 }
 assertEqualsObject([
-    [ [...pos_ansi_to_color_lookup(1, [])], [["#FFF","#000"]]],
-    [ [...pos_ansi_to_color_lookup(3, [[1,[91,41]]])], [["#FFF","#000"],["#F00","#D00"],["#F00","#D00"]]],
-    [ [...pos_ansi_to_color_lookup(3, [[1,[91,41]],[2,[102]]])], [["#FFF","#000"],["#F00","#D00"],["#F00","#0F0"]]],
+    [ [...pos_ansi_to_color_lookup(1, [])], [["#FFF",null]]],
+    [ [...pos_ansi_to_color_lookup(3, [[1,[91,41]]])], [["#FFF",null],["#F00","#D00"],["#F00","#D00"]]],
+    [ [...pos_ansi_to_color_lookup(3, [[1,[91,41]],[2,[102]]])], [["#FFF",null],["#F00","#D00"],["#F00","#0F0"]]],
 ])
 
 export const [FONT_WIDTH, FONT_HEIGHT] = [8, 16]
@@ -105,8 +105,12 @@ export function drawFont_color(c, string, x, y, x_width=Infinity) {
         const _x_progress = (i * FONT_WIDTH)
         const _x = x + (_x_progress % x_width)
         const _y = y + Math.floor(_x_progress / x_width) * FONT_HEIGHT
-        c.fillStyle = color_background
-        c.fillRect(_x, _y, FONT_WIDTH, FONT_HEIGHT)
+        if (color_background) {
+            c.fillStyle = color_background
+            c.fillRect(_x, _y, FONT_WIDTH, FONT_HEIGHT)
+        } else {
+            c.clearRect(_x, _y, FONT_WIDTH, FONT_HEIGHT)
+        }
         c.drawImage(shiftImage(fontImageBitMaps[char], color_foreground), _x, _y)
     }
 }

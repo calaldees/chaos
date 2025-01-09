@@ -11,6 +11,7 @@ export class NetworkManager {
         this.onMessageListeners = new Set()
         this.channel = channel
         this.gzip_length_threshold = gzip_length_threshold
+        this.socket = undefined
         this.connect()
     }
 
@@ -30,6 +31,7 @@ export class NetworkManager {
     }
     close = (event) => {
         console.error('socket close')
+        if (this.socket) {this.socket.close()}
         this.socket = undefined
     }
     message = (msg) => {
