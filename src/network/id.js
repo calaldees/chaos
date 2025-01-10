@@ -13,6 +13,10 @@ assertEquals([
 
 const KEY_ID = 'id'
 export function getId() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const query_string_id = urlParams.get('id')
+    if (query_string_id) {return query_string_id}
+
     let id = window.localStorage.getItem(KEY_ID)
     if (!id) {
         id = generateStringId()

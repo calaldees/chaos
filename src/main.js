@@ -38,6 +38,7 @@ import { NetworkManager } from './network/network.js'
 import { JoinManager } from './manager/JoinManager.js'
 
 
+const urlParams = new URLSearchParams(window.location.search);
 
 export class ChaosTest extends CanvasAnimationBase {
 constructor() {
@@ -63,13 +64,6 @@ constructor() {
     }
     window.addEventListener("resize", setCanvasSizeForScreen)
 
-
-    // UI Test
-    //new UISpells(ui)
-    //new UICharacterSelect(ui)
-    //const uis = new UIStats(ui)
-    //uis.drawStats("King Cobra")
-
     // Logging
     new LoggingCanvas(document.getElementById('canvas_log'))
     logging.registerHandler("map", (level, message)=>{
@@ -89,29 +83,37 @@ constructor() {
     }
 
     // DialogJoin
-    new DialogJoinOrCreate({
-        'create': ()=>{
-            // Ponder? does the creator always join the same channel? or a new channel?
-            const channel = generateStringId()  // getId()
+    const dialogActions = {
+        create: (channel)=>{
+            channel = channel || generateStringId()
             logging.info(`Join: ${window.location.host} ${channel}`)
             this.canvas.classList.add('full_screen')
             setupNetwork(channel)
             new JoinManager(this.canvas, this.ui, network)
         },
-        'join': (player_name, channel)=>{
+        join: (channel, player_name)=>{
             logging.info(`Connecting: ${window.location.host} ${channel}`)
             this.canvas.classList.remove('full_screen')
             setupNetwork(channel)
             setCanvasSizeForScreen()
             new JoinManager(this.canvas, this.ui, network, player_name)
         },
-    })
+    }
+    const dialogAction = urlParams.get('dialogAction')
+    if (dialogAction == 'create') {dialogActions.create(urlParams.get('channel'))}
+    if (dialogAction == 'join'  ) {dialogActions.join(urlParams.get('channel'), urlParams.get('player_name'))}
+    if (!dialogAction) {new DialogJoinOrCreate(dialogActions)}
 
     // Mouse
     this.mouse_index = undefined
     this.mouse_effect = {}
     this.cursor = sprites.cursor[0]
 
+    // UI Test
+    //new UISpells(ui)
+    //new UICharacterSelect(ui)
+    //const uis = new UIStats(ui)
+    //uis.drawStats("King Cobra")
 
     // Sprite tests
     drawBorder(c,0,0,this.w,this.h-16,COLOR.blue)

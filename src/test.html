@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link id="favicon" rel="shortcut icon" type="image/png" href="data:image/png;base64,....==" />
+    <title>Chaos: Test</title>
+    <style>
+        html, body {margin: 0; padding: 0; height: 100%; overflow: hidden;}
+        iframe {display: inline-block; width:256px; height:384px; padding: 0; margin: 0; border: 0;}
+        iframe.host {display: block; width:768px; height:576px;}
+    </style>
+</head>
+<body>
+    <iframe src="index.html?websocket_url=ws://localhost:9800/&channel=test&dialogAction=create&id=host" title="Host" class="host"></iframe>
+    <iframe src="index.html?websocket_url=ws://localhost:9800/&channel=test&dialogAction=join&id=1&player_name=one" title="Player1"></iframe>
+    <iframe src="index.html?websocket_url=ws://localhost:9800/&channel=test&dialogAction=join&id=2&player_name=two" title="Player2"></iframe>
+    <iframe src="index.html?websocket_url=ws://localhost:9800/&channel=test&dialogAction=join&id=3&player_name=three" title="Player3"></iframe>
+</body>
+</html>

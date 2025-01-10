@@ -7,7 +7,7 @@ export class DialogJoinOrCreate {
         if (!hasAllProperties(action_handlers, ['join', 'create'])) {throw 'action_handlers'}
         dialog.addEventListener("close", (e) => {
             const action = e.target.returnValue
-            action_handlers[action](this.name, this.channel)
+            action_handlers[action](this.channel, this.name)
         })
         dialog.querySelector("button[action='create']").addEventListener("click", (e)=>{
             e.preventDefault()
@@ -15,8 +15,8 @@ export class DialogJoinOrCreate {
         })
         dialog.querySelector("button[action='join']").addEventListener("click", (e)=>{
             e.preventDefault()
-            if (!this.name || !this.channel) {
-                console.warn('join', 'requires name and channel')
+            if (!this.channel || !this.name) {
+                console.warn('join', 'requires channel and name')
                 return
             }
             dialog.close("join")
