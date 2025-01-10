@@ -20,6 +20,6 @@ services:
     build:
       context: ./channelServer/
       target: production
-    command: [ '--log_level=10', '--first_peer' ]
+    command: [ '--log_level=20', '--first_peer' ]
     ports:         # Only for local development
       - 9800:9800  # Only for local development

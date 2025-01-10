@@ -41,19 +41,19 @@ export class JoinManager {
         const isPlayer = Boolean(player_name)
         const isHost   = Boolean(!player_name)
 
-        network.socket.addEventListener("open", () => {
-            logging.info(`Joined: ${network.channel} as ${this.player.name}`)
-            this.player = this.player  // sends the player state over network
-            const HOST_RESPONSE_TIMEOUT_MILLISECONDS = 3000
-            if (isPlayer) {setTimeout(()=>{
-                if (this.ui_players.players.length==0) {
-                    logging.error(`No game in channel ${this.network.channel}. Host did not respond.`)
-                    this.network.close()
-                }
-            }, HOST_RESPONSE_TIMEOUT_MILLISECONDS)}
-        })
-
         if (isPlayer) {
+            network.socket.addEventListener("open", () => {
+                logging.info(`Joined: ${network.channel} as ${this.player.name}`)
+                this.player = this.player  // sends the player state over network
+                const HOST_RESPONSE_TIMEOUT_MILLISECONDS = 3000
+                // todo: consider `await timeout(3000)`
+                setTimeout(()=>{
+                    if (this.ui_players.players.length==0) {
+                        logging.error(`No game in channel ${this.network.channel}. Host did not respond.`)
+                        this.network.close()
+                    }
+                }, HOST_RESPONSE_TIMEOUT_MILLISECONDS)
+            })
             this.messageListener = (data) => {
                 if (data.action != 'players') {return this.close()}
                 this.ui_players.players = data.players  // update ui
@@ -64,7 +64,7 @@ export class JoinManager {
                 if (data.action != 'join') {return this.close()}
                 const players = this.ui_players.players
                 let player
-                for (player of this.ui_players.players) {if (player.name == data.name) {break}}
+                for (player of this.ui_players.players) {if (player.name == data.name) {break}; player = undefined}
                 if (player) {
                     player.color = data.color
                     player.unit_type = data.unit_type

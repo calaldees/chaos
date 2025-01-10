@@ -71,6 +71,7 @@ constructor() {
         this.context.clearRect(...message_xy, this.w, this.h)
         drawFont_color(this.context, message, ...message_xy)
     })
+    logging.info(`Chaos \\033[91;103mMobile\\033[0m Test`)
 
     let network
     const setupNetwork = (channel) => {
@@ -79,7 +80,7 @@ constructor() {
         network.socket.addEventListener("open", () => {this.canvas.classList.remove('disconnected')})
         network.socket.addEventListener("close", () => {this.canvas.classList.add('disconnected')})
         window.network = network  // for debugging
-        network.addOnMessageListener((data)=>console.log("socket recv", data))
+        //network.addOnMessageListener((data)=>console.log("socket recv", data))
     }
 
     // DialogJoin
@@ -118,7 +119,7 @@ constructor() {
     // Sprite tests
     drawBorder(c,0,0,this.w,this.h-16,COLOR.blue)
     //drawFont_color(c, `Chaos \\033[91;103mMobile\\033[0m Test`, 0, 176)
-    logging.info(`Chaos \\033[91;103mMobile\\033[0m Test`)
+
     //c.drawImage(sprites.animation.twirl[8], 10*16,7*16)
 
     // Early draw tests without model or animation
@@ -130,8 +131,8 @@ constructor() {
     //}
 
     const game = new Game([
-        new Player("Player1", "Wizard JULIAN", COLOR.yellow),
-        new Player("Player2", "Wizard GANDALF", COLOR.red),
+        //new Player("Player1", "Wizard JULIAN", COLOR.yellow),
+        //new Player("Player2", "Wizard GANDALF", COLOR.red),
     ])
     // Expose to console
     window.game = game

@@ -202,6 +202,10 @@ export const inclusivePick = (obj, ...keys) => Object.fromEntries(keys.map(key =
 export const omit = (obj, ...keys) => Object.fromEntries(Object.entries(obj).filter(([key]) => !keys.includes(key)))
 
 
+// https://stackoverflow.com/a/33292942/3356840
+// use with `await timeout(5000)`
+export function timeout(ms) {return new Promise(resolve => setTimeout(resolve, ms))}
+
 
 // https://stackoverflow.com/a/49479174/3356840
 // combined with   `Object.defineProperty(photo, '_key', {enumerable: false, value: 1});`
