@@ -22,3 +22,6 @@ channelServer:
 shell_debug_minify:
 	docker build --tag debug_minify --target build .
 	docker run --rm -it debug_minify /bin/sh
+
+cloc:  ## cloc - lines of code count
+	cloc --vcs=git --exclude-dir=data
