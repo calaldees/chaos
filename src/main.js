@@ -191,6 +191,7 @@ loop(context, frame) {
 handle_mouse() {
     const i = this.gfx_map.map_model.dimension.position_to_index(...[this.mouse_x,this.mouse_y].map((i)=>Math.floor((i-BORDER_OFFSET_PX)/CELL_SIZE_PX)))
     if (this.mouse_index == i) {return}
+    console.log(i)
     // Mouse moved - redraw
     this.gfx_dispatch.markDirty(this.mouse_index || 0, i)
     this.mouse_index = i

@@ -6,16 +6,24 @@ import { Map } from './map.js'
 import { Registry } from './registry.js'
 
 
-export const INDEX_START = [
-    16,  // top left
-    133, // bottom right
-    121, // bottom left
-    28,  // top right
-    22,  // middle top
-    127, // middle bottom
-    // player 7?
-    // player 8?
-]
+export const PLAYER_START_INDEX = {
+    0: [],
+    1: [67],
+    2: [33, 116],
+    3: [22, 108, 116],
+    4: [34, 40, 109, 115],
+    5: [7, 62, 139, 145, 72],
+    6: [
+        16,  // top left
+        133, // bottom right
+        121, // bottom left
+        28,  // top right
+        22,  // middle top
+        127, // middle bottom
+    ],
+    7:[],
+    8:[],
+}
 
 export class Game {
     constructor(players) {
@@ -25,7 +33,7 @@ export class Game {
             this.registry.players[player.id] = player
         }
         this.map = new Map(this.registry)
-        for (let [player, start_location] of zip(players, INDEX_START)) {
+        for (let [player, start_location] of zip(players, PLAYER_START_INDEX[players.length])) {
             if (!player) {continue}
             const unit = this.newUnit(player.unit_type, player.id, start_location)
             unit.animColorsOverride.push(player.color)

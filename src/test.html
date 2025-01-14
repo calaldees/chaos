@@ -15,7 +15,7 @@
 
 <script type="module">
 setTimeout(()=>{  // allow host to join first to prevent race hazards with channel
-    for (let player_name of ['one', 'two', 'thee']) {
+    for (let player_name of ['one', 'two', 'thee']) {  // 'five', 'four'
         const iframe = document.createElement('iframe')
         iframe.src = `index.html?websocket_url=ws://${window.location.hostname}:9800/&channel=test&dialogAction=join&id=${player_name}&player_name=${player_name}`
         iframe.title = player_name

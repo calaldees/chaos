@@ -3,7 +3,7 @@
 help:	## display this help
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n\nTargets:\n"} /^[a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-8s\033[0m %s\n", $$1, $$2 } END{print ""}' $(MAKEFILE_LIST)
 
-run: channelServer  ## build and run whole stack with docker
+run: channelServer  ## build and run whole stack with docker/nginx
 	docker compose up --build
 
 serve_files_for_local:  ##  serve static files on localhost:8000

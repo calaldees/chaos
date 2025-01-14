@@ -1,6 +1,6 @@
 import { enumerate, hasAllProperties } from "../core.js"
 import { COLOR, shiftImage } from '../gfx/color.js'
-import { INDEX_START } from '../model/game.js'
+import { PLAYER_START_INDEX } from '../model/game.js'
 import { i_to_xy } from '../gfx/gfx_dispatch.js'
 import { gfx_units } from '../gfx/units.js'
 import { drawFont, FONT_WIDTH, FONT_HEIGHT } from '../gfx/text.js'
@@ -12,16 +12,53 @@ class ALIGN {
     static CENTRE = 2
 }
 
-const INDEX_LABEL_SHIFT = [
-    [INDEX_START[0], +1, ALIGN.LEFT],
-    [INDEX_START[1], -1, ALIGN.RIGHT],
-    [INDEX_START[2], -1, ALIGN.LEFT],
-    [INDEX_START[3], +1, ALIGN.RIGHT],
-    [INDEX_START[4], +1, ALIGN.CENTRE],
-    [INDEX_START[5], -1, ALIGN.CENTRE],
-    // player 7?
-    // player 8?
-]
+const PLAYER_START_INDEX_LABEL_SHIFT = {
+    0: [],
+    1: [
+        [PLAYER_START_INDEX[1][0], +1, ALIGN.CENTRE],
+    ],
+    2: [
+        [PLAYER_START_INDEX[2][0], +1, ALIGN.LEFT],
+        [PLAYER_START_INDEX[2][1], -1, ALIGN.RIGHT],
+    ],
+    3: [
+        [PLAYER_START_INDEX[3][0], +1, ALIGN.CENTRE],
+        [PLAYER_START_INDEX[3][1], -1, ALIGN.CENTRE],
+        [PLAYER_START_INDEX[3][2], -1, ALIGN.CENTRE],
+    ],
+    4: [
+        [PLAYER_START_INDEX[4][0], +1, ALIGN.LEFT],
+        [PLAYER_START_INDEX[4][1], +1, ALIGN.RIGHT],
+        [PLAYER_START_INDEX[4][2], -1, ALIGN.LEFT],
+        [PLAYER_START_INDEX[4][3], -1, ALIGN.RIGHT],
+    ],
+    5: [
+        [PLAYER_START_INDEX[5][0], +1, ALIGN.CENTRE],
+        [PLAYER_START_INDEX[5][1], +1, ALIGN.CENTRE],
+        [PLAYER_START_INDEX[5][2], -1, ALIGN.CENTRE],
+        [PLAYER_START_INDEX[5][3], -1, ALIGN.CENTRE],
+        [PLAYER_START_INDEX[5][4], +1, ALIGN.CENTRE],
+    ],
+    6: [
+        [PLAYER_START_INDEX[6][0], +1, ALIGN.LEFT],
+        [PLAYER_START_INDEX[6][1], -1, ALIGN.RIGHT],
+        [PLAYER_START_INDEX[6][2], -1, ALIGN.LEFT],
+        [PLAYER_START_INDEX[6][3], +1, ALIGN.RIGHT],
+        [PLAYER_START_INDEX[6][4], +1, ALIGN.CENTRE],
+        [PLAYER_START_INDEX[6][5], -1, ALIGN.CENTRE],
+    ],
+    7: [
+        [PLAYER_START_INDEX[7][0], +1, ALIGN.LEFT],
+        [PLAYER_START_INDEX[7][1], -1, ALIGN.RIGHT],
+        [PLAYER_START_INDEX[7][2], -1, ALIGN.LEFT],
+        [PLAYER_START_INDEX[7][3], +1, ALIGN.RIGHT],
+        [PLAYER_START_INDEX[7][4], +1, ALIGN.CENTRE],
+        [PLAYER_START_INDEX[7][5], -1, ALIGN.CENTRE],
+        [PLAYER_START_INDEX[7][6], -1, ALIGN.CENTRE],
+    ],
+    8: [
+    ],
+}
 
 export class UIPlayers {
     // This UI is a special case
@@ -50,7 +87,7 @@ export class UIPlayers {
     draw() {
         this.clear()
         for (let [j, player] of enumerate(this.players)) {
-            const [i, row_shift, align] = INDEX_LABEL_SHIFT[j]
+            const [i, row_shift, align] = PLAYER_START_INDEX_LABEL_SHIFT[this.players.length][j]
             this.drawUnitType(i, player.unit_type, player.color)
             this.drawFontForIndex(player.name, COLOR.white, i, row_shift, align)
         }
