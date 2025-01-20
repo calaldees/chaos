@@ -171,6 +171,9 @@ constructor() {
     //c.translate(0,100)
     //drawAudioFloatStream(c, sounds['engaged_sound_effect'])
     //c.restore()
+
+    // TODO:
+    //.setRunning(true)
 }
 loop(context, frame) {
     this.handle_mouse()
