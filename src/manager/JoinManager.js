@@ -1,4 +1,4 @@
-import { pick } from '../core.js'
+import { all, pick } from '../core.js'
 import { COLOR } from '../gfx/color.js'
 import { logging } from '../log/logging.js'
 import { UIPlayers } from '../ui/players.js'
@@ -15,8 +15,9 @@ export class JoinManager {
 
         this._player = {
             name: player_name,
-            unit_type: "Wizard JULIAN",  // TODO: random select from wizards
-            color: COLOR.white,          // TODO: random select from colors
+            unit_type: "Wizard JULIAN",
+            color: COLOR.white,
+            ready: 'no',
         }
 
         this.ui_players = new UIPlayers(canvas_map)
@@ -34,8 +35,9 @@ export class JoinManager {
         this.ui_character_select = new UICharacterSelect(ui)
         this.ui_character_select.player_name = player_name
         this.ui_character_select.ui.callback = (item) => {
-            if (item.action.indexOf('Color') == 0) {this.player = {color: COLOR[item.action.split(' ')[1]]}}
+            if (item.action.indexOf('Color')  == 0) {this.player = {color: COLOR[item.action.split(' ')[1]]}}
             if (item.action.indexOf('Wizard') == 0) {this.player = {unit_type: item.action}}
+            if (item.action.indexOf('Ready')  == 0) {this.player = {ready: item.action.split(' ')[1]}}
         }
 
         const isPlayer = Boolean(player_name)
@@ -55,24 +57,35 @@ export class JoinManager {
                 }, HOST_RESPONSE_TIMEOUT_MILLISECONDS)
             })
             this.messageListener = (data) => {
-                if (data.action != 'players') {return this.close()}
+                if (data.action != 'players') {
+                    logging.error('Invalid message type received - out of sync')
+                    return this.close()
+                }
                 this.ui_players.players = data.players  // update ui
             }
         }
         if (isHost) {
             this.messageListener = (data) => {
-                if (data.action != 'join') {return this.close()}
+                if (data.action != 'join') {
+                    logging.error('Invalid message type received - out of sync')
+                    return this.close()
+                }
                 const players = this.ui_players.players
                 let player
                 for (player of this.ui_players.players) {if (player.name == data.name) {break}; player = undefined}
                 if (player) {
                     player.color = data.color
                     player.unit_type = data.unit_type
+                    player.ready = data.ready
                 } else {
                     players.push(data)
                 }
                 this.ui_players.players = players  // update ui
                 network.send({action: 'players', players: players})
+
+                if (all(players.map(player=> player.ready == 'yes'))) {
+                    logging.info('START GAME!')
+                }
             }
         }
         network.addOnMessageListener(this.messageListener)
@@ -91,7 +104,7 @@ export class JoinManager {
 
     get player() {return this._player}
     set player(player) {
-        this._player = {...this._player, ...pick(player, 'name', 'unit_type', 'color')}
+        this._player = {...this._player, ...pick(player, 'name', 'unit_type', 'color', 'ready')}
         this.network.send({action: "join", ...this.player})
     }
 }

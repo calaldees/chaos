@@ -90,6 +90,9 @@ export class UIPlayers {
             const [i, row_shift, align] = PLAYER_START_INDEX_LABEL_SHIFT[this.players.length][j]
             this.drawUnitType(i, player.unit_type, player.color)
             this.drawFontForIndex(player.name, COLOR.white, i, row_shift, align)
+            if (player.ready == 'yes') {
+                this.drawFontForIndex('Ready', COLOR.yellow, i, -row_shift, ALIGN.CENTRE)
+            }
         }
     }
     drawUnitType(i, unit_type, color) {
