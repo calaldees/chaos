@@ -14,11 +14,18 @@ export class UICharacterSelect {
         ui.drawFont("PLAYER 3", 0, 0, COLOR.yellow)
         ui.drawFont("Enter name (12 letters max.)", 0, 1, COLOR.magenta)
 
-        ui.drawFont("Computer controlled?", 0, 4, COLOR.magenta)
-        ui.drawFont("NO", 21, 4, COLOR.yellow)
-        ui.drawFont("Which character?", 0, 5, COLOR.magenta)
+        // Original UI - "Computer Controlled"
+        // ui.drawFont("Computer controlled?", 0, 4, COLOR.magenta)
+        // ui.drawFont("NO", 21, 4, COLOR.yellow)
 
-        ui.drawFont("Which colour?", 0, 7, COLOR.magenta)
+        ui.drawFont("Which character?", 0, 3, COLOR.magenta)
+
+        ui.drawFont("Which colour?", 0, 5, COLOR.magenta)
+
+        // New UI - "Ready Yes/No"
+        ui.drawFont("Ready?", 0, 8, COLOR.magenta)
+        //ui.drawFont("Yes", 4, 9, COLOR.white)
+        //ui.drawFont("No", 20, 9, COLOR.white)
 
         ui.items = [
             ...mergeItemsAndLayout([
@@ -40,9 +47,12 @@ export class UICharacterSelect {
                 {action:"Color yellow_bright", text:'  ', color: COLOR.cyan},
                 {action:"Color white", text:'  ', color: COLOR.cyan},
                 {action:"Color white_bright", text:'  ', color: COLOR.cyan},
-            ], this.UI_INDEXES_COLOR())
+            ], this.UI_INDEXES_COLOR()),
+            ...[
+                {action:"Ready yes", text:'es', color: COLOR.cyan, key: 'Y', i: (this.ui.dimension.width*9)+4},
+                {action:"Ready no" , text:'o' , color: COLOR.cyan, key: 'N', i: (this.ui.dimension.width*9)+20},
+            ],
         ]
-
         for (let item of ui.items.slice(0,8)) {
             this.ui.c.drawImage(
                 shiftImage(...gfx_units[item.action].sprite_and_color(0)),
@@ -53,16 +63,18 @@ export class UICharacterSelect {
             this.ui.c.fillStyle = COLOR[item.action.replace('Color ', '')]
             this.ui.c.fillRect(...this.ui.i_to_xy(item.i + 1),FONT_HEIGHT,FONT_HEIGHT)
         }
+
+
     }
 
-    UI_INDEXES_CHAR_SELECT(start_row=6) {
+    UI_INDEXES_CHAR_SELECT(start_row=4) {
         return [...range(8)].map((r)=>{return {
             'i': (this.ui.dimension.width*start_row)+(r*3),
             'key': String.fromCharCode(r+49),
         }})
     }
 
-    UI_INDEXES_COLOR(start_row=8) {
+    UI_INDEXES_COLOR(start_row=6) {
         return [...range(8)].map((r)=>{return {
             'i': (this.ui.dimension.width*start_row)+(r*3),
             'key': String.fromCharCode(r+65),
