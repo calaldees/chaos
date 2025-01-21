@@ -1,17 +1,19 @@
 import { all, pick } from '../core.js'
 import { COLOR } from '../gfx/color.js'
 import { logging } from '../log/logging.js'
-import { UIPlayers } from '../ui/players.js'
+import { UIPlayers } from '../ui/join_players.js'
 import { UICharacterSelect } from '../ui/character_select.js'
 
 
 export class JoinManager {
-    constructor(canvas_map, ui, network, player_name='') {
+    constructor(canvas_map, ui, network, player_name='', start_game_callback=undefined) {
         console.assert(canvas_map.constructor.name == 'HTMLCanvasElement')
         console.assert(ui.constructor.name == 'UI')
         console.assert(network.constructor.name == 'NetworkManager')
+        //console.assert(typeof start_game_callback == 'function')
 
         this.network = network
+        this.start_game_callback = start_game_callback || (()=>{this.close()})
 
         this._player = {
             name: player_name,
@@ -84,7 +86,9 @@ export class JoinManager {
                 network.send({action: 'players', players: players})
 
                 if (all(players.map(player=> player.ready == 'yes'))) {
-                    logging.info('START GAME!')
+                    const players = this.ui_players.players
+                    this.close()
+                    this.start_game_callback(players)
                 }
             }
         }
@@ -96,7 +100,9 @@ export class JoinManager {
         this.messageListener = null
         this.network = null
         // TODO: clear uis?
+        this.ui_players.clear()
         this.ui_players = null
+        this.ui_character_select.clear()
         this.ui_character_select = null
     }
 

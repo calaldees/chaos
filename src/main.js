@@ -83,6 +83,11 @@ constructor() {
         //network.addOnMessageListener((data)=>console.log("socket recv", data))
     }
 
+    const start_game_callback = (players) => {
+        logging.info('start_game_callback')
+        console.log(players)
+    }
+
     // DialogJoin
     const dialogActions = {
         create: (channel)=>{
@@ -90,7 +95,7 @@ constructor() {
             logging.info(`Join: ${window.location.host} ${channel}`)
             this.canvas.classList.add('full_screen')
             setupNetwork(channel)
-            new JoinManager(this.canvas, this.ui, network)
+            new JoinManager(this.canvas, this.ui, network, '', start_game_callback)
         },
         join: (channel, player_name)=>{
             logging.info(`Connecting: ${window.location.host} ${channel}`)

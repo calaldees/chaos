@@ -87,4 +87,8 @@ export class UICharacterSelect {
         this.ui.clearFont(12, 0, 2)
         this.ui.drawFont(name, 0, 2, COLOR.cyan)
     }
+
+    clear() {
+        this.ui.clear()
+    }
 }
