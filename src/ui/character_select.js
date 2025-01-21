@@ -18,12 +18,12 @@ export class UICharacterSelect {
         // ui.drawFont("Computer controlled?", 0, 4, COLOR.magenta)
         // ui.drawFont("NO", 21, 4, COLOR.yellow)
 
-        ui.drawFont("Which character?", 0, 3, COLOR.magenta)
+        ui.drawFont("Which character?", 0, 4, COLOR.magenta)
 
-        ui.drawFont("Which colour?", 0, 5, COLOR.magenta)
+        ui.drawFont("Which colour?", 0, 6, COLOR.magenta)
 
         // New UI - "Ready Yes/No"
-        ui.drawFont("Ready?", 0, 8, COLOR.magenta)
+        ui.drawFont("Everyone ready?", 0, 8, COLOR.magenta)
         //ui.drawFont("Yes", 4, 9, COLOR.white)
         //ui.drawFont("No", 20, 9, COLOR.white)
 
@@ -67,14 +67,14 @@ export class UICharacterSelect {
 
     }
 
-    UI_INDEXES_CHAR_SELECT(start_row=4) {
+    UI_INDEXES_CHAR_SELECT(start_row=5) {
         return [...range(8)].map((r)=>{return {
             'i': (this.ui.dimension.width*start_row)+(r*3),
             'key': String.fromCharCode(r+49),
         }})
     }
 
-    UI_INDEXES_COLOR(start_row=6) {
+    UI_INDEXES_COLOR(start_row=7) {
         return [...range(8)].map((r)=>{return {
             'i': (this.ui.dimension.width*start_row)+(r*3),
             'key': String.fromCharCode(r+65),

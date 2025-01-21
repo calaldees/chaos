@@ -86,6 +86,20 @@ constructor() {
     const start_game_callback = (players) => {
         logging.info('start_game_callback')
         console.log(players)
+
+        const game = new Game(players.map((player)=>new Player(
+            player.from, player.name, player.unit_type, player.color,
+        )))
+        window.game = game  // Expose to console
+
+        // Gfx Map
+        this.gfx_map = new GfxMap(game.map)
+        this.gfx_effects = new GfxEffects(game.map.dimension.size)
+        this.gfx_dispatch = new GfxDispatch([this.gfx_map, this.gfx_effects])
+
+        //network.addOnMessageListener()
+
+        this.setRunning(true)
     }
 
     // DialogJoin
@@ -135,12 +149,6 @@ constructor() {
     //    c.drawImage(shiftImage(monster_sprites[i], COLOR.white) , (i%16)*16, 32+(Math.floor(i/16)*16))
     //}
 
-    const game = new Game([
-        //new Player("Player1", "Wizard JULIAN", COLOR.yellow),
-        //new Player("Player2", "Wizard GANDALF", COLOR.red),
-    ])
-    // Expose to console
-    window.game = game
 
     // Model
     //for (let [i, unit_name] of enumerate(Object.keys(unit_data))) {
@@ -149,10 +157,6 @@ constructor() {
     //game.map.getUnit(0).status.add("corpse")
     //game.map.getUnit(3).setPos(5) // HACK - test sprite flipping
 
-    // Gfx Map
-    this.gfx_map = new GfxMap(game.map)
-    this.gfx_effects = new GfxEffects(game.map.dimension.size)
-    this.gfx_dispatch = new GfxDispatch([this.gfx_map, this.gfx_effects])
 
     // Gfx Effects
     /*
@@ -176,9 +180,6 @@ constructor() {
     //c.translate(0,100)
     //drawAudioFloatStream(c, sounds['engaged_sound_effect'])
     //c.restore()
-
-    // TODO:
-    //.setRunning(true)
 }
 loop(context, frame) {
     this.handle_mouse()
@@ -190,16 +191,16 @@ loop(context, frame) {
     this.gfx_dispatch.drawDirty(context, frame)
     this.gfx_dispatch.resetDirtyIndexes()
 
-    if (frame % 100 == 0) {
-        //playSound(this.audioContext, 'engaged_sound_effect')
-        const name = 'engaged_sound_effect'
-        //this.play_audio(`sound/${name}.mp3`)
-    }
+    //if (frame % 100 == 0) {
+    //    //playSound(this.audioContext, 'engaged_sound_effect')
+    //    const name = 'engaged_sound_effect'
+    //    //this.play_audio(`sound/${name}.mp3`)
+    //}
 }
 handle_mouse() {
     const i = this.gfx_map.map_model.dimension.position_to_index(...[this.mouse_x,this.mouse_y].map((i)=>Math.floor((i-BORDER_OFFSET_PX)/CELL_SIZE_PX)))
     if (this.mouse_index == i) {return}
-    console.log(i)
+    // console.log('mouse_index', i)
     // Mouse moved - redraw
     this.gfx_dispatch.markDirty(this.mouse_index || 0, i)
     this.mouse_index = i

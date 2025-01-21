@@ -30,6 +30,7 @@ export class Game {
         Object.defineProperty(this, "registry", {writable: false, enumerable: true, value: new Registry()})
         if (!hasIterationProtocol(players)) {throw TypeError()}
         for (let player of players) {
+            if (player.constructor.name != 'Player') {throw Error()}
             this.registry.players[player.id] = player
         }
         this.map = new Map(this.registry)

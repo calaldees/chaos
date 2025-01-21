@@ -8,6 +8,7 @@ FROM node:alpine as build
     # --format es
     RUN gzip -9 -k bundle.js && mv bundle.js.gz main.js.gz
     RUN gzip -9 -k index.html
+    # RUN gzip -9 -k test.html  # `test.html` requires update to work on production server
     # TODO
     # https://rollupjs.org/introduction/
     # Alternatively ...
