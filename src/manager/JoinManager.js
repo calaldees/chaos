@@ -64,6 +64,7 @@ export class JoinManager {
                     return this.close()
                 }
                 this.ui_players.players = data.players  // update ui
+                if (data.isReady) {this.close()}
             }
         }
         if (isHost) {
@@ -83,9 +84,11 @@ export class JoinManager {
                     players.push(data)
                 }
                 this.ui_players.players = players  // update ui
-                network.send({action: 'players', players: players})
 
-                if (all(players.map(player=> player.ready == 'yes'))) {
+                const isReady = all(players.map(player=> player.ready == 'yes'))
+                network.send({action: 'players', players: players, isReady})
+
+                if (isReady) {
                     const players = this.ui_players.players
                     this.close()
                     this.start_game_callback(players)
