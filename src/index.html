@@ -24,6 +24,7 @@
 
         canvas.disconnected {background-color: red;}
     </style>
+    <script type="module" src="main.js"></script>
 </head>
 <body>
 
@@ -40,9 +41,5 @@
 <canvas id="canvas_ui"  width="256" height="192" tabindex='1'></canvas>
 <canvas id="canvas_log" width="256" height="192"></canvas>
 
-<script type="module">
-import { ChaosTest } from './main.js'
-new ChaosTest(document.getElementById('canvas_map'), 30)
-</script>
 </body>
 </html>
