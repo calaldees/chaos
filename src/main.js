@@ -38,7 +38,7 @@ import { NetworkManager } from './network/network.js'
 import { JoinManager } from './manager/JoinManager.js'
 
 
-const urlParams = new URLSearchParams(window.location.search);
+const urlParams = new URLSearchParams(window.location.search)
 
 export class Chaos extends CanvasAnimationBase {
     constructor() {
@@ -46,23 +46,7 @@ export class Chaos extends CanvasAnimationBase {
         const c = this.context
         this.ui = new UI(document.getElementById('canvas_ui'))
 
-        const setCanvasSizeForScreen = (event) => {
-            const orientationVertical = this.window_aspect_ratio<=(2/3)
-            const orientationHorizontal = this.window_aspect_ratio>=(8/3)
-            if (orientationVertical) {
-                this.canvas.classList.remove('full_height')
-                this.ui.canvas.classList.remove('full_height')
-                this.canvas.classList.add('full_width')
-                this.ui.canvas.classList.add('full_width')
-            }
-            if (orientationHorizontal) {
-                this.canvas.classList.remove('full_width')
-                this.ui.canvas.classList.remove('full_width')
-                this.canvas.classList.add('full_height')
-                this.ui.canvas.classList.add('full_height')
-            }
-        }
-        window.addEventListener("resize", setCanvasSizeForScreen)
+        window.addEventListener("resize", this.setCanvasSizeForScreen)
 
         logging.registerHandler("map", (level, message)=>{
             const message_xy = [0, 176]
@@ -119,6 +103,22 @@ export class Chaos extends CanvasAnimationBase {
     get persistentData() {return JSON.parse(window.localStorage.getItem("chaos") || "{}")}
     set persistentData(data) {window.localStorage.setItem("chaos", JSON.stringify(data))}
 
+    setCanvasSizeForScreen = (event) => {
+        const orientationVertical = this.window_aspect_ratio<=(2/3)
+        const orientationHorizontal = this.window_aspect_ratio>=(8/3)
+        if (orientationVertical) {
+            this.canvas.classList.remove('full_height')
+            this.ui.canvas.classList.remove('full_height')
+            this.canvas.classList.add('full_width')
+            this.ui.canvas.classList.add('full_width')
+        }
+        if (orientationHorizontal) {
+            this.canvas.classList.remove('full_width')
+            this.ui.canvas.classList.remove('full_width')
+            this.canvas.classList.add('full_height')
+            this.ui.canvas.classList.add('full_height')
+        }
+    }
 
 }
 
@@ -131,6 +131,18 @@ logging.info(`Chaos \\033[91;103mMobile\\033[0m`)
 // -----------------------------------------------------------------------------
 
 
+
+let {action, channel, player_name} = await (new DialogJoinOrCreate()).showModalPromise()
+if (action == 'create') {
+    chaos.canvas.classList.add('full_screen')
+    channel = channel || generateStringId()
+    logging.info(`Join: ${window.location.host} ${channel}`)
+}
+if (action == 'join') {
+    chaos.canvas.classList.remove('full_screen')
+    chaos.setCanvasSizeForScreen()
+    logging.info(`Connecting: ${window.location.host} ${channel}`)
+}
 const setupNetwork = (channel) => {
     chaos.canvas.classList.add('disconnected')
     const network = new NetworkManager(channel)
@@ -140,26 +152,6 @@ const setupNetwork = (channel) => {
     //network.addOnMessageListener((data)=>console.log("socket recv", data))
     return network
 }
-
-
-// DialogJoin
-const dialogActions = {
-    create: (channel)=>{
-        channel = channel || generateStringId()
-        logging.info(`Join: ${window.location.host} ${channel}`)
-        chaos.canvas.classList.add('full_screen')
-        const network = setupNetwork(channel)
-        new JoinManager(chaos.canvas, chaos.ui, network, '', chaos.start_game)
-    },
-    join: (channel, player_name)=>{
-        logging.info(`Connecting: ${window.location.host} ${channel}`)
-        chaos.canvas.classList.remove('full_screen')
-        chaos.setCanvasSizeForScreen()
-        const network = setupNetwork(channel)
-        new JoinManager(chaos.canvas, chaos.ui, network, player_name)
-    },
-}
-const dialogAction = urlParams.get('dialogAction')
-if (dialogAction == 'create') {dialogActions.create(urlParams.get('channel'))}
-if (dialogAction == 'join'  ) {dialogActions.join(urlParams.get('channel'), urlParams.get('player_name'))}
-if (!dialogAction) {new DialogJoinOrCreate(dialogActions)}
+const network = setupNetwork(channel)
+const players = await (new JoinManager(chaos.canvas, chaos.ui, network, player_name)).promise
+console.log('players', players)

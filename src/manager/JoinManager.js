@@ -6,14 +6,18 @@ import { UICharacterSelect } from '../ui/character_select.js'
 
 
 export class JoinManager {
-    constructor(canvas_map, ui, network, player_name='', start_game_callback=undefined) {
+    constructor(canvas_map, ui, network, player_name='') {
         console.assert(canvas_map.constructor.name == 'HTMLCanvasElement')
         console.assert(ui.constructor.name == 'UI')
         console.assert(network.constructor.name == 'NetworkManager')
-        //console.assert(typeof start_game_callback == 'function')
+
+        this.promise = new Promise((resolve, reject) => {
+            this.resolve = resolve
+            this.reject = reject
+        })
 
         this.network = network
-        this.start_game_callback = start_game_callback || (()=>{this.close()})
+        //this.start_game_callback = start_game_callback || (()=>{this.close()})
 
         this._player = {
             name: player_name,
@@ -89,9 +93,8 @@ export class JoinManager {
                 network.send({action: 'players', players: players, isReady})
 
                 if (isReady) {
-                    const players = this.ui_players.players
+                    this.resolve(this.ui_players.players)
                     this.close()
-                    this.start_game_callback(players)
                 }
             }
         }
@@ -107,6 +110,7 @@ export class JoinManager {
         this.ui_players = null
         this.ui_character_select.clear()
         this.ui_character_select = null
+        this.reject()
     }
 
     get state() {}
