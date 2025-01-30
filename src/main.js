@@ -148,8 +148,6 @@ const setupNetwork = (channel) => {
     const network = new NetworkManager(channel)
     network.socket.addEventListener("open", () => {chaos.canvas.classList.remove('disconnected')})
     network.socket.addEventListener("close", () => {chaos.canvas.classList.add('disconnected')})
-    window.network = network  // for debugging
-    //network.addOnMessageListener((data)=>console.log("socket recv", data))
     return network
 }
 const network = setupNetwork(channel)
