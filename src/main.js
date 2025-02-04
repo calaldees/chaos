@@ -61,14 +61,10 @@ export class Chaos extends CanvasAnimationBase {
         this.mouse_effect = {}
         this.cursor = sprites.cursor[0]
     }
-    start_game(players) {
-        logging.info('start_game')
-        console.log(players)
-
-        const game = new Game(players.map((player)=>new Player(
-            player.from, player.name, player.unit_type, player.color,
-        )))
-        window.game = game  // Expose to console
+    get game() {return this._game}
+    set game(game) {
+        this._game = game
+        logging.info('game attached to MainUIThing')
 
         // Gfx Map
         this.gfx_map = new GfxMap(game.map)
@@ -155,8 +151,13 @@ const setupNetwork = (channel) => {
 const network = setupNetwork(channel)
 const players = await (new JoinManager(chaos.canvas, chaos.ui, network, player_name)).promise
 if (action == 'create') {
-    chaos.start_game(players)
+    chaos.game = new Game(players.map((player)=>new Player(
+        player.from, player.name, player.unit_type, player.color,
+    )))
+    console.log(chaos.game.stateJSON)
 }
 if (action == 'join') {
     logging.info(`Client waiting`)
 }
+
+window.game = chaos.game  // Expose to console
