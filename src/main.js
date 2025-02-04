@@ -78,6 +78,7 @@ export class Chaos extends CanvasAnimationBase {
         this.setRunning(true)
     }
     loop(context, frame) {
+        if (!this.gfx_map) {return}  // Temp to stop handling of active state. setRunning is called by the focus listener
         this.handle_mouse()
         this.gfx_dispatch.markDirty(
             ...this.gfx_map.dirtyIndexes(frame),
@@ -88,6 +89,7 @@ export class Chaos extends CanvasAnimationBase {
         this.gfx_dispatch.resetDirtyIndexes()
     }
     handle_mouse() {
+        if (!this.gfx_map) {return}  // Temp - See loop above
         const i = this.gfx_map.map_model.dimension.position_to_index(...[this.mouse_x,this.mouse_y].map((i)=>Math.floor((i-BORDER_OFFSET_PX)/CELL_SIZE_PX)))
         if (this.mouse_index == i) {return}
         // console.log('mouse_index', i)
@@ -152,4 +154,9 @@ const setupNetwork = (channel) => {
 }
 const network = setupNetwork(channel)
 const players = await (new JoinManager(chaos.canvas, chaos.ui, network, player_name)).promise
-console.log('players', players)
+if (action == 'create') {
+    chaos.start_game(players)
+}
+if (action == 'join') {
+    logging.info(`Client waiting`)
+}
