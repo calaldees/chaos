@@ -28,12 +28,15 @@ export const PLAYER_START_INDEX = {
 export class Game {
     constructor(players) {
         Object.defineProperty(this, "registry", {writable: false, enumerable: true, value: new Registry()})
-        if (!hasIterationProtocol(players)) {throw TypeError()}
+        this.map = new Map(this.registry)
+
+        //if (!hasIterationProtocol(players)) {throw TypeError()}
+        if (!players) {return}
+
         for (let player of players) {
             if (player.constructor.name != 'Player') {throw Error()}
             this.registry.players[player.id] = player
         }
-        this.map = new Map(this.registry)
         for (let [player, start_location] of zip(players, PLAYER_START_INDEX[players.length])) {
             if (!player) {continue}
             const unit = this.newUnit(player.unit_type, player.id, start_location)
@@ -48,14 +51,8 @@ export class Game {
     }
 
     // used for serialiseing the state of the whole game and sending it over the network or disk
-    get stateJSON() {
-        function replacer(key, value) {
-            if (value instanceof Set) {return [...value]}
-            return value
-        }
-        return JSON.stringify(this.state, replacer)
-    }
-    set stateJSON(data) {this.state = JSON.parse(data)}
+    //get stateJSON() {return JSON.stringify(this.state, replacer)}
+    //set stateJSON(data) {this.state = JSON.parse(data)}
     get state() {return this}
     set state(data) {
         this.registry.state = data.registry

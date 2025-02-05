@@ -69,10 +69,18 @@ if (action == 'create') {
         player.from, player.name, player.unit_type, player.color,
     )))
     map_ui.game = game
-    console.log(game.stateJSON)
+    network.addOnMessageListener((data)=>{
+        console.log('host got network data??')
+    })
+    network.send(game.state)
 }
 if (action == 'join') {
     logging.info(`Client waiting`)
+    const game = new Game()
+    map_ui.game = game
+    network.addOnMessageListener((data)=>{
+        game.state = data
+    })
 }
 
 // Expose for use in console for debugging

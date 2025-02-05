@@ -1,6 +1,13 @@
 import { isObject } from '../core.js';
 import { getId } from './id.js'
 
+
+function json_stringify_replacer(key, value) {
+    if (value instanceof Set) {return [...value]}
+    return value
+}
+
+
 const id = getId()
 
 export class NetworkManager {
@@ -59,7 +66,7 @@ export class NetworkManager {
                 data.from = id  // append from:id to every message
             }
             if (typeof data != "string") {
-                try {data = JSON.stringify(data)}
+                try {data = JSON.stringify(data, json_stringify_replacer)}
                 catch (ex) {return console.error("socket failed send - JSON.stringify", ex)}
             }
             if (data.length > this.gzip_length_threshold) {
