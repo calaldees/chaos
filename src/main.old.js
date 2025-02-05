@@ -1,3 +1,23 @@
+/*
+import {enumerate} from './core.js'
+import {loadImage, loadImages} from './gfx/image_decode.js'
+
+import {shiftImage, COLOR} from './gfx/color.js'
+import {drawFont_color, fontImageData} from './gfx/text.js'
+
+import {unit_data} from './data/unit_data.js'
+import {sounds, drawAudioFloatStream, playSound} from './sound/sounds.js'
+
+import { UISpells } from './ui/spells.js'
+import { UICharacterSelect } from './ui/character_select.js'
+import { UIStats } from './ui/stats.js'
+
+import {Unit} from './model/unit.js'
+import {Map} from './model/map.js'
+
+*/
+
+
 
     // UI Test
     //new UISpells(ui)

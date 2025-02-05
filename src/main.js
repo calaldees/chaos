@@ -1,37 +1,18 @@
-import {enumerate} from './core.js'
-import {loadImage, loadImages} from './gfx/image_decode.js'
-
-import {shiftImage, COLOR} from './gfx/color.js'
-import {drawFont_color, fontImageData} from './gfx/text.js'
-
-import {unit_data} from './data/unit_data.js'
-import {sounds, drawAudioFloatStream, playSound} from './sound/sounds.js'
-
-import {Unit} from './model/unit.js'
-//import {Map} from './model/map.js'
 import {Game} from './model/game.js'
 import {Player} from './model/player.js'
 
-
-
 import {getId, generateStringId} from './network/id.js'
 
-import {DialogJoinOrCreate} from './ui/dialogs.js'
 import {logging} from './log/logging.js'
-
-import { UI } from './ui/ui_canvas.js'
-import { UISpells } from './ui/spells.js'
-import { UICharacterSelect } from './ui/character_select.js'
-import { UIStats } from './ui/stats.js'
-
-
 import {} from './log/console.js'
 import { LoggingCanvas } from './log/logging_canvas.js'
 
-import { NetworkManager } from './network/network.js'
-
-import { JoinManager } from './manager/JoinManager.js'
 import { MapUI } from './ui/map.js'
+import { UI } from './ui/ui_canvas.js'
+
+import { NetworkManager } from './network/network.js'
+import { DialogJoinOrCreate } from './ui/dialogs.js'
+import { JoinManager } from './manager/JoinManager.js'
 
 
 const urlParams = new URLSearchParams(window.location.search)
@@ -72,14 +53,16 @@ if (action == 'join') {
     setCanvasSizeForScreen()
     logging.info(`Connecting: ${window.location.host} ${channel}`)
 }
-const setupNetwork = (channel) => {
+
+const connectNetwork = (channel) => {
     map_ui.canvas.classList.add('disconnected')
     const network = new NetworkManager(channel)
     network.socket.addEventListener("open", () => {map_ui.canvas.classList.remove('disconnected')})
     network.socket.addEventListener("close", () => {map_ui.canvas.classList.add('disconnected')})
     return network
 }
-const network = setupNetwork(channel)
+const network = connectNetwork(channel)
+
 const players = await (new JoinManager(map_ui.canvas, input_ui, network, player_name)).promise
 if (action == 'create') {
     const game = new Game(players.map((player)=>new Player(
