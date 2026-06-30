@@ -1,53 +1,68 @@
-I don't know how they did it, but the reverse engineer masters created an mp3 of the sound effects form the binary data
-I need to ask them how they did it
+Chaos (ZX Spectrum) - Sound
+===========================
 
-skoolkit is a tool to disassemble spectrum games. It has a routine for rendering audio from delays. This is similar to what I want to do.
-https://github.com/skoolkid/skoolkit/blob/7d578b689a888b6dcd8ec089369c452954b8d922/skoolkit/audio.py#L138
-```python
-    def _delays_to_samples(self, delays, options):
-        sample_delay = options[CLOCK_SPEED] / options[SAMPLE_RATE]
-        samples = []
-        direction = 1
-        i = 0
-        d = delays[0]
-        t = 0
-        while 1:
-            while t >= d:
-                i += 1
-                if i >= len(delays):
-                    break
-                d += delays[i]
-                direction *= -1
-            if i >= len(delays):
-                break
-            if direction > 0:
-                samples.append(32767)
-            else:
-                samples.append(32768)
-            t += sample_delay
-        return samples
-```
+I am trying to implement an audio renderer for an old ZX spectrum game.
+The original Spectrum did not have any sound hardware.
+One of the output pins was soldered directly to a speaker cone.
+Because the Z80 cpu had a predictable time (T-States) per instruction, it was possible for developers to play tones/notes by entering a for-loop for a known number of iterations to apply voltage to the speaker cone.
 
-http://z80-heaven.wikidot.com/the-registers-and-memory
+Goal:
+* I want to reproduce the sound effects from the original game data.
+* I am making my remake in vanilla javascript.
+* I want to use browser api's to playback the rendered game sound effects.
 
+There has been some efforts to disassemble the binary dump of Chaos.
+The Z80 disassembly has some comments and insights that could help with the reimplementation of the sound effect player.
+
+I have proved the following in this document:
+1. I've highlighted what I think are the core parts of the Z80 assembly code to perform the sound rendering
+	* I provide the url as my source and a txt copy/paste of the relevant segment in this document
+2. A link to some existing python code (`skoolkit`) which is a disassembly tool that can accurately render the sounds from delay values (I think).
+3. A link to relevant documentation for the Z80 processor
+	* register descriptions
+	* example of the number of T-State for the `add` instruction
+
+## My partial solution so far
+
+* Data: `./data/sound_data.js`
+	* I have the sound delays values in hex strings copied from the disassembly
+* Sound Data Decoding: `./src/sounds/sounds.js`
+	* I have decoded the hex strings from the sound data
+	* I have tried to reproduce the timing loop `chaosSoundDelayData_to_timecodes`
+	* I have probably made some mistakes trying to model the speaker as `mass_velocity` system.
+		* This can probably be removed. The python reference from `skoolkit` does not have this. This was a poor direction on my part.
+	* There are also addition comments in this file that could help.
+
+## Reference Audio Samples
+
+In this folder `./src/sound` I have `Makefile` to download the exemplar mp3 samples of the audio sound effects. These should(?) be named the same as my `sound_data.js`. The mp3's seem to have additional silence at the beggining and end of the sample, but they should document the intended output audio.
+These mp3 examples are compressed and wont be byte-for-byte the output expected. They will be very close.
+I've loaded the sample up in audacity and can see the inner and outer loops manifesting.
+
+
+## Chaos Disassembly
 
 https://zxnet.co.uk/spectrum/chaos/asm/C33A.html
+```
 C33A: sound_playback_delay_routine
 Used by the routine at play_sound_effect_pointer.
 calling routine takes 17 T-states, loop for (13*(B-1))+8 T-states, and return takes 10 T-states
 sound_playback_delay_routine 	C33A 	DJNZ sound_playback_delay_routine 	loop to self B-1 times then return
 	C33C 	RET
+```
 
 https://zxnet.co.uk/spectrum/chaos/asm/C2E8.html
+```
 C2E8: sound effect data
 Sound effects are copied here by play_sound_effect_in_HL and the bytes read directly to save calculating offsets at the original location.
 sound_effect_temp 	C2E8 	DEFB $3F 	Outer loop counter.
 	C2E9 	DEFB $04 	Middle loop counter.
 	C2EA 	DEFB $FD,$FD,$C6,$93 	Delay counters.
 	C2EE 	DEFB $04,$04,$E2,$B0 	Values to add to delay.
+```
 
 https://zxnet.co.uk/spectrum/chaos/asm/C2F6.html#C2F9
-
+```
 sound_effect_playback 	C301 	DI 	disable interrupts
 	C302 	LD HL,sound_effect_temp 	load first byte of sound effect playback data into B
 	C305 	LD B,(HL)
@@ -83,3 +98,45 @@ sound_delay_addition_loop 	C32F 	LD A,(DE) 	add byte at address in HL to byte at
 	C336 	POP BC 	restore outer loop counter
 	C337 	DJNZ outer_sound_loop 	loop back to outer_sound_loop
 	C339 	RET 	return
+```
+
+## Existing project to render/export sound samples from spectrum asm loop
+
+`skoolkit` is a tool to disassemble spectrum games.
+It has a routine for rendering audio from delays.
+This is similar to what I want to do.
+
+https://github.com/skoolkid/skoolkit/blob/7d578b689a888b6dcd8ec089369c452954b8d922/skoolkit/audio.py#L138
+```python
+    def _delays_to_samples(self, delays, options):
+        sample_delay = options[CLOCK_SPEED] / options[SAMPLE_RATE]
+        samples = []
+        direction = 1
+        i = 0
+        d = delays[0]
+        t = 0
+        while 1:
+            while t >= d:
+                i += 1
+                if i >= len(delays):
+                    break
+                d += delays[i]
+                direction *= -1
+            if i >= len(delays):
+                break
+            if direction > 0:
+                samples.append(32767)
+            else:
+                samples.append(32768)
+            t += sample_delay
+        return samples
+```
+
+## Z80 Processor Reference
+
+Register names
+http://z80-heaven.wikidot.com/the-registers-and-memory
+
+T-States per instruction (example of `add`)
+http://z80-heaven.wikidot.com/instructions-set:add
+
