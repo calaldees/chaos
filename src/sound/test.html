@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Chaos: Sound Test</title>
+    <style>
+        html, body {margin: 0; padding: 0; background: #111; color: #eee;
+                    font-family: monospace;}
+        h1 {font-size: 16px; padding: 12px; margin: 0; border-bottom: 1px solid #333;}
+        .row {display: flex; align-items: center; gap: 12px; padding: 6px 12px;
+              border-bottom: 1px solid #222;}
+        .row:hover {background: #1a1a1a;}
+        .name {width: 200px; overflow: hidden; text-overflow: ellipsis;}
+        button {font-family: monospace; background: #222; color: #eee;
+                border: 1px solid #444; padding: 4px 8px; cursor: pointer;}
+        button:hover {background: #333;}
+        audio {height: 28px; width: 200px;}
+        canvas {background: #000; border: 1px solid #333;}
+        .len {width: 70px; text-align: right; color: #888;}
+        .missing {width: 200px; color: #555; font-style: italic;}
+    </style>
+</head>
+<body>
+    <h1>Chaos — Sound Test &nbsp;·&nbsp; JS render (▶) vs reference mp3</h1>
+    <div id="rows"></div>
+
+<script type="module">
+import { sounds, playSound, drawAudioFloatStream } from './sounds.js'
+
+const rows = document.getElementById('rows')
+
+for (const [name, stream] of Object.entries(sounds)) {
+    const row = document.createElement('div')
+    row.className = 'row'
+
+    // name
+    const label = document.createElement('div')
+    label.className = 'name'
+    label.textContent = name
+    row.appendChild(label)
+
+    // play the JS-rendered AudioBuffer
+    const playBtn = document.createElement('button')
+    playBtn.textContent = '▶ render'
+    playBtn.onclick = () => playSound(name)
+    row.appendChild(playBtn)
+
+    // reference mp3 (may not exist for every entry)
+    const audio = document.createElement('audio')
+    audio.controls = true
+    audio.src = `./${name}.mp3`
+    audio.onerror = () => {
+        const miss = document.createElement('div')
+        miss.className = 'missing'
+        miss.textContent = '(no reference mp3)'
+        audio.replaceWith(miss)
+    }
+    row.appendChild(audio)
+
+    // waveform preview
+    const canvas = document.createElement('canvas')
+    canvas.width = 400
+    canvas.height = 80
+    const ctx = canvas.getContext('2d')
+    // centre the origin so the wave (drawn from y=0) sits mid-canvas
+    ctx.setTransform(1, 0, 0, 1, 0, canvas.height / 2)
+    // xScale spreads the sample count across the 400px canvas
+    const xScale = Math.max(1, Math.ceil(stream.length / canvas.width))
+    drawAudioFloatStream(ctx, stream, 30, xScale)
+    row.appendChild(canvas)
+
+    // sample count
+    const len = document.createElement('div')
+    len.className = 'len'
+    len.textContent = stream.length
+    row.appendChild(len)
+
+    rows.appendChild(row)
+}
+</script>
+</body>
+</html>
