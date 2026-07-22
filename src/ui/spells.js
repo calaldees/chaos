@@ -18,10 +18,11 @@ export class UISpells {
     }
 
     get UI_INDEXES_2COLS() {
-        const start_row = 1
+        const START_ROW = 1
+        const START_ROW_OFFSET = this.ui.dimension.width * START_ROW
         return [...range(20)].map((r)=>{return {
-            'i': r*(this.ui.dimension.width/2)+(this.ui.dimension.width*start_row),
-            'key': String.fromCharCode(r+65),
+            'i': START_ROW_OFFSET + (r * (this.ui.dimension.width/2)),
+            'key': String.fromCharCode(r+65),  // 65='A'
         }})
     }
 

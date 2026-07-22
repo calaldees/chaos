@@ -43,11 +43,7 @@ export class UIStats {
         ui.drawFont("Magic Resistance=", 3, 7, COLOR.cyan)
         ui.drawFont(stat('res'), 20, 7, COLOR.white)
 
-        // Extra - draw the unit in correct color
-        this.ui.c.drawImage(
-            shiftImage(...gfx_units[unit_type].sprite_and_color(0)),
-            ...this.ui.i_to_xy(0)
-        )
-
+        // TODO: draw the unit in correct color for this unit status
+        this.ui.drawUnit(unit_type, 0, 0)
     }
 }

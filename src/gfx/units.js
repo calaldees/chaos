@@ -390,7 +390,7 @@ class GfxUnit {
         return this._animation_frame(frame) % this.template.animFrames.length
     }
 
-    sprite_and_color(frame) {
+    sprite_and_color(frame = 0) {
         const sprite = this.template.animSprites[this.template.animFrames[this._unit_frame(frame)]]
         const color  = this.template.animColors[this._animation_frame(frame) % this.template.animColors.length]
         return [sprite, color]

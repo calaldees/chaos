@@ -2,7 +2,7 @@ import { Dimension, hasAllProperties, range, zip } from "../core.js"
 import { COLOR } from '../gfx/color.js'
 import { drawBorder } from '../gfx/border.js'
 import { drawFont, extract_ansi_colors, FONT_WIDTH, FONT_HEIGHT } from '../gfx/text.js'
-
+import {gfx_units} from '../gfx/units.js'
 
 export function* mergeItemsAndLayout(items, layout) {
     for (let [i, l] of zip(items, layout)) {
@@ -118,6 +118,13 @@ export class UI {
     drawFont = (text, col, row, color=COLOR.white) => {
         drawFont(this.c, text, ...this.colRow_to_xy(col,row), color)
     }
+    drawUnit = (unit_type, col, row, color=undefined) => {
+        this.c.drawImage(
+            shiftImage(...gfx_units[unit_type].sprite_and_color(0)),
+            ...this.colRow_to_xy(col,row),
+        )
+    }
+
     _drawItem = (item) => {
         const {i, key, text, color, hide_key_prefix} = item
         const [x, y] = this.i_to_xy(i)
