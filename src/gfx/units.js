@@ -306,7 +306,7 @@ const unit_gfx_data = {
         "animColors": [COLOR.white],
         "animSprites": sprites.wizard.slice(19,23),
     },
-    "Wizard Armor": {
+    "Wizard Armour": {
         "animFrames": [0],
         "animSpeed": 300,  //?
         "animColors": [COLOR.white],

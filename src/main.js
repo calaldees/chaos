@@ -14,6 +14,7 @@ import { NetworkManager } from './network/network.js'
 import { DialogJoinOrCreate } from './ui/dialogs.js'
 import { JoinManager } from './manager/JoinManager.js'
 
+import { UIMoves } from './ui/moves.js'
 
 const urlParams = new URLSearchParams(window.location.search)
 
@@ -41,6 +42,12 @@ window.addEventListener("resize", setCanvasSizeForScreen)
 
 
 logging.info(`Chaos \\033[91;103mMobile\\033[0m`)
+
+// -----------------------------------------------------------------------------
+
+new UIMoves(input_ui)
+
+async function main() {
 
 let {action, channel, player_name} = await (new DialogJoinOrCreate()).showModalPromise()
 if (action == 'create') {
@@ -86,6 +93,9 @@ if (action == 'join') {
 // Expose for use in console for debugging
 //window.game = game
 //window.network = network
+
+}
+
 
 /*
     // Persistent Storage -----------------------------------------------------------------

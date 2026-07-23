@@ -4,9 +4,9 @@
 // com Combat=0,
 // rcm Ranged combat=0,
 // rng Range=0,
-// def Defense=0,
+// def Defence=0,
 // mov Movement allowance=0,
-// mnv Manoeuver rating=0,
+// mnv Manoeuvre rating=0,
 // res Magic resistance=0,
 // Casting chance=0,
 // Chaos/Law=0,
@@ -636,8 +636,8 @@ export const unit_data = {
         },
         "status": ["wizardMod"],
     },
-    "Wizard Armor": {
-        "name": "Wizard Armor",
+    "Wizard Armour": {
+        "name": "Wizard Armour",
         "properties": {
             "mov": 0,
             "com": 0,

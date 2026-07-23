@@ -1,5 +1,5 @@
 import { Dimension, hasAllProperties, range, zip } from "../core.js"
-import { COLOR } from '../gfx/color.js'
+import { COLOR, shiftImage } from '../gfx/color.js'
 import { drawBorder } from '../gfx/border.js'
 import { drawFont, extract_ansi_colors, FONT_WIDTH, FONT_HEIGHT } from '../gfx/text.js'
 import {gfx_units} from '../gfx/units.js'
@@ -86,6 +86,9 @@ export class UI {
     //    drawFont(this.c, this._title, start_x_center, this.border_offset_px)
     //}
 
+    get cols() {return (this.w - (this.border_offset_px * 2))/FONT_WIDTH }  // TODO? RoundInt?
+    get rows() {return (this.h - (this.border_offset_px * 2))/FONT_HEIGHT}
+
     colRow_to_xy = (col, row) => {
         return [(col*FONT_WIDTH)+this.border_offset_px, (row*FONT_HEIGHT)+this.border_offset_px]
     }
@@ -120,7 +123,7 @@ export class UI {
     }
     drawUnit = (unit_type, col, row, color=undefined) => {
         this.c.drawImage(
-            shiftImage(...gfx_units[unit_type].sprite_and_color(0)),
+            shiftImage(...gfx_units[unit_type].sprite_and_color(0)),  // TODO: color override
             ...this.colRow_to_xy(col,row),
         )
     }
