@@ -1,6 +1,6 @@
 import {COLOR} from '../gfx/color.js'
 import {sprites} from '../gfx/sprites.js'  // just for mouse cursor graphic
-import {drawFont_color} from '../gfx/text.js'
+import {drawFont_color, FONT_HEIGHT} from '../gfx/text.js'
 import {GfxDispatch, BORDER_OFFSET_PX, CELL_SIZE_PX, i_to_xy} from '../gfx/gfx_dispatch.js'
 import {GfxMap} from '../gfx/gfx_map.js'
 import {GfxEffects, SpriteEffect, SpriteAnimationEffect, HighlightEffect, InvertEffect} from '../gfx/gfx_effects.js'
@@ -21,7 +21,7 @@ export class MapUI extends CanvasAnimationBase {
             drawFont_color(this.context, message, ...message_xy)
         })
 
-        drawBorder(c,0,0,this.w,this.h-16,COLOR.blue)
+        drawBorder(c,0,0,this.w,this.h-FONT_HEIGHT,COLOR.blue)
 
         // Mouse
         this.mouse_index = undefined
