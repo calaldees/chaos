@@ -20,6 +20,11 @@ export function clearObject(obj) {
     }
 }
 
+
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random#try_it
+// The `+1` is to make the generation inclusive
+export function getRandomInt(max) {return Math.floor(Math.random() * (max+1))}
+
 export function* range(target, start=0, step=1) {
     for (let i=start ; i<target ; i+=step) {yield i;}
 }

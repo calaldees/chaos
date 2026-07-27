@@ -1,5 +1,5 @@
 
-import {zip, hasIterationProtocol} from '../core.js'
+import {getRandomInt, zip, hasIterationProtocol, assertEquals} from '../core.js'
 
 import { Unit } from "./unit.js"
 import { Map } from './map.js'
@@ -21,12 +21,12 @@ export const PLAYER_START_INDEX = {
         22,  // middle top
         127, // middle bottom
     ],
-    7:[],
-    8:[],
+    7:[],  // TODO
+    8:[],  // TODO
 }
 
 export class Game {
-    constructor(players) {
+    constructor(players) {  // players:Player[]
         Object.defineProperty(this, "registry", {writable: false, enumerable: true, value: new Registry()})
         this.map = new Map(this.registry)
 
@@ -34,17 +34,25 @@ export class Game {
         if (!players) {return}
 
         for (let player of players) {
-            if (player.constructor.name != 'Player') {throw Error()}
+            if (player.constructor.name != 'Player') {throw Error('Game must be constructed with `Player` objects')}
             this.registry.players[player.id] = player
         }
-        for (let [player, start_location] of zip(players, PLAYER_START_INDEX[players.length])) {
+        assertEquals(players.length, PLAYER_START_INDEX[players.length].length)
+        for (let [player, i_start_location] of zip(players, PLAYER_START_INDEX[players.length])) {
             if (!player) {continue}
-            const unit = this.newUnit(player.unit_type, player.id, start_location)
+            const unit = this.newUnit(player.unit_type, player.id, i_start_location, {stat_modifiers: {
+                // https://www.archaos.co.uk/chaos-disassembly/asm/8cf2.html
+                com: getRandomInt(9)>>1,
+                def: getRandomInt(9)>>1,
+                mnv: getRandomInt(9)>>1,
+                res: getRandomInt(9)>>2,
+                spells: 9,  // meant to to be random but only seems to affect computer players, so a constant for now
+            }})
             unit.animColorsOverride.push(player.color)
         }
     }
-    newUnit(unit_type, player_id, i) {
-        const unit = new Unit(unit_type, player_id)
+    newUnit(unit_type, player_id, i, state={}) {
+        const unit = new Unit(unit_type, player_id, state)
         const unit_id = this.registry.units.push(unit)-1
         this.map.setUnit(unit_id, i)
         return unit

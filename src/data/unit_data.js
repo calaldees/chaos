@@ -16,7 +16,7 @@ export const unit_data = {
     "King Cobra": {
         "name": "King Cobra",
         "attackType": "struck",
-        "properties": {
+        "stats": {
             "mov": 1,
             "com": 4,
             "rcm": 0,
@@ -30,7 +30,7 @@ export const unit_data = {
     "Bat": {
         "name": "Bat",
         "attackType": "bit",
-        "properties": {
+        "stats": {
             "mov": 5,
             "com": 1,
             "rcm": 0,
@@ -44,7 +44,7 @@ export const unit_data = {
     "Gooey Blob": {
         "name": "Gooey Blob",
         "attackType": "engulfed",
-        "properties": {
+        "stats": {
             "mov": 0,
             "com": 0,
             "rcm": 0,
@@ -58,7 +58,7 @@ export const unit_data = {
     "Dire Wolf": {
         "name": "Dire Wolf",
         "attackType": "savaged",
-        "properties": {
+        "stats": {
             "mov": 3,
             "com": 3,
             "rcm": 0,
@@ -72,7 +72,7 @@ export const unit_data = {
     "Spectre": {
         "name": "Spectre",
         "attackType": "slashed",
-        "properties": {
+        "stats": {
             "mov": 1,
             "com": 4,
             "rcm": 0,
@@ -85,7 +85,7 @@ export const unit_data = {
     },
     "Goblin": {
         "name": "Goblin",
-        "properties": {
+        "stats": {
             "mov": 1,
             "com": 2,
             "rcm": 0,
@@ -99,7 +99,7 @@ export const unit_data = {
     "Crocodile": {
         "name": "Crocodile",
         "attackType": "bit",
-        "properties": {
+        "stats": {
             "mov": 1,
             "com": 5,
             "rcm": 0,
@@ -115,7 +115,7 @@ export const unit_data = {
         "attackType": "attacked",
         "rangedType": "burned",
         "projectileType": "dragonfire",
-        "properties": {
+        "stats": {
             "mov": 3,
             "com": 5,
             "rcm": 4,
@@ -129,7 +129,7 @@ export const unit_data = {
     "Magic Fire": {
         "name": "Magic Fire",
         "attackType": "burned",
-        "properties": {
+        "stats": {
             "mov": 0,
             "com": 0,
             "rcm": 0,
@@ -144,7 +144,7 @@ export const unit_data = {
     "Faun": {
         "name": "Faun",
         "attackType": "stabbed",
-        "properties": {
+        "stats": {
             "mov": 1,
             "com": 3,
             "rcm": 0,
@@ -158,7 +158,7 @@ export const unit_data = {
     "Vampire": {
         "name": "Vampire",
         "attackType": "savaged",
-        "properties": {
+        "stats": {
             "mov": 4,
             "com": 6,
             "rcm": 0,
@@ -172,7 +172,7 @@ export const unit_data = {
     "Lion": {
         "name": "Lion",
         "attackType": "mauled",
-        "properties": {
+        "stats": {
             "mov": 4,
             "com": 6,
             "rcm": 0,
@@ -186,7 +186,7 @@ export const unit_data = {
     "Gryphon": {
         "name": "Gryphon",
         "attackType": "clawed",
-        "properties": {
+        "stats": {
             "mov": 5,
             "com": 3,
             "rcm": 0,
@@ -202,7 +202,7 @@ export const unit_data = {
         "attackType": "hit",
         "rangedType": "shot",
         "projectileType": "arrow",
-        "properties": {
+        "stats": {
             "mov": 1,
             "com": 1,
             "rcm": 2,
@@ -216,7 +216,7 @@ export const unit_data = {
     "Horse": {
         "name": "Horse",
         "attackType": "kicked",
-        "properties": {
+        "stats": {
             "mov": 4,
             "com": 1,
             "rcm": 0,
@@ -229,7 +229,7 @@ export const unit_data = {
     },
     "Orc": {
         "name": "Orc",
-        "properties": {
+        "stats": {
             "mov": 1,
             "com": 2,
             "rcm": 0,
@@ -245,7 +245,7 @@ export const unit_data = {
         "attackType": "attacked",
         "rangedType": "burned",
         "projectileType": "dragonfire",
-        "properties": {
+        "stats": {
             "mov": 3,
             "com": 7,
             "rcm": 3,
@@ -259,7 +259,7 @@ export const unit_data = {
     "Troll": {
         "name": "Troll",
         "attackType": "??ed",
-        "properties": {
+        "stats": {
             "mov": 1,
             "com": 4,
             "rcm": 0,
@@ -273,7 +273,7 @@ export const unit_data = {
     "Unicorn": {
         "name": "Unicorn",
         "attackType": "kicked",
-        "properties": {
+        "stats": {
             "mov": 4,
             "com": 5,
             "rcm": 0,
@@ -287,7 +287,7 @@ export const unit_data = {
     "Pegasus": {
         "name": "Pegasus",
         "attackType": "kicked",
-        "properties": {
+        "stats": {
             "mov": 5,
             "com": 2,
             "rcm": 0,
@@ -303,7 +303,7 @@ export const unit_data = {
         "attackType": "bit",
         "rangedType": "stung",
         "projectileType": "arrow",
-        "properties": {
+        "stats": {
             "mov": 5,
             "com": 3,
             "rcm": 1,
@@ -319,7 +319,7 @@ export const unit_data = {
     "Ghost": {
         "name": "Ghost",
         "attackType": "attacked",
-        "properties": {
+        "stats": {
             "mov": 2,
             "com": 1,
             "rcm": 0,
@@ -334,7 +334,7 @@ export const unit_data = {
     "Wraith": {
         "name": "Wraith",
         "attackType": "stabbed",
-        "properties": {
+        "stats": {
             "mov": 2,
             "com": 5,
             "rcm": 0,
@@ -348,7 +348,7 @@ export const unit_data = {
     "Bear": {
         "name": "Bear",
         "attackType": "mauled",
-        "properties": {
+        "stats": {
             "mov": 2,
             "com": 6,
             "rcm": 0,
@@ -362,7 +362,7 @@ export const unit_data = {
     "Gorilla": {
         "name": "Gorilla",
         "attackType": "pounded",
-        "properties": {
+        "stats": {
             "mov": 1,
             "com": 6,
             "rcm": 0,
@@ -376,7 +376,7 @@ export const unit_data = {
     "Skeleton": {
         "name": "Skeleton",
         "attackType": "slashed",
-        "properties": {
+        "stats": {
             "mov": 1,
             "com": 3,
             "rcm": 0,
@@ -390,7 +390,7 @@ export const unit_data = {
     "Ogre": {
         "name": "Ogre",
         "attackType": "clubbed",
-        "properties": {
+        "stats": {
             "mov": 1,
             "com": 4,
             "rcm": 0,
@@ -404,7 +404,7 @@ export const unit_data = {
     "Zombie": {
         "name": "Zombie",
         "attackType": "bit",
-        "properties": {
+        "stats": {
             "mov": 1,
             "com": 1,
             "rcm": 0,
@@ -418,7 +418,7 @@ export const unit_data = {
     "Harpy": {
         "name": "Harpy",
         "attackType": "clawed",
-        "properties": {
+        "stats": {
             "mov": 5,
             "com": 4,
             "rcm": 0,
@@ -432,7 +432,7 @@ export const unit_data = {
     "Eagle": {
         "name": "Eagle",
         "attackType": "clawed",
-        "properties": {
+        "stats": {
             "mov": 6,
             "com": 3,
             "rcm": 0,
@@ -446,7 +446,7 @@ export const unit_data = {
     "Hydra": {
         "name": "Hydra",
         "attackType": "struck",
-        "properties": {
+        "stats": {
             "mov": 1,
             "com": 7,
             "rcm": 0,
@@ -460,7 +460,7 @@ export const unit_data = {
     "Giant Rat": {
         "name": "Giant Rat",
         "attackType": "bit",
-        "properties": {
+        "stats": {
             "mov": 3,
             "com": 1,
             "rcm": 0,
@@ -476,7 +476,7 @@ export const unit_data = {
         "attackType": "kicked",
         "rangedType": "shot",
         "projectileType": "arrow",
-        "properties": {
+        "stats": {
             "mov": 4,
             "com": 1,
             "rcm": 2,
@@ -490,7 +490,7 @@ export const unit_data = {
     "Giant": {
         "name": "Giant",
         "attackType": "crushed",
-        "properties": {
+        "stats": {
             "mov": 2,
             "com": 9,
             "rcm": 0,
@@ -506,7 +506,7 @@ export const unit_data = {
         "attackType": "attacked",
         "rangedType": "burned",
         "projectileType": "dragonfire",
-        "properties": {
+        "stats": {
             "mov": 3,
             "com": 7,
             "rcm": 5,
@@ -519,7 +519,7 @@ export const unit_data = {
     },
     "Dark Citadel": {
         "name": "Dark Citadel",
-        "properties": {
+        "stats": {
             "mov": 0,
             "com": 0,
             "rcm": 0,
@@ -532,7 +532,7 @@ export const unit_data = {
     },
     "Magic Castle": {
         "name": "Magic Castle",
-        "properties": {
+        "stats": {
             "mov": 0,
             "com": 0,
             "rcm": 0,
@@ -546,7 +546,7 @@ export const unit_data = {
     "Shadow Wood": {
         "name": "Shadow Wood",
         "attackType": "attacked",
-        "properties": {
+        "stats": {
             "mov": 0,
             "com": 2,
             "rcm": 0,
@@ -559,7 +559,7 @@ export const unit_data = {
     },
     "Magic Wood": {
         "name": "Magic Wood",
-        "properties": {
+        "stats": {
             "mov": 0,
             "com": 0,
             "rcm": 0,
@@ -572,7 +572,7 @@ export const unit_data = {
     },
     "Wall": {
         "name": "Wall",
-        "properties": {
+        "stats": {
             "mov": 0,
             "com": 0,
             "rcm": 0,
@@ -586,7 +586,7 @@ export const unit_data = {
 
     "Wizard Sword": {
         "name": "Wizard Sword",
-        "properties": {
+        "stats": {
             "mov": 0,
             "com": 3,  // this will be added to wizard I assume
             "rcm": 0,
@@ -599,7 +599,7 @@ export const unit_data = {
     },
     "Wizard Knife": {
         "name": "Wizard Knife",
-        "properties": {
+        "stats": {
             "mov": 0,
             "com": 2,  // this will be added to wizard I assume
             "rcm": 0,
@@ -612,7 +612,7 @@ export const unit_data = {
     },
     "Wizard Fly": {
         "name": "Wizard Fly",
-        "properties": {
+        "stats": {
             "mov": 5,
             "com": 0,
             "rcm": 0,
@@ -625,7 +625,7 @@ export const unit_data = {
     },
     "Wizard Bow": {
         "name": "Wizard Bow",
-        "properties": {
+        "stats": {
             "mov": 0,
             "com": 0,
             "rcm": 0,
@@ -638,7 +638,7 @@ export const unit_data = {
     },
     "Wizard Armour": {
         "name": "Wizard Armour",
-        "properties": {
+        "stats": {
             "mov": 0,
             "com": 0,
             "rcm": 0,
@@ -651,7 +651,7 @@ export const unit_data = {
     },
     "Wizard Shield": {
         "name": "Wizard Shield",
-        "properties": {
+        "stats": {
             "mov": 0,
             "com": 0,
             "rcm": 0,
@@ -666,118 +666,118 @@ export const unit_data = {
     // https://zxnet.co.uk/spectrum/chaos/asm/EA39.html
     "Wizard JULIAN": {
         "name": "Wizard JULIAN",
-        "properties": {
+        "stats": {
             "mov": 1,
-            "com": 1,  // 2
+            "com": 1, // +rnd(0,9)/2  -> getRandomInt(9)>>1 01=0 23=1 45=2 67=3 89=4
             "rcm": 0,
             "rng": 0,
-            "def": 1,  // 3
-            "mnv": 3,  // 6
-            "res": 7,  // 7
-            // ability 1
-            "spells": 11,  // 13
+            "def": 1, // +rnd(0,9)/2
+            "mnv": 3, // +rnd(0,9)/2
+            "res": 6, // +rnd(0,9)/4  -> getRandomInt(9)>>2 0123=0 4567=1 89=2
+            // ability 1  //
+            "spells": 11,  //min(rad(0,9)/2, 9)
         },
     },
     "Wizard GANDALF": {
         "name": "Wizard GANDALF",
-        "properties": {
+        "stats": {
             "mov": 1,
-            "com": 1,  // 3
+            "com": 1,
             "rcm": 0,
             "rng": 0,
-            "def": 1,  // 3
-            "mnv": 3,  // 4
-            "res": 6,  // 7
+            "def": 1,
+            "mnv": 3,
+            "res": 6,
             // ability 0
-            "spells": 15,  // 14
+            "spells": 11,
         },
 
     },
     "Wizard GREATFOGEY": {
         "name": "Wizard GREATFOGEY",
-        "properties": {
+        "stats": {
             "mov": 1,
-            "com": 3,  // 6
+            "com": 1,
             "rcm": 0,
             "rng": 0,
-            "def": 3,  // 2
-            "mnv": 5,  // 7
-            "res": 6,  // 6
+            "def": 1,
+            "mnv": 3,
+            "res": 6,
             // ability 0
-            "spells": 0,  // default?  // 14
+            "spells": 11,
         },
 
     },
     "Wizard DYERARTI": {
         "name": "Wizard DYERARTI",
-        "properties": {
+        "stats": {
             "mov": 1,
-            "com": 1,  // 4
+            "com": 1,
             "rcm": 0,
             "rng": 0,
-            "def": 2,  // 4
-            "mnv": 6,  // 7
-            "res": 7,  // 7
+            "def": 1,
+            "mnv": 3,
+            "res": 6,
             // ability 1
-            "spells": 0,  // default?  // 16
+            "spells": 11,
         },
 
     },
     "Wizard GOWIN": {
         "name": "Wizard GOWIN",
-        "properties": {
+        "stats": {
             "mov": 1,
-            "com": 2,  // 3
+            "com": 1,
             "rcm": 0,
             "rng": 0,
-            "def": 2,  // 5
-            "mnv": 5,  // 7
-            "res": 0,  // default?  // 6
+            "def": 1,
+            "mnv": 5,
+            "res": 6,
             // ability 0
-            "spells": 0,  // default?  // 17
+            "spells": 11,
         },
     },
     "Wizard MERLIN": {
         "name": "Wizard MERLIN",
-        "properties": {
+        "stats": {
             "mov": 1,
-            "com": 1,  // 5
+            "com": 1,
             "rcm": 0,
             "rng": 0,
-            "def": 4,  // 2
-            "mnv": 4,  // 6
-            "res": 0,  // default?  // 6
+            "def": 1,
+            "mnv": 3,
+            "res": 6,
             // ability 0
-            "spells": 0,  // default?  // 14
+            "spells": 11,
         },
     },
     "Wizard ILIAN RANE": {
         "name": "Wizard ILIAN RANE",
-        "properties": {
+        "stats": {
             "mov": 1,
-            "com": 1,  // 5
+            "com": 1,
             "rcm": 0,
             "rng": 0,
-            "def": 2,  // 2
-            "mnv": 4,  // 7
-            "res": 0,  // default?  // 6
+            "def": 1,
+            "mnv": 3,
+            "res": 6,
             // ability 0
-            "spells": 0,  // default?  // 14
+            "spells": 11,
         },
     },
     "Wizard ASIMONO ZARK": {
         // Combat=3, Ranged combat=0, Range=0, Defence=2, Movement allowance=1, Manoeuvre rating=6, Magic resistance=0, Spells=0, Ability=0, Animation delay=30
         "name": "Wizard ASIMONO ZARK",
-        "properties": {
+        "stats": {
             "mov": 1,
-            "com": 3,  // 3
+            "com": 1,
             "rcm": 0,
             "rng": 0,
-            "def": 2,  // 4
-            "mnv": 6,  // 6
-            "res": 0,  // default?  // 7
+            "def": 1,
+            "mnv": 3,
+            "res": 6,
             // ability 1
-            "spells": 0,  // default?  // 15
+            "spells": 11,
         },
     },
 

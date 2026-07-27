@@ -14,11 +14,17 @@ export class Unit {
 
         this.status = new Set(state.status)
         this.positions = state.positions || []
-        this.moves_remaining = state.moves_remaining || 0
         this.animColorsOverride = state.animColorsOverride || []
+        this.stat_modifiers = state.stat_modifiers || {}
+        this.moves_remaining = state.moves_remaining || 0
     }
 
     get template() {return unit_data[this.unit_type]}
+    get stats() {
+        return Object.fromEntries(Object.entries(this.template.stats).map(
+            ([k, v]) => [k, v + this.stat_modifiers[k] || 0]
+        ))
+    }
 
     get pos() {return this.positions[0]}
     set pos(i) {this.positions.unshift(i)}

@@ -7,8 +7,11 @@ export class Registry {
         this.players = {}
     }
 
-    getPlayer(unit) {
+    getPlayerFromUnit(unit) {
         return this.players[unit.player_name]
+    }
+    getUnitsForPlayer(player) {
+        // TODO? player_id? or Player object?
     }
 
     get state() {return this}

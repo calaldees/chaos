@@ -63,6 +63,9 @@ export class UI {
         drawBorder(this.c, 0, 0, this.w, this.h, ...this.border)
         this.border_offset_px = border_offset_px
         this.dimension = new Dimension((this.w-this.border_offset_px*2)/FONT_WIDTH, (this.h-this.border_offset_px*2)/FONT_HEIGHT)  // 32, 12 (without border)
+        // TODO?
+        // Some original screens have a row of text at the bottom of the screen.
+        // `this.h - FONT_HEIGHT`?
     }
     //get border_offset_px() {return this.border?8:0}
 

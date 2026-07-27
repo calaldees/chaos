@@ -17,6 +17,7 @@ import { JoinManager } from './manager/JoinManager.js'
 import { UIMoves } from './ui/moves.js'
 
 const urlParams = new URLSearchParams(window.location.search)
+const this_id = getId()
 
 const log_ui = new LoggingCanvas(document.getElementById('canvas_log'))
 const map_ui = new MapUI(document.getElementById('canvas_map'), 30)
@@ -71,6 +72,7 @@ const connectNetwork = (channel) => {
 const network = connectNetwork(channel)
 
 const players = await (new JoinManager(map_ui.canvas, input_ui, network, player_name)).promise
+// players[] of {name:str, unit_type:str, color: COLOR.white}  // god I want types
 if (action == 'create') {
     const game = new Game(players.map((player)=>new Player(
         player.from, player.name, player.unit_type, player.color,

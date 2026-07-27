@@ -17,7 +17,7 @@ export class MapUI extends CanvasAnimationBase {
 
         logging.registerHandler("map", (level, message)=>{
             const message_xy = [0, 176]
-            this.context.clearRect(...message_xy, this.w, this.h)
+            this.context.clearRect(...message_xy, this.w, FONT_HEIGHT)
             drawFont_color(this.context, message, ...message_xy)
         })
 
