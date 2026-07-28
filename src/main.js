@@ -15,6 +15,7 @@ import { DialogJoinOrCreate } from './ui/dialogs.js'
 import { JoinManager } from './manager/JoinManager.js'
 
 import { UIMoves } from './ui/moves.js'
+import { COLOR } from './gfx/color.js'
 
 const urlParams = new URLSearchParams(window.location.search)
 const this_id = getId()
@@ -46,8 +47,20 @@ logging.info(`Chaos \\033[91;103mMobile\\033[0m`)
 
 // -----------------------------------------------------------------------------
 
-new UIMoves(input_ui)
+async function local_test() {
 
+    const game = new Game([
+        new Player(getId(), 'Test1', "Wizard JULIAN" , COLOR.white),
+        new Player('aaaaa', 'Test2', "Wizard GANDALF", COLOR.red  ),
+    ])
+    map_ui.game = game
+
+    new UIMoves(input_ui)
+}
+await local_test()
+
+// Main ------------------------------------------------------------------------
+// DISABLED
 async function main() {
 
 let {action, channel, player_name} = await (new DialogJoinOrCreate()).showModalPromise()

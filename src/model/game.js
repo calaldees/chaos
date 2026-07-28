@@ -37,7 +37,7 @@ export class Game {
             if (player.constructor.name != 'Player') {throw Error('Game must be constructed with `Player` objects')}
             this.registry.players[player.id] = player
         }
-        assertEquals(players.length, PLAYER_START_INDEX[players.length].length)
+        assertEquals([[players.length, PLAYER_START_INDEX[players.length].length]])
         for (let [player, i_start_location] of zip(players, PLAYER_START_INDEX[players.length])) {
             if (!player) {continue}
             const unit = this.newUnit(player.unit_type, player.id, i_start_location, {stat_modifiers: {

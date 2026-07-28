@@ -17,7 +17,7 @@ export class UIStats {
         ui.clear()
         ui.setBorder(COLOR.green_bright, undefined, 16)
 
-        const stat = (property) => `${u.properties[property]}`
+        const stat = (k) => `${u.stats[k]}`
 
         // Stats
         ui.drawFont(u.name, 3, 0, COLOR.yellow)
@@ -39,7 +39,7 @@ export class UIStats {
         ui.drawFont(stat('def'), 11, 4, COLOR.white)
 
         ui.drawFont("Movement Allowance=", 3, 5, COLOR.cyan)
-        ui.drawFont(stat('mnv'), 22, 5, COLOR.white)
+        ui.drawFont(stat('mov'), 22, 5, COLOR.white)
 
         ui.drawFont("Manoeuvre Rating=", 3, 6, COLOR.cyan)
         ui.drawFont(stat('mnv'), 20, 6, COLOR.white)
@@ -58,5 +58,22 @@ export class UIStats {
 
         // TODO: draw the unit in correct color for this unit status
         this.ui.drawUnit(unit_type, 0, 0)
+    }
+
+    drawStatModifiers(unit) {
+        for (let [stat_key, row, col] of [
+            ['com', 11, 2],
+            ['rcm', 18, 3],
+            ['rng', 26, 3],
+            ['def', 12, 4],
+            ['mov', 23, 5],
+            ['mnv', 21, 6],
+            ['res', 21, 7],
+        ]) {
+            const val = unit.stat_modifiers[stat_key]
+            if (val) {
+                this.ui.drawFont(`+${val}`, row, col, COLOR.yellow)
+            }
+        }
     }
 }
