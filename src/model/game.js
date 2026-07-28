@@ -35,7 +35,7 @@ export class Game {
 
         for (let player of players) {
             if (player.constructor.name != 'Player') {throw Error('Game must be constructed with `Player` objects')}
-            this.registry.players[player.id] = player
+            this.registry.players.set(player.id, player)
         }
         assertEquals([[players.length, PLAYER_START_INDEX[players.length].length]])
         for (let [player, i_start_location] of zip(players, PLAYER_START_INDEX[players.length])) {

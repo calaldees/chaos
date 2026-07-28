@@ -50,10 +50,12 @@ logging.info(`Chaos \\033[91;103mMobile\\033[0m`)
 async function local_test() {
 
     const game = new Game([
-        new Player(getId(), 'Test1', "Wizard JULIAN" , COLOR.white),
+        new Player(this_id, 'Test1', "Wizard JULIAN" , COLOR.white),
         new Player('aaaaa', 'Test2', "Wizard GANDALF", COLOR.red  ),
     ])
     map_ui.game = game
+    game.newUnit("King Cobra", this_id, game.map.dimension.position_to_index(5,5))
+    game.newUnit("Horse", this_id, game.map.dimension.position_to_index(7,6))
 
     new UIMoves(input_ui)
 }
