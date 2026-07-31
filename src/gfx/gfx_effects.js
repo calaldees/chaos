@@ -12,7 +12,7 @@ export class _GfxEffect {
 export class SpriteEffect {
     constructor(sprite, color) {
         this.sprite = sprite
-        this.color
+        this.color = color
         this.active = true
     }
     isDirty(frame) {

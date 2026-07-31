@@ -7,13 +7,14 @@ export class UIMoves {
     constructor(ui, player) {
         console.assert(ui.constructor.name == "UI", 'must pass ui obj')
         this.ui = ui
-        this.player = player
+        //this.player = player
         ui.callback = (item) => {console.log('UIMoves', item)}
-        ui.drawFont("Moves", 0,0, COLOR.yellow)
+
         this.updateItems()
     }
 
-    updateItems = () => {
+    updateItems = (units) => {  // units:Unit[]
+        this.ui.drawFont("Moves", 0,0, COLOR.yellow)
         // TODO: Look at this.players unit and stats
         //{i, key, text, color, hide_key_prefix}
 

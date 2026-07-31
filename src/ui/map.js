@@ -26,7 +26,7 @@ export class MapUI extends CanvasAnimationBase {
         // Mouse
         this.mouse_index = undefined
         this.mouse_pressed = undefined
-        this.mouse_effect = {}
+        this.mouse_effect = {}  // empty object for first run prevent null pointer
         this.cursor = sprites.cursor[0]
 
         // Events
@@ -66,7 +66,7 @@ export class MapUI extends CanvasAnimationBase {
         this.gfx_dispatch.markDirty(this.mouse_index || 0, i)
         this.mouse_index = i
         this.mouse_pressed = pressed
-        this.mouse_effect.active = false
+        this.mouse_effect.active = false  // expire the existing effect/cursor
         this.mouse_effect = new SpriteEffect(this.cursor)
         this.gfx_effects.addEffect(this.mouse_index, this.mouse_effect)
 
