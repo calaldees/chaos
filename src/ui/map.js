@@ -28,6 +28,9 @@ export class MapUI extends CanvasAnimationBase {
         this.mouse_pressed = undefined
         this.mouse_effect = {}
         this.cursor = sprites.cursor[0]
+
+        // Events
+        this.event_listeners = new Map()
     }
     get game() {return this._game}
     set game(game) {
@@ -58,6 +61,7 @@ export class MapUI extends CanvasAnimationBase {
         const pressed = this.keys_pressed.has('mouse0')
         if (this.mouse_index == i && this.mouse_pressed == pressed) {return}
         // console.log('mouse_index', i)
+
         // Mouse moved - redraw
         this.gfx_dispatch.markDirty(this.mouse_index || 0, i)
         this.mouse_index = i
@@ -65,6 +69,17 @@ export class MapUI extends CanvasAnimationBase {
         this.mouse_effect.active = false
         this.mouse_effect = new SpriteEffect(this.cursor)
         this.gfx_effects.addEffect(this.mouse_index, this.mouse_effect)
-    }
 
+        // Trigger Events
+        if (this.mouse_pressed) {for (const f of this.event_listeners.get('pressed')) {f(this.mouse_index)}}
+    }
+    addEventListener(event_name, func) {
+        if (!this.event_listeners.has(event_name)) {
+            this.event_listeners.set(event_name, new Array())
+        }
+        this.event_listeners.get(event_name).push(func)
+    }
+    removeEventListener(event_name, func) {
+        throw new Error("not implemented")
+    }
 }

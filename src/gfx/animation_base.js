@@ -28,9 +28,12 @@ class CanvasAnimationBase {
         this.mouse_y = 0
         this.canvas.addEventListener('mousemove', (e) => {
             const r = e.target.getBoundingClientRect()
-            this.mouse_x = Math.floor((e.clientX - r.left) / (this.canvas.clientWidth/this.canvas.width))
-            this.mouse_y = Math.floor((e.clientY - r.top ) / (this.canvas.clientHeight/this.canvas.height))
+            const scale_width = this.canvas.clientWidth/this.canvas.width
+            const scale_height = this.canvas.clientHeight/this.canvas.height
+            this.mouse_x = Math.floor((e.clientX - r.left) / scale_width)
+            this.mouse_y = Math.floor((e.clientY - r.top ) / scale_height)
         }, true)
+
 
         this.frame = 0
         this.milliseconds_per_frame = 1000/fps
