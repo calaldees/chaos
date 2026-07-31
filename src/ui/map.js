@@ -25,6 +25,7 @@ export class MapUI extends CanvasAnimationBase {
 
         // Mouse
         this.mouse_index = undefined
+        this.mouse_pressed = undefined
         this.mouse_effect = {}
         this.cursor = sprites.cursor[0]
     }
@@ -54,11 +55,13 @@ export class MapUI extends CanvasAnimationBase {
     handle_mouse() {
         if (!this.gfx_map) {return}  // Temp - See loop above
         const i = this.gfx_map.map_model.dimension.position_to_index(...[this.mouse_x,this.mouse_y].map((i)=>Math.floor((i-BORDER_OFFSET_PX)/CELL_SIZE_PX)))
-        if (this.mouse_index == i) {return}
+        const pressed = this.keys_pressed.has('mouse0')
+        if (this.mouse_index == i && this.mouse_pressed == pressed) {return}
         // console.log('mouse_index', i)
         // Mouse moved - redraw
         this.gfx_dispatch.markDirty(this.mouse_index || 0, i)
         this.mouse_index = i
+        this.mouse_pressed = pressed
         this.mouse_effect.active = false
         this.mouse_effect = new SpriteEffect(this.cursor)
         this.gfx_effects.addEffect(this.mouse_index, this.mouse_effect)

@@ -14,8 +14,8 @@ import { NetworkManager } from './network/network.js'
 import { DialogJoinOrCreate } from './ui/dialogs.js'
 import { JoinManager } from './manager/JoinManager.js'
 
-import { UIMoves } from './ui/moves.js'
 import { COLOR } from './gfx/color.js'
+import { UIManager } from './ui/UIManager.js'
 
 const urlParams = new URLSearchParams(window.location.search)
 const this_id = getId()
@@ -56,8 +56,10 @@ async function local_test() {
     map_ui.game = game
     game.newUnit("King Cobra", this_id, game.map.dimension.position_to_index(5,5))
     game.newUnit("Horse", this_id, game.map.dimension.position_to_index(7,6))
+    game.newUnit("Eagle", 'aaaaa', game.map.dimension.position_to_index(8,4))
 
-    new UIMoves(input_ui)
+    new UIManager(map_ui, input_ui)
+
 }
 await local_test()
 
