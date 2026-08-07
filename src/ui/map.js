@@ -15,10 +15,10 @@ export class MapUI extends CanvasAnimationBase {
         super(...arguments)
         const c = this.context
 
+        this.LOGGING_AREA_XY = [0, 176]  // needed for mouse events to activate logging actions
         logging.registerHandler("map", (level, message)=>{
-            const message_xy = [0, 176]
-            this.context.clearRect(...message_xy, this.w, FONT_HEIGHT)
-            drawFont_color(this.context, message, ...message_xy)
+            this.context.clearRect(...this.LOGGING_AREA_XY, this.w, FONT_HEIGHT)
+            drawFont_color(this.context, message, ...this.LOGGING_AREA_XY)
         })
 
         drawBorder(c,0,0,this.w,this.h-FONT_HEIGHT,COLOR.blue)
@@ -59,6 +59,12 @@ export class MapUI extends CanvasAnimationBase {
         if (!this.gfx_map) {return}  // Temp - See loop above
         const i = this.gfx_map.map_model.dimension.position_to_index(...[this.mouse_x,this.mouse_y].map((i)=>Math.floor((i-BORDER_OFFSET_PX)/CELL_SIZE_PX)))
         const pressed = this.keys_pressed.has('mouse0')
+
+        // Handle logging_area_click
+        if (pressed && this.mouse_y >= this.LOGGING_AREA_XY[1]) {
+            for (const f of this.event_listeners.get('logging')) {f()}
+            return
+        }
         if (this.mouse_index == i && this.mouse_pressed == pressed) {return}
         // console.log('mouse_index', i)
 

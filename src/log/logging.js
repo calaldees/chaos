@@ -9,7 +9,7 @@ const MessageType = Object.freeze({
 class Logging {
     constructor() {
         Object.defineProperty(this, "handlers", {writable: false, enumerable: true, value: {}})
-        Object.defineProperty(this, "history", {writable: false, enumerable: true, value: []})
+        Object.defineProperty(this, "history", {writable: false, enumerable: true, value: []})  // History[[timestamp,level,message]]
     }
     registerHandler = (name, handler) => {
         console.assert(typeof handler === 'function', "message handler must be a function")
