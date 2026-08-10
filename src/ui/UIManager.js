@@ -19,28 +19,34 @@ export class UIManager {
 
         logging.registerHandler("logging_ui", this.logging_event)
 
-        this.map_ui.addEventListener('pressed', this.map_pressed)
-        this.map_ui.addEventListener('logging', this.logging_pressed)
+        this.map_ui.addEventListener('map_clicked', this.map_pressed)
+        this.map_ui.addEventListener('logging_clicked', this.logging_pressed)
         this.effect_unit_selected = {}
 
-        this.active_ui = undefined
+        this._active_ui = undefined
+        this.map_pressed()  // trigger the default UI
     }
 
     logging_pressed = () => {
-        const logging_ui = new UILogging(this.input_ui)
-        this.input_ui.clear()
-        this.active_ui = logging_ui
-
+        this.ui = UILogging
         this.logging_event()
     }
     logging_event = (level, message) => {
-        if (this.active_ui.constructor.name == 'UILogging') {
+        if (this.ui.constructor.name == 'UILogging') {
             const messages = logging.history.slice(
                 Math.max(0,logging.history.length-this.input_ui.rows),
                 Math.max(0,logging.history.length-1),
             ).map(([timestamp,level,message])=>message)
-            this.active_ui.render_messages(messages)
+            this.ui.render_messages(messages)
         }
+    }
+
+    get ui() {return this._active_ui}
+    set ui(UIClass) {
+        // TODO: enforce UIClass type? // damn dirty typeless js
+        this.input_ui.clear()
+        this._active_ui = new UIClass(this.input_ui)
+        return this._active_ui
     }
 
     map_pressed = (i) => {
@@ -49,26 +55,21 @@ export class UIManager {
         const unit = this.map_ui.game.map.getUnit(i)
 
         if (unit) {
-            this.effect_unit_selected = new SpriteEffect(sprites.cursor[3], COLOR.green_bright)
+            this.effect_unit_selected = new SpriteEffect(sprites.cursor[3], COLOR.white)
             this.map_ui.gfx_effects.addEffect(i, this.effect_unit_selected)
 
 
-            const stats_ui = new UIStats(this.input_ui)
-            this.input_ui.clear()
-            this.active_ui = stats_ui
-
-            stats_ui.drawStats(unit.unit_type)
-            stats_ui.drawStatModifiers(unit)
+            this.ui = UIStats
+            this.ui.drawStats(unit.unit_type)
+            this.ui.drawStatModifiers(unit)
 
             return
         }
         if (!unit) {
-            const move_ui = new UIMoves(this.input_ui)
-            this.input_ui.clear()
-            this.active_ui = move_ui
+            this.ui = UIMoves
 
-            //units = this.map_ui.game.registry.getUnitsForPlayerID()
-            move_ui.updateItems
+            const units = this.map_ui.game.registry.getUnitsForPlayerID()
+            this.ui.updateItems(units)
         }
     }
 }

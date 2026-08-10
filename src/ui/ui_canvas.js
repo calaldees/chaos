@@ -16,13 +16,25 @@ export class UI {
         this.canvas = canvas || document.getElementById('canvas')
         this.c = this.canvas.getContext('2d')
 
+        this.bindEventHandlers()
+        this.clear()
+
+        //this.selected_callback = selected_callback   // `callback(UIItem)`  UIItem:{i,key,action,text,color}
+    }
+
+    bindEventHandlers() {
         this.canvas.addEventListener("mousedown", this.mouseDown)
         this.canvas.addEventListener("mousemove", this.mouseDown)
         this.canvas.addEventListener("click", this.mouseUp)
         this.canvas.addEventListener("keydown", this.keyDown)
         this.canvas.addEventListener("keyup", this.keyUp)
-
-        this.clear()
+    }
+    unbindEventHandlers() {
+        this.canvas.removeEventListener("mousedown", this.mouseDown)
+        this.canvas.removeEventListener("mousemove", this.mouseDown)
+        this.canvas.removeEventListener("click", this.mouseUp)
+        this.canvas.removeEventListener("keydown", this.keyDown)
+        this.canvas.removeEventListener("keyup", this.keyUp)
     }
 
     get w() {return this.canvas.width}
@@ -55,7 +67,7 @@ export class UI {
     itemSelected = (item) => {
         this.highlightNone()
         if (!item) {return}
-        this.callback(item)
+        this.selected_callback(item)
     }
 
     setBorder = (color_foreground, color_background=null, border_offset_px=8) => {

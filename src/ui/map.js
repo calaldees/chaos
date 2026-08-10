@@ -62,7 +62,7 @@ export class MapUI extends CanvasAnimationBase {
 
         // Handle logging_area_click
         if (pressed && this.mouse_y >= this.LOGGING_AREA_XY[1]) {
-            for (const f of this.event_listeners.get('logging')) {f()}
+            for (const f of this.event_listeners.get('logging_clicked')) {f()}
             return
         }
         if (this.mouse_index == i && this.mouse_pressed == pressed) {return}
@@ -77,7 +77,7 @@ export class MapUI extends CanvasAnimationBase {
         this.gfx_effects.addEffect(this.mouse_index, this.mouse_effect)
 
         // Trigger Events
-        if (this.mouse_pressed) {for (const f of this.event_listeners.get('pressed')) {f(this.mouse_index)}}
+        if (this.mouse_pressed) {for (const f of this.event_listeners.get('map_clicked')) {f(this.mouse_index)}}
     }
     addEventListener(event_name, func) {
         if (!this.event_listeners.has(event_name)) {

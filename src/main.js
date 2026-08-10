@@ -20,7 +20,6 @@ import { UIManager } from './ui/UIManager.js'
 const urlParams = new URLSearchParams(window.location.search)
 const this_id = getId()
 
-const log_ui = new LoggingCanvas(document.getElementById('canvas_log'))
 const map_ui = new MapUI(document.getElementById('canvas_map'), 30)
 const input_ui = new UI(document.getElementById('canvas_ui'))
 

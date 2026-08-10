@@ -22,8 +22,8 @@ class CanvasAnimationBase {
         this.keys_pressed = new Set()
         window.addEventListener('keydown'  , (e) => this.keys_pressed.add(e.key), true)
         window.addEventListener('keyup'    , (e) => this.keys_pressed.delete(e.key), true)
-        window.addEventListener("mousedown", (e) => this.keys_pressed.add(`mouse${e.button}`), true)
-        window.addEventListener("mouseup"  , (e) => this.keys_pressed.delete(`mouse${e.button}`), true)
+        this.canvas.addEventListener("mousedown", (e) => this.keys_pressed.add(`mouse${e.button}`), true)
+        this.canvas.addEventListener("mouseup"  , (e) => this.keys_pressed.delete(`mouse${e.button}`), true)
         this.mouse_x = 0
         this.mouse_y = 0
         this.canvas.addEventListener('mousemove', (e) => {
