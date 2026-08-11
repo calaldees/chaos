@@ -20,6 +20,6 @@ FROM node:alpine as build
 
 FROM nginx:alpine as nginx
     WORKDIR /usr/share/nginx/html/
-    COPY nginx.conf /etc/nginx/nginx.conf
+    COPY nginx/nginx.conf /etc/nginx/nginx.conf
     #COPY ./src .
     COPY --from=build /build/*.gz .
