@@ -1,9 +1,12 @@
 import { enumerate } from '../core.js'
 import { drawFont_color, FONT_HEIGHT } from '../gfx/text.js'
 
+import { UIInputBase } from './ui_input_base.js'
+
+
 export class UILogging {
     constructor(ui) {
-        console.assert(ui.constructor.name == "UI", 'must pass ui obj')
+        console.assert(ui.constructor.name == UIInputBase.name, 'must pass ui obj')
         this.ui = ui
     }
     render_messages = (messages) => {

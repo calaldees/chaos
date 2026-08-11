@@ -2,12 +2,12 @@ import { range } from '../core.js'
 import { COLOR, shiftImage } from '../gfx/color.js'
 
 import {gfx_units} from '../gfx/units.js'
-import {mergeItemsAndLayout} from './ui_canvas.js'
+import { UIInputBase, mergeItemsAndLayout } from './ui_input_base.js'
 import { FONT_HEIGHT } from '../gfx/text.js'
 
 export class UICharacterSelect {
     constructor(ui) {
-        console.assert(ui.constructor.name == "UI", 'must pass ui obj')
+        console.assert(ui.constructor.name == UIInputBase.name, 'must pass ui obj')
         this.ui = ui
         ui.setBorder(COLOR.blue_bright, COLOR.cyan, 16)
 

@@ -1,26 +1,32 @@
-// Keep track of Map, Menu, Effects and Cursor
-import {COLOR} from '../gfx/color.js'
-import {sprites} from '../gfx/sprites.js'  // just for mouse cursor graphic
+import { COLOR } from '../gfx/color.js'
+import { sprites } from '../gfx/sprites.js'  // just for mouse cursor graphic
 
 import { logging } from '../log/logging.js'
-import {GfxEffects, SpriteEffect, SpriteAnimationEffect, HighlightEffect, InvertEffect} from '../gfx/gfx_effects.js'
+import { GfxEffects, SpriteEffect, SpriteAnimationEffect, HighlightEffect, InvertEffect } from '../gfx/gfx_effects.js'
 
-import { UIMoves } from '../ui/moves.js'
-import { UIStats } from '../ui/stats.js'
-import { UILogging } from '../ui/logging.js'
+
+import { UIInputBase } from './ui_input_base.js'
+import { UIMap } from './map.js'
+import { UIMoves } from './moves.js'
+import { UIStats } from './stats.js'
+import { UILogging } from './logging.js'
 
 export class UIManager {
-    constructor(map_ui, input_ui, player) {
-        console.assert(map_ui.constructor.name == 'MapUI')
-        console.assert(input_ui.constructor.name == 'UI')
-        this.map_ui = map_ui  // TODO: immutable properties?
-        this.input_ui = input_ui
+    /*
+    Keep track of Map, Menu, Effects and Cursor
+    Player input state
+    */
+    constructor(ui_map, ui_input_base, player) {
+        console.assert(ui_map.constructor.name == UIMap.name)
+        console.assert(ui_input_base.constructor.name == UIInputBase.name)
+        Object.defineProperty(this, "ui_map"       , {writable: false, enumerable: true, value: ui_map       })
+        Object.defineProperty(this, "ui_input_base", {writable: false, enumerable: true, value: ui_input_base})
         this.player = player
 
         logging.registerHandler("logging_ui", this.logging_event)
 
-        this.map_ui.addEventListener('map_clicked', this.map_pressed)
-        this.map_ui.addEventListener('logging_clicked', this.logging_pressed)
+        this.ui_map.addEventListener('map_clicked', this.map_pressed)
+        this.ui_map.addEventListener('logging_clicked', this.logging_pressed)
         this.effect_unit_selected = {}
 
         this._active_ui = undefined
@@ -34,7 +40,7 @@ export class UIManager {
     logging_event = (level, message) => {
         if (this.ui.constructor.name == 'UILogging') {
             const messages = logging.history.slice(
-                Math.max(0,logging.history.length-this.input_ui.rows),
+                Math.max(0,logging.history.length-this.ui_input_base.rows),
                 Math.max(0,logging.history.length-1),
             ).map(([timestamp,level,message])=>message)
             this.ui.render_messages(messages)
@@ -44,20 +50,24 @@ export class UIManager {
     get ui() {return this._active_ui}
     set ui(UIClass) {
         // TODO: enforce UIClass type? // damn dirty typeless js
-        this.input_ui.clear()
-        this._active_ui = new UIClass(this.input_ui)
+        this.ui_input_base.clear()
+        this._active_ui = new UIClass(this.ui_input_base)
         return this._active_ui
     }
 
     map_pressed = (i) => {
         //console.log('pressed', i)
         this.effect_unit_selected.active = false  // TODO - mark old selection as dirty
-        const unit = this.map_ui.game.map.getUnit(i)
+        const unit = this.ui_map.game.map.getUnit(i)
 
         if (unit) {
             this.effect_unit_selected = new SpriteEffect(sprites.cursor[3], COLOR.white)
-            this.map_ui.gfx_effects.addEffect(i, this.effect_unit_selected)
+            this.ui_map.gfx_effects.addEffect(i, this.effect_unit_selected)
 
+            const units = this.ui_map.game.registry.getUnitsForPlayerID(unit.player_id)
+            for (let _unit of units) {
+                this.ui_map.gfx_effects.addEffect(_unit.pos, new InvertEffect(20))
+            }
 
             this.ui = UIStats
             this.ui.drawStats(unit.unit_type)
@@ -67,8 +77,7 @@ export class UIManager {
         }
         if (!unit) {
             this.ui = UIMoves
-
-            const units = this.map_ui.game.registry.getUnitsForPlayerID()
+            const units = this.ui_map.game.registry.getUnitsForPlayerID(this.player.id)
             this.ui.updateItems(units)
         }
     }

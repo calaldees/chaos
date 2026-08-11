@@ -7,11 +7,11 @@ export class Registry {
         Object.defineProperty(this, "players", {writable: false, enumerable: true, value: new Map()  }) // Map[PlayerID, Player]
     }
 
-    getPlayerFromUnit(unit) {
+    getPlayerFromUnit = (unit) => {
         return this.players[unit.player_id]
     }
-    getUnitsForPlayerID(player_id) {
-        return this.units.filter((unit)=>{unit.player_id==player_id})
+    getUnitsForPlayerID = (player_id) => {
+        return this.units.filter((unit)=>unit.player_id==player_id)
     }
 
     get state() {return this}

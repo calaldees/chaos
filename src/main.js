@@ -7,8 +7,8 @@ import {logging} from './log/logging.js'
 import {} from './log/console.js'
 import { LoggingCanvas } from './log/logging_canvas.js'
 
-import { MapUI } from './ui/map.js'
-import { UI } from './ui/ui_canvas.js'
+import { UIMap } from './ui/map.js'
+import { UIInputBase } from './ui/ui_input_base.js'
 
 import { NetworkManager } from './network/network.js'
 import { DialogJoinOrCreate } from './ui/dialogs.js'
@@ -20,23 +20,23 @@ import { UIManager } from './ui/UIManager.js'
 const urlParams = new URLSearchParams(window.location.search)
 const this_id = getId()
 
-const map_ui = new MapUI(document.getElementById('canvas_map'), 30)
-const input_ui = new UI(document.getElementById('canvas_ui'))
+const ui_map = new UIMap(document.getElementById('canvas_map'), 30)
+const ui_input_base = new UIInputBase(document.getElementById('canvas_ui'))
 
 const setCanvasSizeForScreen = (event) => {
-    const orientationVertical = map_ui.window_aspect_ratio<=(2/3)
-    const orientationHorizontal = map_ui.window_aspect_ratio>=(8/3)
+    const orientationVertical = ui_map.window_aspect_ratio<=(2/3)
+    const orientationHorizontal = ui_map.window_aspect_ratio>=(8/3)
     if (orientationVertical) {
-        map_ui.canvas.classList.remove('full_height')
-        input_ui.canvas.classList.remove('full_height')
-        map_ui.canvas.classList.add('full_width')
-        input_ui.canvas.classList.add('full_width')
+        ui_map.canvas.classList.remove('full_height')
+        ui_input_base.canvas.classList.remove('full_height')
+        ui_map.canvas.classList.add('full_width')
+        ui_input_base.canvas.classList.add('full_width')
     }
     if (orientationHorizontal) {
-        map_ui.canvas.classList.remove('full_width')
-        input_ui.canvas.classList.remove('full_width')
-        map_ui.canvas.classList.add('full_height')
-        input_ui.canvas.classList.add('full_height')
+        ui_map.canvas.classList.remove('full_width')
+        ui_input_base.canvas.classList.remove('full_width')
+        ui_map.canvas.classList.add('full_height')
+        ui_input_base.canvas.classList.add('full_height')
     }
 }
 window.addEventListener("resize", setCanvasSizeForScreen)
@@ -52,12 +52,12 @@ async function local_test() {
         new Player(this_id, 'Test1', "Wizard JULIAN" , COLOR.white),
         new Player('aaaaa', 'Test2', "Wizard GANDALF", COLOR.red  ),
     ])
-    map_ui.game = game
+    ui_map.game = game
     game.newUnit("King Cobra", this_id, game.map.dimension.position_to_index(5,5))
     game.newUnit("Horse", this_id, game.map.dimension.position_to_index(7,6))
     game.newUnit("Eagle", 'aaaaa', game.map.dimension.position_to_index(8,4))
 
-    new UIManager(map_ui, input_ui)
+    new UIManager(ui_map, ui_input_base, game.registry.players.get(this_id))
 
 }
 await local_test()
@@ -68,32 +68,32 @@ async function main() {
 
 let {action, channel, player_name} = await (new DialogJoinOrCreate()).showModalPromise()
 if (action == 'create') {
-    map_ui.canvas.classList.add('full_screen')
+    ui_map.canvas.classList.add('full_screen')
     channel = channel || generateStringId()
     logging.info(`Join: ${window.location.host} ${channel}`)
 }
 if (action == 'join') {
-    map_ui.canvas.classList.remove('full_screen')
+    ui_map.canvas.classList.remove('full_screen')
     setCanvasSizeForScreen()
     logging.info(`Connecting: ${window.location.host} ${channel}`)
 }
 
 const connectNetwork = (channel) => {
-    map_ui.canvas.classList.add('disconnected')
+    ui_map.canvas.classList.add('disconnected')
     const network = new NetworkManager(channel)
-    network.socket.addEventListener("open", () => {map_ui.canvas.classList.remove('disconnected')})
-    network.socket.addEventListener("close", () => {map_ui.canvas.classList.add('disconnected')})
+    network.socket.addEventListener("open", () => {ui_map.canvas.classList.remove('disconnected')})
+    network.socket.addEventListener("close", () => {ui_map.canvas.classList.add('disconnected')})
     return network
 }
 const network = connectNetwork(channel)
 
-const players = await (new JoinManager(map_ui.canvas, input_ui, network, player_name)).promise
+const players = await (new JoinManager(ui_map.canvas, ui_input_base, network, player_name)).promise
 // players[] of {name:str, unit_type:str, color: COLOR.white}  // god I want types
 if (action == 'create') {
     const game = new Game(players.map((player)=>new Player(
         player.from, player.name, player.unit_type, player.color,
     )))
-    map_ui.game = game
+    ui_map.game = game
     network.addOnMessageListener((data)=>{
         console.log('host got network data??')
     })
@@ -102,7 +102,7 @@ if (action == 'create') {
 if (action == 'join') {
     logging.info(`Client waiting`)
     const game = new Game()
-    map_ui.game = game
+    ui_map.game = game
     network.addOnMessageListener((data)=>{
         game.state = data
     })

@@ -10,7 +10,7 @@ import {drawBorder} from '../gfx/border.js'
 import {logging} from '../log/logging.js'
 
 
-export class MapUI extends CanvasAnimationBase {
+export class UIMap extends CanvasAnimationBase {
     constructor() {
         super(...arguments)
         const c = this.context

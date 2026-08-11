@@ -3,10 +3,11 @@ import { COLOR, shiftImage } from '../gfx/color.js'
 import {unit_data} from '../data/unit_data.js'
 import {gfx_units} from '../gfx/units.js'
 
+import { UIInputBase } from './ui_input_base.js'
 
 export class UIStats {
     constructor(ui) {
-        console.assert(ui.constructor.name == "UI", 'must pass ui obj')
+        console.assert(ui.constructor.name == UIInputBase.name, 'must pass ui obj')
         this.ui = ui
     }
 

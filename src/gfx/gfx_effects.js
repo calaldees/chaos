@@ -6,11 +6,21 @@ const CELL_SIZE_PX = 16
 
 
 export class _GfxEffect {
-    get active() {return true}
+    constructor(active_iterations) {
+        this.active_iterations = active_iterations
+    }
+    get active() {
+        if (typeof(this.active_iterations) == 'number') {this.active_iterations -= 1}
+        return Boolean(this.active_iterations)
+    }
+    set active(active_iterations) {
+        this.active_iterations = active_iterations
+    }
 }
 
-export class SpriteEffect {
+export class SpriteEffect extends _GfxEffect {
     constructor(sprite, color) {
+        super()
         this.sprite = sprite
         this.color = color
         this.active = true
@@ -64,6 +74,9 @@ export class VectorEffect extends _GfxEffect {
 }
 
 export class InvertEffect extends _GfxEffect {
+    constructor(active_iterations=undefined) {
+        super(active_iterations)
+    }
     isDirty(frame) {
         return frame % 300
     }

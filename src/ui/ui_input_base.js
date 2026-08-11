@@ -2,7 +2,7 @@ import { Dimension, hasAllProperties, range, zip } from "../core.js"
 import { COLOR, shiftImage } from '../gfx/color.js'
 import { drawBorder } from '../gfx/border.js'
 import { drawFont, extract_ansi_colors, FONT_WIDTH, FONT_HEIGHT } from '../gfx/text.js'
-import {gfx_units} from '../gfx/units.js'
+import { gfx_units } from '../gfx/units.js'
 
 export function* mergeItemsAndLayout(items, layout) {
     for (let [i, l] of zip(items, layout)) {
@@ -11,7 +11,14 @@ export function* mergeItemsAndLayout(items, layout) {
     }
 }
 
-export class UI {
+export class UIInputBase {
+    /*
+    TODO: rational
+    I did not want to use inheritance.
+    UIInputBase overlays a canvas and add event hooks
+    UI interfaces then use this InputBase overlay abstraction.
+    UI Interfaces should never use canvas and addEventListener as these are implementation details.
+    */
     constructor(canvas) {
         this.canvas = canvas || document.getElementById('canvas')
         this.c = this.canvas.getContext('2d')
@@ -19,6 +26,7 @@ export class UI {
         this.bindEventHandlers()
         this.clear()
 
+        this.callback = undefined
         //this.selected_callback = selected_callback   // `callback(UIItem)`  UIItem:{i,key,action,text,color}
     }
 
@@ -67,7 +75,7 @@ export class UI {
     itemSelected = (item) => {
         this.highlightNone()
         if (!item) {return}
-        this.selected_callback(item)
+        this.callback(item)
     }
 
     setBorder = (color_foreground, color_background=null, border_offset_px=8) => {
@@ -125,10 +133,9 @@ export class UI {
     }
     getItemFromKey = (key) => {
         for (let item of this._items) {
-            if (key.toLocaleLowerCase() == item.key.toLocaleLowerCase()) {return item}
+            if (key.toLocaleLowerCase() == item?.key?.toLocaleLowerCase()) {return item}
         }
     }
-
 
     clearFont = (chars,col,row) => {
         this.c.clearRect(...this.colRow_to_xy(col,row), chars*FONT_WIDTH , FONT_HEIGHT)

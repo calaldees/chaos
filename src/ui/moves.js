@@ -1,16 +1,14 @@
 import { enumerate } from '../core.js'
 import { COLOR } from '../gfx/color.js'
 
-import {mergeItemsAndLayout} from './ui_canvas.js'
+import { mergeItemsAndLayout, UIInputBase } from './ui_input_base.js'
 
 export class UIMoves {
-    constructor(ui, player) {
-        console.assert(ui.constructor.name == "UI", 'must pass ui obj')
+    constructor(ui) {
+        console.assert(ui.constructor.name == UIInputBase.name, 'must pass ui obj')
         this.ui = ui
-        //this.player = player
-        ui.callback = (item) => {console.log('UIMoves', item)}
 
-        this.updateItems()
+        ui.callback = (item) => {console.log('UIMoves', item)}
     }
 
     updateItems = (units) => {  // units:Unit[]
@@ -18,7 +16,7 @@ export class UIMoves {
         // TODO: Look at this.players unit and stats
         //{i, key, text, color, hide_key_prefix}
 
-        const unit_types = ["Wizard JULIAN", "King Cobra", "Bat", "Elf"]
+        const unit_types = units.map((unit)=>unit.unit_type)
         // unit_types will be expanded to the state of those units
         //  is a move queued? is an attack queued?
         //  These states probably need to be visualised on the map

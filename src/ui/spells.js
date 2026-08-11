@@ -1,11 +1,11 @@
 import { range } from '../core.js'
 import { COLOR } from '../gfx/color.js'
 
-import {mergeItemsAndLayout} from './ui_canvas.js'
+import { UIInputBase, mergeItemsAndLayout } from './ui_input_base.js'
 
 export class UISpells {
     constructor(ui) {
-        console.assert(ui.constructor.name == "UI", 'must pass ui obj')
+        console.assert(ui.constructor.name == UIInputBase.name, 'must pass ui obj')
         this.ui = ui
         ui.items = [...mergeItemsAndLayout([
             {action:'test1', text:'*test-item', color: COLOR.white},
