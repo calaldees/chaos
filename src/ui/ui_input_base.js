@@ -60,8 +60,12 @@ export class UIInputBase {
 
     _xyFromMouseEvent(event) {
         // x and y in the mouse event don't relate to the parent element. Thanks javascript.
+        // Kind of a rushed copy of the maths from `gfx/animation_base.js`
         const r = event.target.getBoundingClientRect()
-        return [event.clientX - r.left, event.clientY - r.top]
+        return [
+            (event.clientX-r.left)/(this.canvas.clientWidth /this.w),
+            (event.clientY-r.top )/(this.canvas.clientHeight/this.h),
+        ]
     }
     mouseDown = (event) => {
         if (event.type=='mousedown' || (event.type=='mousemove' && event.buttons)) {

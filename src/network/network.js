@@ -1,3 +1,8 @@
+import mqtt_client from './u8-mqtt.js'
+// Originally this was just using plain websockets and my custom channelServer
+// I may return to channel server, but for now I'm going to develop against mqtt
+// In the future I want to write a minimal subset of u8-mqtt.js myself and remove the lib
+
 import { isObject } from '../core.js';
 import { getId } from './id.js'
 

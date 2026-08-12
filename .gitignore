@@ -3,6 +3,6 @@
 
 channelServer
 
-data/classicspells.json
-data/classicunits.json
-temp.js
+src/u8-mqtt.js
+src/data/classicspells.json
+src/data/classicunits.json

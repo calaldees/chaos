@@ -23,5 +23,8 @@ shell_debug_minify:
 	docker build --tag debug_minify --target build .
 	docker run --rm -it debug_minify /bin/sh
 
+src/u8-mqtt.js:
+	curl --url https://cdn.jsdelivr.net/npm/u8-mqtt/esm/web/index.js --output src/u8-mqtt.js
+
 cloc:  ## cloc - lines of code count
 	cloc --vcs=git --exclude-dir=data
