@@ -7,6 +7,7 @@ export class UIMoves {
     constructor(ui) {
         console.assert(ui.constructor.name == UIInputBase.name, 'must pass ui obj')
         this.ui = ui
+        ui.setBorder(COLOR.red, undefined, 16)
 
         ui.callback = (item) => {console.log('UIMoves', item)}
     }

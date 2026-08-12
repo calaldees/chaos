@@ -3,6 +3,6 @@
 
 channelServer
 
-src/u8-mqtt.js
+src/network/u8-mqtt.js
 src/data/classicspells.json
 src/data/classicunits.json

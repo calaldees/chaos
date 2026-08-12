@@ -11,6 +11,8 @@ serve_files_for_local:  ##  serve static files on localhost:8000
 #serve_channelServer_for_local: channelServer  ##  channelServer on port localhost:9800
 #	docker compose run --rm --service-ports channel-server
 
+src/network/u8-mqtt.js:
+	curl -o $@ 'https://cdn.jsdelivr.net/npm/u8-mqtt/esm/web/index.js'
 src/data/classicspells.json:
 	curl -o $@ "https://raw.githubusercontent.com/lewster32/archaos/main/assets/data/classicspells.json"
 src/data/classicunits.json:
@@ -22,9 +24,6 @@ src/data/classicunits.json:
 shell_debug_minify:
 	docker build --tag debug_minify --target build .
 	docker run --rm -it debug_minify /bin/sh
-
-src/u8-mqtt.js:
-	curl --url https://cdn.jsdelivr.net/npm/u8-mqtt/esm/web/index.js --output src/u8-mqtt.js
 
 cloc:  ## cloc - lines of code count
 	cloc --vcs=git --exclude-dir=data

@@ -3,7 +3,7 @@ FROM node:alpine AS build
     RUN npm install --no-package-lock --global \
         rollup \
     && true
-    RUN curl --url https://cdn.jsdelivr.net/npm/u8-mqtt/esm/web/index.js --output u8-mqtt.js
+    RUN curl --url https://cdn.jsdelivr.net/npm/u8-mqtt/esm/web/index.js --output ./network/u8-mqtt.js
     COPY ./src/ .
     RUN rollup main.js --file bundle.js
     # --format es
