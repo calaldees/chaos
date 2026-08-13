@@ -23,6 +23,8 @@ export class UIManager {
         Object.defineProperty(this, "ui_input_base", {writable: false, enumerable: true, value: ui_input_base})
         this.player = player
 
+        this.ui_input_base.callback = this.ui_input_callback
+
         logging.registerHandler("logging_ui", this.logging_event)
 
         this.ui_map.addEventListener('map_clicked', this.map_pressed)
@@ -61,24 +63,31 @@ export class UIManager {
         const unit = this.ui_map.game.map.getUnit(i)
 
         if (unit) {
-            this.effect_unit_selected = new SpriteEffect(sprites.cursor[3], COLOR.white)
-            this.ui_map.gfx_effects.addEffect(i, this.effect_unit_selected)
-
-            const units = this.ui_map.game.registry.getUnitsForPlayerID(unit.player_id)
-            for (let _unit of units) {
-                this.ui_map.gfx_effects.addEffect(_unit.pos, new InvertEffect(20))
-            }
-
-            this.ui = UIStats
-            this.ui.drawStats(unit.unit_type)
-            this.ui.drawStatModifiers(unit)
-
-            return
+            this.select_unit(unit)
         }
         if (!unit) {
             this.ui = UIMoves
             const units = this.ui_map.game.registry.getUnitsForPlayerID(this.player.id)
             this.ui.updateItems(units)
         }
+    }
+
+    ui_input_callback = (item) => {
+        console.log('UIManager', item)
+        if (item.unit) {this.select_unit(item.unit)}
+    }
+
+    select_unit = (unit) => {
+        this.effect_unit_selected = new SpriteEffect(sprites.cursor[3], COLOR.white)
+        this.ui_map.gfx_effects.addEffect(unit.pos, this.effect_unit_selected)
+
+        const units = this.ui_map.game.registry.getUnitsForPlayerID(unit.player_id)
+        for (let _unit of units) {
+            this.ui_map.gfx_effects.addEffect(_unit.pos, new InvertEffect(20))
+        }
+
+        this.ui = UIStats
+        this.ui.drawStats(unit.unit_type)
+        this.ui.drawStatModifiers(unit)
     }
 }

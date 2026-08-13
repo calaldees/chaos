@@ -9,7 +9,7 @@ export class UIMoves {
         this.ui = ui
         ui.setBorder(COLOR.red, undefined, 16)
 
-        ui.callback = (item) => {console.log('UIMoves', item)}
+        //ui.callback = (item) => {console.log('UIMoves', item)}
     }
 
     updateItems = (units) => {  // units:Unit[]
@@ -17,21 +17,21 @@ export class UIMoves {
         // TODO: Look at this.players unit and stats
         //{i, key, text, color, hide_key_prefix}
 
-        const unit_types = units.map((unit)=>unit.unit_type)
+        //const unit_types = units.map((unit)=>unit.unit_type)
         // unit_types will be expanded to the state of those units
         //  is a move queued? is an attack queued?
         //  These states probably need to be visualised on the map
 
         const START_ROW = 1
         const START_ROW_OFFSET = this.ui.dimension.width * START_ROW
-        this.ui.items = [...enumerate(unit_types)].map(
-            ([row, unit_type]) => {
+        this.ui.items = [...enumerate(units)].map(
+            ([row, unit]) => {
                 const row_index = START_ROW_OFFSET + (row * this.ui.dimension.width)
 
                 // Temp: Draw un-intractable stuff
                 // This is contaminating item generation and drawing
                 // There should probably be separate draw step
-                this.ui.drawUnit(unit_type, 2, row + START_ROW)
+                this.ui.drawUnit(unit.unit_type, 2, row + START_ROW)
                 // TODO:
                 // the un-intractable/disabled text should be drawn _greyed out_ before the intractable text
 
@@ -43,6 +43,7 @@ export class UIMoves {
                         'text': '   ',  // Should cover the unit that was drawn to this space earlier
                         'hide_key_prefix': false,
                         'color': COLOR.white,
+                        'unit': unit,
                     },
                     {
                         'i': row_index + 5,
