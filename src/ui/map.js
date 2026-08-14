@@ -68,14 +68,16 @@ export class UIMap extends CanvasAnimationBase {
         if (!this.gfx_map) {return}  // Temp - See loop above
 
         let i
+        // Mouse Index
         if (this.mouse_index >= 0) {
             i = this.mouse_index
             this.mouse_index = undefined
         }
+        // Keyboard Index
         if (this.keys_pressed.intersection(KEYS_ARROWS).size) {
             this.cursor_key_cooldown += 1
             i = (this.cursor_index || 0)
-            if (this.cursor_key_cooldown % 3 == 1) {
+            if (this.cursor_key_cooldown % 2 == 1) {
                 i += (
                     (this.keys_pressed.has('ArrowLeft' )?           -1:0) +
                     (this.keys_pressed.has('ArrowRight')?            1:0) +
@@ -83,11 +85,14 @@ export class UIMap extends CanvasAnimationBase {
                     (this.keys_pressed.has('ArrowDown' )? this.d.width:0) +
                     0
                 )
+                if (i<0 || i>=this.d.size) {
+                    i = (this.cursor_index || 0)
+                }
             }
         } else {
             this.cursor_key_cooldown = 0
         }
-
+        // Button Pressed
         const pressed = (
             this.keys_pressed.has('mouse0') || this.keys_pressed.has('Enter') || this.keys_pressed.has(' ')
         )
@@ -99,12 +104,10 @@ export class UIMap extends CanvasAnimationBase {
         }
 
         if ((i == undefined && !pressed) || (this.cursor_index == i && this.cursor_pressed == pressed)) {return}
-        console.log('cursor_index', i)
-        //if (i == undefined) {debugger}
 
         // Mouse moved - redraw
-        this.gfx_dispatch.markDirty(this.cursor_index || 0, i || this.cursor_index || 0)
-        this.cursor_index = i || this.cursor_index
+        this.gfx_dispatch.markDirty(this.cursor_index || 0, i==undefined?this.cursor_index:i || 0)
+        this.cursor_index = i==undefined ? this.cursor_index : i
         this.cursor_pressed = pressed
         this.cursor_effect.active = false  // expire the existing effect/cursor
         this.cursor_effect = new SpriteEffect(this.cursor)
@@ -112,6 +115,7 @@ export class UIMap extends CanvasAnimationBase {
 
         // Trigger Events
         if (this.cursor_pressed) {for (const f of this.event_listeners.get('map_clicked')) {f(this.cursor_index)}}
+        console.log(this.cursor_index, i, pressed)
     }
     addEventListener(event_name, func) {
         if (!this.event_listeners.has(event_name)) {
