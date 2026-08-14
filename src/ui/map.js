@@ -9,6 +9,7 @@ import {CanvasAnimationBase} from '../gfx/animation_base.js'
 import {drawBorder} from '../gfx/border.js'
 import {logging} from '../log/logging.js'
 
+const KEYS_ARROWS = new Set(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'])
 
 export class UIMap extends CanvasAnimationBase {
     constructor() {
@@ -23,9 +24,10 @@ export class UIMap extends CanvasAnimationBase {
 
         drawBorder(c,0,0,this.w,this.h-FONT_HEIGHT,COLOR.blue)
 
-        // Mouse
-        this.mouse_index = undefined
-        this.mouse_pressed = undefined
+        // Cursor
+        this.cursor_key_cooldown = 0
+        this.cursor_index = undefined
+        this.cursor_pressed = false
         this.mouse_effect = {}  // empty object for first run prevent null pointer
         this.cursor = sprites.cursor[0]
 
@@ -46,7 +48,7 @@ export class UIMap extends CanvasAnimationBase {
     }
     loop(context, frame) {
         if (!this.gfx_map) {return}  // Temp to stop handling of active state. setRunning is called by the focus listener
-        this.handle_mouse()
+        this.handle_input()
         this.gfx_dispatch.markDirty(
             ...this.gfx_map.dirtyIndexes(frame),
             ...this.gfx_effects.dirtyIndexes(frame),
@@ -55,29 +57,52 @@ export class UIMap extends CanvasAnimationBase {
         this.gfx_dispatch.drawDirty(context, frame)
         this.gfx_dispatch.resetDirtyIndexes()
     }
-    handle_mouse() {
+    handle_input() {
         if (!this.gfx_map) {return}  // Temp - See loop above
-        const i = this.gfx_map.map_model.dimension.position_to_index(...[this.mouse_x,this.mouse_y].map((i)=>Math.floor((i-BORDER_OFFSET_PX)/CELL_SIZE_PX)))
-        const pressed = this.keys_pressed.has('mouse0')
+
+        const d = this.gfx_map.map_model.dimension
+        let i
+        if (this.keys_pressed.intersection(KEYS_ARROWS).size) {
+            this.cursor_key_cooldown += 1
+            i = (this.cursor_index || 0)
+            if (this.cursor_key_cooldown % 3 == 1) {
+                i += (
+                    (this.keys_pressed.has('ArrowLeft' )?      -1:0) +
+                    (this.keys_pressed.has('ArrowRight')?       1:0) +
+                    (this.keys_pressed.has('ArrowUp'   )?-d.width:0) +
+                    (this.keys_pressed.has('ArrowDown' )? d.width:0) +
+                    0
+                )
+            }
+        } else {
+            this.cursor_key_cooldown = 0
+            i = d.position_to_index(...[this.mouse_x,this.mouse_y].map((i)=>Math.floor((i-BORDER_OFFSET_PX)/CELL_SIZE_PX)))
+        }
+
+        const pressed = (
+            this.keys_pressed.has('mouse0') || this.keys_pressed.has('Enter') || this.keys_pressed.has('Space')
+        )
 
         // Handle logging_area_click
         if (pressed && this.mouse_y >= this.LOGGING_AREA_XY[1]) {
             for (const f of this.event_listeners.get('logging_clicked')) {f()}
             return
         }
-        if (this.mouse_index == i && this.mouse_pressed == pressed) {return}
-        // console.log('mouse_index', i)
+
+        if (this.cursor_index == i && this.cursor_pressed == pressed) {return}
+        console.log('cursor_index', i)
+        if (i == undefined) {debugger}
 
         // Mouse moved - redraw
-        this.gfx_dispatch.markDirty(this.mouse_index || 0, i)
-        this.mouse_index = i
-        this.mouse_pressed = pressed
+        this.gfx_dispatch.markDirty(this.cursor_index || 0, i)
+        this.cursor_index = i
+        this.cursor_pressed = pressed
         this.mouse_effect.active = false  // expire the existing effect/cursor
         this.mouse_effect = new SpriteEffect(this.cursor)
-        this.gfx_effects.addEffect(this.mouse_index, this.mouse_effect)
+        this.gfx_effects.addEffect(this.cursor_index, this.mouse_effect)
 
         // Trigger Events
-        if (this.mouse_pressed) {for (const f of this.event_listeners.get('map_clicked')) {f(this.mouse_index)}}
+        if (this.cursor_pressed) {for (const f of this.event_listeners.get('map_clicked')) {f(this.cursor_index)}}
     }
     addEventListener(event_name, func) {
         if (!this.event_listeners.has(event_name)) {

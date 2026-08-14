@@ -79,7 +79,7 @@ class CanvasAnimationBase {
     }
 
     run = (time) => {
-        if (this.keys_pressed.has("Escape")) {this.setRunning(false)}
+        //if (this.keys_pressed.has("Escape")) {this.setRunning(false)}
         if (!time) {this.epoch = undefined}
         if (!this.epoch && time) {this.epoch = time - (this.frame * this.milliseconds_per_frame)}
         const frame = Math.floor((time - this.epoch) / this.milliseconds_per_frame)

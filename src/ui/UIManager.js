@@ -57,24 +57,30 @@ export class UIManager {
         return this._active_ui
     }
 
+    unselect = () => {
+        this.effect_unit_selected.active = false  // TODO - mark old selection as dirty
+    }
+
     map_pressed = (i) => {
         //console.log('pressed', i)
-        this.effect_unit_selected.active = false  // TODO - mark old selection as dirty
+        this.unselect()
         const unit = this.ui_map.game.map.getUnit(i)
 
-        if (unit) {
-            this.select_unit(unit)
-        }
-        if (!unit) {
-            this.ui = UIMoves
-            const units = this.ui_map.game.registry.getUnitsForPlayerID(this.player.id)
-            this.ui.updateItems(units)
-        }
+        if (unit) {this.select_unit(unit)}
+        if (!unit) {this.default_ui()}
     }
 
     ui_input_callback = (item) => {
         console.log('UIManager', item)
+        if (item.action == 'escape') {this.default_ui()}
         if (item.unit) {this.select_unit(item.unit)}
+    }
+
+    default_ui = () => {
+        this.unselect()
+        this.ui = UIMoves
+        const units = this.ui_map.game.registry.getUnitsForPlayerID(this.player.id)
+        this.ui.updateItems(units)
     }
 
     select_unit = (unit) => {

@@ -77,8 +77,13 @@ export class UIInputBase {
         }
     }
     mouseUp = (event) => {this.itemSelected(this.getItemAt(this.xy_to_i(...this._xyFromMouseEvent(event))))}
-    keyDown = (event) => {this.highlightItem(this.getItemFromKey(event.key))}
-    keyUp = (event) => {this.itemSelected(this.getItemFromKey(event.key))}  // FIX BUG: handle multiple keypress items gracefully
+    keyDown = (event) => {
+        if (event.key=='Escape') {
+            this.callback({i:undefined, key: event.key, action: 'escape', text: undefined, color: undefined})
+        }
+        this.highlightItem(this.getItemFromKey(event.key))
+    }
+    keyUp   = (event) => {this.itemSelected(this.getItemFromKey(event.key))}  // FIX BUG: handle multiple keypress items gracefully
 
     itemSelected = (item) => {
         this.highlightNone()
