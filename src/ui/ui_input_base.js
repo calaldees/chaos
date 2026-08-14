@@ -1,3 +1,5 @@
+import { xyFromMouseEvent } from '../gfx/animation_base.js'
+
 import { Dimension, hasAllProperties, range, zip } from "../core.js"
 import { COLOR, shiftImage } from '../gfx/color.js'
 import { drawBorder } from '../gfx/border.js'
@@ -62,21 +64,12 @@ export class UIInputBase {
         this._items.forEach(this._drawItem)
     }
 
-    _xyFromMouseEvent(event) {
-        // x and y in the mouse event don't relate to the parent element. Thanks javascript.
-        // Kind of a rushed copy of the maths from `gfx/animation_base.js`
-        const r = event.target.getBoundingClientRect()
-        return [
-            (event.clientX-r.left)/(this.canvas.clientWidth /this.w),
-            (event.clientY-r.top )/(this.canvas.clientHeight/this.h),
-        ]
-    }
     mouseDown = (event) => {
         if (event.type=='mousedown' || (event.type=='mousemove' && event.buttons)) {
-            this.highlightItem(this.getItemAt(this.xy_to_i(...this._xyFromMouseEvent(event))))
+            this.highlightItem(this.getItemAt(this.xy_to_i(...xyFromMouseEvent(event))))
         }
     }
-    mouseUp = (event) => {this.itemSelected(this.getItemAt(this.xy_to_i(...this._xyFromMouseEvent(event))))}
+    mouseUp = (event) => {this.itemSelected(this.getItemAt(this.xy_to_i(...xyFromMouseEvent(event))))}
     keyDown = (event) => {
         if (event.key=='Escape') {
             this.callback({i:undefined, key: event.key, action: 'escape', text: undefined, color: undefined})

@@ -5,7 +5,7 @@ import {GfxDispatch, BORDER_OFFSET_PX, CELL_SIZE_PX, i_to_xy} from '../gfx/gfx_d
 import {GfxMap} from '../gfx/gfx_map.js'
 import {GfxEffects, SpriteEffect, SpriteAnimationEffect, HighlightEffect, InvertEffect} from '../gfx/gfx_effects.js'
 
-import {CanvasAnimationBase} from '../gfx/animation_base.js'
+import {CanvasAnimationBase, xyFromMouseEvent} from '../gfx/animation_base.js'
 import {drawBorder} from '../gfx/border.js'
 import {logging} from '../log/logging.js'
 
@@ -24,16 +24,23 @@ export class UIMap extends CanvasAnimationBase {
 
         drawBorder(c,0,0,this.w,this.h-FONT_HEIGHT,COLOR.blue)
 
-        // Cursor
+        // Cursor - Mouse
+        this.mouse_index = undefined
+        this.canvas.addEventListener('mousemove', (e) => {
+            this.mouse_index = this.d.position_to_index(...xyFromMouseEvent(e).map((i)=>Math.floor((i-BORDER_OFFSET_PX)/CELL_SIZE_PX)))
+        }, true)
+        // Cursor -Keys
         this.cursor_key_cooldown = 0
+
         this.cursor_index = undefined
         this.cursor_pressed = false
-        this.mouse_effect = {}  // empty object for first run prevent null pointer
+        this.cursor_effect = {}  // empty object for first run prevent null pointer
         this.cursor = sprites.cursor[0]
 
         // Events
         this.event_listeners = new Map()
     }
+    get d() {return this.gfx_map.map_model.dimension}
     get game() {return this._game}
     set game(game) {
         this._game = game
@@ -60,27 +67,29 @@ export class UIMap extends CanvasAnimationBase {
     handle_input() {
         if (!this.gfx_map) {return}  // Temp - See loop above
 
-        const d = this.gfx_map.map_model.dimension
         let i
+        if (this.mouse_index >= 0) {
+            i = this.mouse_index
+            this.mouse_index = undefined
+        }
         if (this.keys_pressed.intersection(KEYS_ARROWS).size) {
             this.cursor_key_cooldown += 1
             i = (this.cursor_index || 0)
             if (this.cursor_key_cooldown % 3 == 1) {
                 i += (
-                    (this.keys_pressed.has('ArrowLeft' )?      -1:0) +
-                    (this.keys_pressed.has('ArrowRight')?       1:0) +
-                    (this.keys_pressed.has('ArrowUp'   )?-d.width:0) +
-                    (this.keys_pressed.has('ArrowDown' )? d.width:0) +
+                    (this.keys_pressed.has('ArrowLeft' )?           -1:0) +
+                    (this.keys_pressed.has('ArrowRight')?            1:0) +
+                    (this.keys_pressed.has('ArrowUp'   )?-this.d.width:0) +
+                    (this.keys_pressed.has('ArrowDown' )? this.d.width:0) +
                     0
                 )
             }
         } else {
             this.cursor_key_cooldown = 0
-            i = d.position_to_index(...[this.mouse_x,this.mouse_y].map((i)=>Math.floor((i-BORDER_OFFSET_PX)/CELL_SIZE_PX)))
         }
 
         const pressed = (
-            this.keys_pressed.has('mouse0') || this.keys_pressed.has('Enter') || this.keys_pressed.has('Space')
+            this.keys_pressed.has('mouse0') || this.keys_pressed.has('Enter') || this.keys_pressed.has(' ')
         )
 
         // Handle logging_area_click
@@ -89,17 +98,17 @@ export class UIMap extends CanvasAnimationBase {
             return
         }
 
-        if (this.cursor_index == i && this.cursor_pressed == pressed) {return}
+        if ((i == undefined && !pressed) || (this.cursor_index == i && this.cursor_pressed == pressed)) {return}
         console.log('cursor_index', i)
-        if (i == undefined) {debugger}
+        //if (i == undefined) {debugger}
 
         // Mouse moved - redraw
-        this.gfx_dispatch.markDirty(this.cursor_index || 0, i)
-        this.cursor_index = i
+        this.gfx_dispatch.markDirty(this.cursor_index || 0, i || this.cursor_index || 0)
+        this.cursor_index = i || this.cursor_index
         this.cursor_pressed = pressed
-        this.mouse_effect.active = false  // expire the existing effect/cursor
-        this.mouse_effect = new SpriteEffect(this.cursor)
-        this.gfx_effects.addEffect(this.cursor_index, this.mouse_effect)
+        this.cursor_effect.active = false  // expire the existing effect/cursor
+        this.cursor_effect = new SpriteEffect(this.cursor)
+        this.gfx_effects.addEffect(this.cursor_index, this.cursor_effect)
 
         // Trigger Events
         if (this.cursor_pressed) {for (const f of this.event_listeners.get('map_clicked')) {f(this.cursor_index)}}

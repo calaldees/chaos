@@ -1,4 +1,14 @@
-class CanvasAnimationBase {
+export function xyFromMouseEvent(e) {
+    // x and y in the mouse event don't relate to the parent element. Thanks javascript.
+    const t = e.target
+    const r = t.getBoundingClientRect()
+    return [
+        Math.floor((e.clientX-r.left)/(t.clientWidth /t.width)),
+        Math.floor((e.clientY-r.top )/(t.clientHeight/t.height)),
+    ]
+}
+
+export class CanvasAnimationBase {
     constructor(canvas, fps=60) {
         this.canvas = canvas || document.getElementById('canvas')
         this.context = this.canvas.getContext('2d')
@@ -27,13 +37,8 @@ class CanvasAnimationBase {
         this.mouse_x = 0
         this.mouse_y = 0
         this.canvas.addEventListener('mousemove', (e) => {
-            const r = e.target.getBoundingClientRect()
-            const scale_width = this.canvas.clientWidth/this.canvas.width
-            const scale_height = this.canvas.clientHeight/this.canvas.height
-            this.mouse_x = Math.floor((e.clientX - r.left) / scale_width)
-            this.mouse_y = Math.floor((e.clientY - r.top ) / scale_height)
+            [this.mouse_x, this.mouse_y] = xyFromMouseEvent(e)
         }, true)
-
 
         this.frame = 0
         this.milliseconds_per_frame = 1000/fps
@@ -100,5 +105,3 @@ class CanvasAnimationBase {
         throw Exception("Not Implemented Error")
     }
 }
-
-export {CanvasAnimationBase}
