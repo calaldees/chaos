@@ -1,14 +1,22 @@
-import { isNumber, Dimension, range } from "../core.js"
+import { isNumber, Dimension, range, enumerate, mod } from "../core.js"
 
 
-function generate_movement_vectors(dw, max_mov=6) {
+function generate_movement_vectors(dw) {
+    const max_move = Math.floor(dw/2)
     // dw == the width of the map/grid
-    const vectors = [...range(max_mov)].map((r)=>
+    const vectors = [...range(max_move)].map((r)=>
         new Set([...range(r+2)].flatMap((i)=>{
             const ir = i-(r+1)
             return [i*dw+ir,i*dw-ir,-i*dw+ir,-i*dw-ir]
         }))
     )
+    vectors.unshift(new Set())
+
+    let all_vectors = new Set()
+    for (const [i, v] of enumerate(vectors)) {
+        all_vectors = all_vectors.union(v)
+        vectors[i] = new Set(all_vectors)
+    }
     // TODO: combine all previous vectors with next vector set
     return vectors
         /*
@@ -40,6 +48,20 @@ function generate_movement_vectors(dw, max_mov=6) {
         */
 }
 
+function generate_overflow_indexes_for_cols(dimension) {
+    const dw = dimension.width
+    const dh = dimension.height
+    const max_move = Math.floor(dw/2)
+    const indexes_per_col = new Map(
+        [...range(max_move,-max_move)].map((col_offset)=>{
+            const col = mod(col_offset,dw)
+            return [col, new Set([...range(dh).map((row)=>(row*dw)+col)])]
+        })
+    )
+    // TODO: amalgamate cols
+    return indexes_per_col
+}
+
 
 export class Map {
     constructor(registry) {
@@ -61,7 +83,14 @@ export class Map {
         if (!isNumber(unit_id)) {return}
         return this.registry.units[unit_id]
     }
-
+    getUnitMoveIndexes(unit) {
+        const mov = unit.stats.mov
+        const pos = unit.pos
+        return this.movement_vectors[mov]
+            .map((i)=>i+pos)
+            .filter((i)=>i<0||i>=this.dimension.size)
+            .filter()
+    }
 
     get state() {return this}
     set state(data) {
