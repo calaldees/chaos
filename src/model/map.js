@@ -117,6 +117,29 @@ export class MapChaos {
     getUnitMoveIndexes(unit) {
         const mov = unit.stats.mov
         const pos = unit.pos
+        const mov_indexes = new Map([[pos, mov]])
+        for (let dt=mov ; dt>0 ; dt--) {
+            for (let i of mov_indexes.entries().filter(([i,d])=>d==dt).map(([i,d])=>i)) {
+                const [x,y,z] = this.dimension.index_to_position(i)
+                const pos_to_try = []
+                if (x<this.dimension.width-1 ) {pos_to_try.push([x+1,y  ])}
+                if (x>0                      ) {pos_to_try.push([x-1,y  ])}
+                if (y<this.dimension.height-1) {pos_to_try.push([x  ,y+1])}
+                if (y>0                      ) {pos_to_try.push([x  ,y-1])}
+                const i_to_try = pos_to_try
+                    .map(([x,y])=>this.dimension.position_to_index(x,y))
+                    .filter((i)=>!this.getUnit(i))
+                    .filter((i)=>!mov_indexes.has(i))
+                for (let j of i_to_try) {
+                    mov_indexes.set(j, mov_indexes.get(j)||(dt-1))
+                }
+            }
+        }
+        return mov_indexes.keys()
+    }
+    getUnitMoveIndexesOLD(unit) {
+        const mov = unit.stats.mov
+        const pos = unit.pos
         const [x,y,z] = this.dimension.index_to_position(pos)
         const overflow_vectors = this.overflow_vectors.get(x)
         return [...this.movement_vectors[mov]]
