@@ -1,6 +1,7 @@
 import { isNumber, Dimension, range, enumerate, mod } from "../core.js"
 
 
+// failed experiment
 function generate_movement_vectors(dw) {
     const max_move = Math.floor(dw/2)
     // dw == the width of the map/grid
@@ -10,8 +11,9 @@ function generate_movement_vectors(dw) {
             return [i*dw+ir,i*dw-ir,-i*dw+ir,-i*dw-ir]
         }))
     )
-    vectors.unshift(new Set())
+    vectors.unshift(new Set())  // Add a `0` index, because no vectors for 0 move
 
+    // Combine all previous vectors for each mov distance
     let all_vectors = new Set()
     for (const [i, v] of enumerate(vectors)) {
         all_vectors = all_vectors.union(v)
@@ -47,7 +49,7 @@ function generate_movement_vectors(dw) {
         ]
         */
 }
-
+// failed experiment
 function generate_overflow_indexes_for_cols(dimension) {
     const dw = dimension.width
     const dh = dimension.height
@@ -58,18 +60,47 @@ function generate_overflow_indexes_for_cols(dimension) {
             return [col, new Set([...range(dh).map((row)=>(row*dw)+col)])]
         })
     )
-    // TODO: amalgamate cols
-    return indexes_per_col
+    // col_lookup
+    /*
+    col = 0..max_move
+    0 -> (dw-max_move+col)..dw [union-all]
+    1 -> dw-max_move+col..dw
+    2 -> dw-max_move+col..dw
+
+    3 -> []
+
+    col = dw-max_move..dw
+    4 -> 0..dw-col
+    5 -> ..
+    6 -> 0..
+    */
+    const union_cols = (acc,_col)=> acc.union(indexes_per_col.get(_col))
+    const col_lookup = new Map([...range(dw).map((col)=>{
+        const dw_max_move = dw-max_move
+        if (col<=max_move) {
+            return [col, [...range(dw,dw_max_move+col)].reduce(union_cols, new Set())]
+        }
+        if (col>=dw_max_move) {
+            // diz iz fooked
+            return [col, [...range(dw_max_move-col,0)].reduce(union_cols, new Set())]
+        }
+        return [col, new Set()]
+    })])
+    return col_lookup
 }
 
+// ----
 
-export class Map {
+
+
+export class MapChaos {
     constructor(registry) {
         if (!registry.units) {throw TypeError()}
         Object.defineProperty(this, "registry", {writable: false, enumerable: false, value: registry})
         this.dimension = new Dimension(15, 10)
         this.map_data = new Array(this.dimension.size)
         this.movement_vectors = generate_movement_vectors(this.dimension.width)
+        this.overflow_vectors = generate_overflow_indexes_for_cols(this.dimension)
     }
     setUnit(_unit, i) {
         const unit    = isNumber(_unit) ? this.registry.units[_unit] : _unit
@@ -78,7 +109,7 @@ export class Map {
         this.map_data[i] = unit_id
         unit.pos = i
     }
-    getUnit(i) {
+    getUnit(i) {  // -> Unit
         const unit_id = this.map_data[i]
         if (!isNumber(unit_id)) {return}
         return this.registry.units[unit_id]
@@ -86,10 +117,12 @@ export class Map {
     getUnitMoveIndexes(unit) {
         const mov = unit.stats.mov
         const pos = unit.pos
-        return this.movement_vectors[mov]
+        const [x,y,z] = this.dimension.index_to_position(pos)
+        const overflow_vectors = this.overflow_vectors.get(x)
+        return [...this.movement_vectors[mov]]
             .map((i)=>i+pos)
-            .filter((i)=>i<0||i>=this.dimension.size)
-            .filter()
+            .filter((i)=>i>=0 && i<this.dimension.size)
+            .filter((i)=>!overflow_vectors.has(i))
     }
 
     get state() {return this}

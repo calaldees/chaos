@@ -22,7 +22,7 @@ export class Unit {
     get template() {return unit_data[this.unit_type]}
     get stats() {
         return Object.fromEntries(Object.entries(this.template.stats).map(
-            ([k, v]) => [k, v + this.stat_modifiers[k] || 0]
+            ([k, v]) => [k, v + this.stat_modifiers[k] || v]
         ))
     }
 

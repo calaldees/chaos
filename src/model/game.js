@@ -2,7 +2,7 @@
 import {getRandomInt, zip, hasIterationProtocol, assertEquals} from '../core.js'
 
 import { Unit } from "./unit.js"
-import { Map } from './map.js'
+import { MapChaos } from './map.js'
 import { Registry } from './registry.js'
 
 
@@ -28,7 +28,7 @@ export const PLAYER_START_INDEX = {
 export class Game {
     constructor(players) {  // players:Player[]
         Object.defineProperty(this, "registry", {writable: false, enumerable: true, value: new Registry()})
-        this.map = new Map(this.registry)
+        this.map = new MapChaos(this.registry)
 
         //if (!hasIterationProtocol(players)) {throw TypeError()}
         if (!players) {return}

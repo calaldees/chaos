@@ -92,6 +92,11 @@ export class UIManager {
             this.ui_map.gfx_effects.addEffect(_unit.pos, new InvertEffect(20))
         }
 
+        const unit_move_indexes = this.ui_map.game.map.getUnitMoveIndexes(unit)
+        for (const i of unit_move_indexes) {
+            this.ui_map.gfx_effects.addEffect(i, new HighlightEffect())
+        }
+
         this.ui = UIStats
         this.ui.drawStats(unit.unit_type)
         this.ui.drawStatModifiers(unit)
