@@ -121,11 +121,8 @@ export class MapChaos {
         for (let dt=mov ; dt>0 ; dt--) {
             for (let i of mov_indexes.entries().filter(([i,d])=>d==dt).map(([i,d])=>i)) {
                 const [x,y,z] = this.dimension.index_to_position(i)
-                const pos_to_try = []
-                if (x<this.dimension.width-1 ) {pos_to_try.push([x+1,y  ])}
-                if (x>0                      ) {pos_to_try.push([x-1,y  ])}
-                if (y<this.dimension.height-1) {pos_to_try.push([x  ,y+1])}
-                if (y>0                      ) {pos_to_try.push([x  ,y-1])}
+                const pos_to_try = [[x+1,y],[x-1,y], [x,y+1],[x,y-1]]
+                    .filter(([x,y])=>this.dimension.position_in_bounds(x,y))
                 const i_to_try = pos_to_try
                     .map(([x,y])=>this.dimension.position_to_index(x,y))
                     .filter((i)=>!this.getUnit(i))

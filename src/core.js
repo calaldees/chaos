@@ -141,6 +141,10 @@ export class Dimension {
         const [_x,_y,_z] = this.normalise_position(x,y,z)
         return (this.width * this.height * _z) + (this.width * _y) + _x
     }
+
+    position_in_bounds(x,y,z=0) { // bool
+        return x>=0 && x<this.width && y>=0 && y<this.height && z>=0 && z<this.depth
+    }
 }
 assertEqualsObject([
     [(new Dimension(3, 3, 3)).normalise_position(0,0,0), [0,0,0]],
