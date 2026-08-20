@@ -1,14 +1,14 @@
 // https://en.wikipedia.org/wiki/ZX_Spectrum_graphic_modes#Colour_palette
 
-export const COLOR = {
+export const COLOR = {  // should be `D` (according to wikipedia)
     black: "#000",
-    blue: "#00D",
-    red: "#D00",
-    magenta: "#D0D",
-    green: "#0D0",
-    cyan: "#0DD",
-    yellow: "#DD0",
-    white: "#DDD",
+    blue: "#00B",
+    red: "#B00",
+    magenta: "#B0B",
+    green: "#0B0",
+    cyan: "#0BB",
+    yellow: "#BB0",
+    white: "#BBB",
 
     black_bright: "#000",
     blue_bright: "#00F",

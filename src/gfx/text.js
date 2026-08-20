@@ -91,9 +91,9 @@ function* pos_ansi_to_color_lookup(text_length, pos_ansi) {
     }
 }
 assertEqualsObject([
-    [ [...pos_ansi_to_color_lookup(1, [])], [["#FFF",null]]],
-    [ [...pos_ansi_to_color_lookup(3, [[1,[91,41]]])], [["#FFF",null],["#F00","#D00"],["#F00","#D00"]]],
-    [ [...pos_ansi_to_color_lookup(3, [[1,[91,41]],[2,[102]]])], [["#FFF",null],["#F00","#D00"],["#F00","#0F0"]]],
+    [ [...pos_ansi_to_color_lookup(1, [])], [[COLOR.white_bright,null]]],
+    [ [...pos_ansi_to_color_lookup(3, [[1,[91,41]]])], [[COLOR.white_bright,null],[COLOR.red_bright,COLOR.red],[COLOR.red_bright,COLOR.red]]],
+    [ [...pos_ansi_to_color_lookup(3, [[1,[91,41]],[2,[102]]])], [[COLOR.white_bright,null],[COLOR.red_bright,COLOR.red],[COLOR.red_bright,COLOR.green_bright]]],
 ])
 
 export const [FONT_WIDTH, FONT_HEIGHT] = [8, 16]

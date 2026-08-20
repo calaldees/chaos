@@ -49,7 +49,7 @@ export class SpriteAnimationEffect extends _GfxEffect {
         this.sprites = sprites
     }
     isDirty(frame) {
-        return _GfxEffect.prototype.isDirty.call(this, frame) || frame % 16 == 0  // hack
+        return super.isDirty(frame) || frame % 16 == 0  // hack
     }
     draw(c, frame) {
         const f = Math.floor(frame/16)%this.sprites.length
@@ -67,7 +67,7 @@ export class HighlightEffect extends _GfxEffect {
         this.frame_alpha_multiplier = frame_alpha_multiplier
     }
     isDirty(frame) {
-        return _GfxEffect.prototype.isDirty.call(this, frame) || frame % 16 == 0  // hack
+        return super.isDirty(frame) || frame % 16 == 0  // hack
     }
     draw(c, frame) {
         c.save()
@@ -87,7 +87,7 @@ export class InvertEffect extends _GfxEffect {
         super(active_iterations)
     }
     isDirty(frame) {
-        return _GfxEffect.prototype.isDirty.call(this, frame) || frame % 300
+        return super.isDirty(frame) || frame % 300
     }
     draw(c, frame) {
         c.save()
