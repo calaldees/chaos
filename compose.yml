@@ -7,8 +7,8 @@ services:
     ports:
       - 80:80
     links:
-      - channel-server
-      # - nanomq
+      # - channel-server
+      - nanomq
     volumes:
         - logs:/var/log
 

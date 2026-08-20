@@ -5,6 +5,8 @@ help:	## display this help
 
 run:  ## build and run whole stack with docker/nginx/nanomq
 	docker compose up --build
+build:
+	docker compose cp nginx:/usr/share/nginx/html/ ./build/
 
 serve_files_for_local:  ##  serve static files on localhost:8000
 	python3 -m http.server
