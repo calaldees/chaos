@@ -53,6 +53,10 @@ export class UIMap extends CanvasAnimationBase {
 
         this.setRunning(true)
     }
+    addEffect(i, gfx_effect) {
+        this.gfx_dispatch.markDirty(i)
+        this.gfx_effects.addEffect(i, gfx_effect)
+    }
     loop(context, frame) {
         if (!this.gfx_map) {return}  // Temp to stop handling of active state. setRunning is called by the focus listener
         this.handle_input()
@@ -106,7 +110,6 @@ export class UIMap extends CanvasAnimationBase {
         if ((i == undefined && !pressed) || (this.cursor_index == i && this.cursor_pressed == pressed)) {return}
 
         // Mouse moved - redraw
-        this.gfx_dispatch.markDirty(this.cursor_index || 0, i==undefined?this.cursor_index:i || 0)
         this.cursor_index = i==undefined ? this.cursor_index : i
         this.cursor_pressed = pressed
         this.cursor_effect.active = false  // expire the existing effect/cursor
@@ -114,7 +117,9 @@ export class UIMap extends CanvasAnimationBase {
         this.gfx_effects.addEffect(this.cursor_index, this.cursor_effect)
 
         // Trigger Events
-        if (this.cursor_pressed) {for (const f of this.event_listeners.get('map_clicked')) {f(this.cursor_index)}}
+        if (this.cursor_pressed) {
+            for (const f of this.event_listeners.get('map_clicked')) {f(this.cursor_index)}
+        }
     }
     addEventListener(event_name, func) {
         if (!this.event_listeners.has(event_name)) {

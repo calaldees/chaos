@@ -128,6 +128,7 @@ export class MapChaos {
                     .forEach((i)=>mov_indexes.set(i, dt-1))
             }
         }
+        mov_indexes.delete(unit.pos)
         return mov_indexes.keys()
     }
     getUnitMoveIndexesOLD(unit) {

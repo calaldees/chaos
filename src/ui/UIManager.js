@@ -29,7 +29,7 @@ export class UIManager {
 
         this.ui_map.addEventListener('map_clicked', this.map_pressed)
         this.ui_map.addEventListener('logging_clicked', this.logging_pressed)
-        this.effect_unit_selected = {}
+        this.unit_selected_effects = []
 
         this._active_ui = undefined
         this.map_pressed()  // trigger the default UI
@@ -58,12 +58,15 @@ export class UIManager {
     }
 
     unselect = () => {
-        this.effect_unit_selected.active = false  // TODO - mark old selection as dirty
+        // TODO - mark old selection as dirty
+        for (let unit_selected_effect of this.unit_selected_effects) {
+            unit_selected_effect.active = false
+        }
+        this.unit_selected_effects.length = 0
     }
 
     map_pressed = (i) => {
         //console.log('pressed', i)
-        this.unselect()
         const unit = this.ui_map.game.map.getUnit(i)
 
         if (unit) {this.select_unit(unit)}
@@ -84,17 +87,21 @@ export class UIManager {
     }
 
     select_unit = (unit) => {
-        this.effect_unit_selected = new SpriteEffect(sprites.cursor[3], COLOR.white)
-        this.ui_map.gfx_effects.addEffect(unit.pos, this.effect_unit_selected)
+        this.unselect()
+        const select_effect = new SpriteEffect(sprites.cursor[3], COLOR.white)
+        this.ui_map.addEffect(unit.pos, select_effect)
+        this.unit_selected_effects.push(select_effect)
 
         const units = this.ui_map.game.registry.getUnitsForPlayerID(unit.player_id)
         for (let _unit of units) {
-            this.ui_map.gfx_effects.addEffect(_unit.pos, new InvertEffect(20))
+            this.ui_map.addEffect(_unit.pos, new InvertEffect(20))
         }
 
         const unit_move_indexes = this.ui_map.game.map.getUnitMoveIndexes(unit)
         for (const i of unit_move_indexes) {
-            this.ui_map.gfx_effects.addEffect(i, new HighlightEffect())
+            const move_sprite_effect = new HighlightEffect() // new SpriteEffect(sprites.cursor[4], COLOR.white)
+            this.ui_map.addEffect(i, move_sprite_effect)
+            this.unit_selected_effects.push(move_sprite_effect)
         }
 
         this.ui = UIStats

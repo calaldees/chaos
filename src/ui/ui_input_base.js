@@ -33,22 +33,22 @@ export class UIInputBase {
     }
 
     bindEventHandlers() {
-        //const s = this.canvas
-        const s = window
-        s.addEventListener("mousedown", this.mouseDown)
-        s.addEventListener("mousemove", this.mouseDown)
-        s.addEventListener("click", this.mouseUp)
-        s.addEventListener("keydown", this.keyDown)
-        s.addEventListener("keyup", this.keyUp)
+        const c = this.canvas
+        const w = window
+        c.addEventListener("mousedown", this.mouseDown)
+        c.addEventListener("mousemove", this.mouseDown)
+        c.addEventListener("click", this.mouseUp)
+        w.addEventListener("keydown", this.keyDown)
+        w.addEventListener("keyup", this.keyUp)
     }
     unbindEventHandlers() {
-        //const s = this.canvas
-        const s = window
-        s.removeEventListener("mousedown", this.mouseDown)
-        s.removeEventListener("mousemove", this.mouseDown)
-        s.removeEventListener("click", this.mouseUp)
-        s.removeEventListener("keydown", this.keyDown)
-        s.removeEventListener("keyup", this.keyUp)
+        const c = this.canvas
+        const w = window
+        c.removeEventListener("mousedown", this.mouseDown)
+        c.removeEventListener("mousemove", this.mouseDown)
+        c.removeEventListener("click", this.mouseUp)
+        w.removeEventListener("keydown", this.keyDown)
+        w.removeEventListener("keyup", this.keyUp)
     }
 
     get w() {return this.canvas.width}

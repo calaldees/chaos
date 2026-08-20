@@ -8,25 +8,34 @@ const CELL_SIZE_PX = 16
 export class _GfxEffect {
     constructor(active_iterations) {
         this.active_iterations = active_iterations
+        this.dirty = true
     }
     get active() {
-        if (typeof(this.active_iterations) == 'number') {this.active_iterations -= 1}
+        if (typeof(this.active_iterations) == 'number') {
+            this.active_iterations -= 1
+            this.markDirty()
+        }
         return Boolean(this.active_iterations)
     }
     set active(active_iterations) {
+        if (this.active_iterations != active_iterations) {this.markDirty()}
         this.active_iterations = active_iterations
+    }
+    markDirty() {this.dirty = true}
+    isDirty(frame) {  // bool
+        if (this.dirty) {
+            this.dirty = false
+            return true
+        }
+        return false
     }
 }
 
 export class SpriteEffect extends _GfxEffect {
     constructor(sprite, color) {
-        super()
+        super(true)
         this.sprite = sprite
         this.color = color
-        this.active = true
-    }
-    isDirty(frame) {
-        return false
     }
     draw(c, frame) {
         c.drawImage(shiftImage(this.sprite, this.color || COLOR.white), 0, 0)
@@ -40,7 +49,7 @@ export class SpriteAnimationEffect extends _GfxEffect {
         this.sprites = sprites
     }
     isDirty(frame) {
-        return frame % 16 == 0  // hack
+        return _GfxEffect.prototype.isDirty.call(this, frame) || frame % 16 == 0  // hack
     }
     draw(c, frame) {
         const f = Math.floor(frame/16)%this.sprites.length
@@ -58,7 +67,7 @@ export class HighlightEffect extends _GfxEffect {
         this.frame_alpha_multiplier = frame_alpha_multiplier
     }
     isDirty(frame) {
-        return frame % 16 == 0  // hack
+        return _GfxEffect.prototype.isDirty.call(this, frame) || frame % 16 == 0  // hack
     }
     draw(c, frame) {
         c.save()
@@ -78,7 +87,7 @@ export class InvertEffect extends _GfxEffect {
         super(active_iterations)
     }
     isDirty(frame) {
-        return frame % 300
+        return _GfxEffect.prototype.isDirty.call(this, frame) || frame % 300
     }
     draw(c, frame) {
         c.save()
@@ -92,11 +101,11 @@ export class InvertEffect extends _GfxEffect {
 export class GfxEffects {
     constructor(size) {
         this.size = size
-        this.clear()
-    }
-    clear() {
         this.data = new Array(this.size)
         for (let i=0 ; i<this.data.length ; i++) {this.data[i]=new Array()}
+    }
+    clear() {
+        for (let i=0 ; i<this.data.length ; i++) {this.data[i].length = 0}
     }
     addEffect(i, effect) {
         this.data[i].push(effect)
