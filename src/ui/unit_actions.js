@@ -3,16 +3,14 @@ import { COLOR } from '../gfx/color.js'
 
 import { mergeItemsAndLayout, UIInputBase } from './ui_input_base.js'
 
-export class UIMoves {
+export class UIUnitActions {
     constructor(ui) {
         console.assert(ui.constructor.name == UIInputBase.name, 'must pass ui obj')
         this.ui = ui
         ui.setBorder(COLOR.red, undefined, 16)
-
-        //ui.callback = (item) => {console.log('UIMoves', item)}
     }
 
-    updateItems = (units) => {  // units:Unit[]
+    updateItems(units) {  // units:Unit[]
         this.ui.drawFont("Moves", 0,0, COLOR.yellow)
         // TODO: Look at this.players unit and stats
         //{i, key, text, color, hide_key_prefix}

@@ -4,12 +4,12 @@ import { sprites } from '../gfx/sprites.js'  // just for mouse cursor graphic
 import { logging } from '../log/logging.js'
 import { GfxEffects, SpriteEffect, SpriteAnimationEffect, HighlightEffect, InvertEffect } from '../gfx/gfx_effects.js'
 
-
 import { UIInputBase } from './ui_input_base.js'
 import { UIMap } from './map.js'
-import { UIMoves } from './moves.js'
-import { UIStats } from './stats.js'
+import { UIUnitActions } from './unit_actions.js'
+import { UIUnitStats } from './unit_stats.js'
 import { UILogging } from './logging.js'
+import { QueuedActionManager } from './actions.js'
 
 export class UIManager {
     /*
@@ -81,7 +81,7 @@ export class UIManager {
 
     default_ui = () => {
         this.unselect()
-        this.ui = UIMoves
+        this.ui = UIUnitActions
         const units = this.ui_map.game.registry.getUnitsForPlayerID(this.player.id)
         this.ui.updateItems(units)
     }
@@ -104,7 +104,7 @@ export class UIManager {
             this.unit_selected_effects.push(move_sprite_effect)
         }
 
-        this.ui = UIStats
+        this.ui = UIUnitStats
         this.ui.drawStats(unit.unit_type)
         this.ui.drawStatModifiers(unit)
     }

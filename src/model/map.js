@@ -39,6 +39,7 @@ export class MapChaos {
                     .filter((i)=>{  // true == keep
                         const u = this.getUnit(i)
                         if (u) {
+                            // TODO: more complexity here. Mounts? or Trees? or Walls?
                             const friend = unit.player_id == u.player_id
                             const enemy  = !friend
                             return (friend && include_friendly_units) || (enemy && include_enemy_units)
