@@ -107,10 +107,14 @@ export class UIMap extends CanvasAnimationBase {
             return
         }
 
-        if ((i == undefined && !pressed) || (this.cursor_index == i && this.cursor_pressed == pressed)) {return}
+        const _i = i==undefined ? this.cursor_index : i
+        if (
+            //(i == undefined && !pressed) ||
+            (this.cursor_index == _i && this.cursor_pressed == pressed)
+        ) {return}
 
         // Mouse moved - redraw
-        this.cursor_index = i==undefined ? this.cursor_index : i
+        this.cursor_index = _i
         this.cursor_pressed = pressed
         this.cursor_effect.active = false  // expire the existing effect/cursor
         this.cursor_effect = new SpriteEffect(this.cursor)

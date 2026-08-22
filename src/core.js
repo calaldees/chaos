@@ -117,7 +117,7 @@ assertEqualsObject([
 
 export class Dimension {
     constructor(width, height, depth=1) {
-        this.dimensions = [width, height, depth]
+        this.dimensions = [width, height, depth].map(Math.floor)
     }
 
     get width() {return this.dimensions[0]}

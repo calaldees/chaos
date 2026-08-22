@@ -21,7 +21,7 @@ export class UIManager {
         console.assert(ui_input_base.constructor.name == UIInputBase.name)
         Object.defineProperty(this, "ui_map"       , {writable: false, enumerable: true, value: ui_map       })
         Object.defineProperty(this, "ui_input_base", {writable: false, enumerable: true, value: ui_input_base})
-        this.player = player
+        this.actions = new QueuedActionManager(ui_map.game, player)
 
         this.ui_input_base.callback = this.ui_input_callback
 
@@ -66,7 +66,6 @@ export class UIManager {
     }
 
     map_pressed = (i) => {
-        //console.log('pressed', i)
         const unit = this.ui_map.game.map.getUnit(i)
 
         if (unit) {this.select_unit(unit)}
@@ -82,8 +81,7 @@ export class UIManager {
     default_ui = () => {
         this.unselect()
         this.ui = UIUnitActions
-        const units = this.ui_map.game.registry.getUnitsForPlayerID(this.player.id)
-        this.ui.updateItems(units)
+        this.ui.updateItems(this.actions.units)
     }
 
     select_unit = (unit) => {

@@ -10,7 +10,12 @@ export class ActionState {
 
 
 export class QueuedActionManager {
-    constructor() {
+    constructor(game, player) {
+        Object.defineProperty(this, "game"  , {writable: false, enumerable: true, value: game  })
+        Object.defineProperty(this, "player", {writable: false, enumerable: true, value: player})
+
         this.actions = [] // of Action
     }
+
+    get units() {return this.game.registry.getUnitsForPlayerID(this.player.id)}
 }
