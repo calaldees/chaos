@@ -83,16 +83,16 @@ assertEquals([
 
 
 // https://stackoverflow.com/a/37319954/3356840
-export function filterInPlace(a, condition, thisArg) {
+export function filterInPlace(array, condition, thisArg) {
     let j = 0;
-    a.forEach((e, i) => {
-        if (condition.call(thisArg, e, i, a)) {
-            if (i!==j) a[j] = e;
+    array.forEach((e, i) => {
+        if (condition.call(thisArg, e, i, array)) {
+            if (i!==j) array[j] = e;
             j++;
         }
     });
-    a.length = j;
-    return a;
+    array.length = j;
+    return array;
 }
 assertEqualsObject([
     [ filterInPlace([1,2,3,4,5], (i)=>i%2), [1,3,5] ],

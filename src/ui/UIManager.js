@@ -5,6 +5,8 @@ import { gfx_units } from '../gfx/units.js'
 import { logging } from '../log/logging.js'
 import { GfxEffects, SpriteEffect, SpriteAnimationEffect, HighlightEffect, InvertEffect } from '../gfx/gfx_effects.js'
 
+import { Action, ActionType } from '../model/actions.js'
+
 import { UIInputBase } from './ui_input_base.js'
 import { UIMap } from './map.js'
 import { UIUnitActions } from './unit_actions.js'
@@ -76,16 +78,20 @@ export class UIManager {
 
     map_pressed = (i) => {
         const unit = this.ui_map.game.map.getUnit(i)
-
-        if (!this.unit_selected && unit) {this.unit_select(unit)}
-        if (!this.unit_selected && !unit) {this.default_ui()}
-
+        if (!this.unit_selected && !unit) {this.default_ui(); return}
+        if (unit && this.unit_selected != unit) {this.unit_select(unit); return}
         if (this.unit_selected && !unit) {
             const unit_move_indexes = this.ui_map.game.map.getUnitMoveIndexes(this.unit_selected)
             if (unit_move_indexes.has(i)) {
+                this.actions.addAction(
+                    new Action(ActionType.MOVE, this.actions.player.id, this.unit_selected.unit_id, i, undefined)
+                )
+                // placeholder effect to see it
                 this.addSelectedEffect(i, new SpriteEffect(...gfx_units[this.unit_selected.unit_type].sprite_and_color(0)))
+                return
             }
         }
+        this.unselect()
     }
 
     ui_input_callback = (item) => {

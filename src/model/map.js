@@ -11,6 +11,7 @@ export class MapChaos {
         const unit    = isNumber(_unit) ? this.registry.units[_unit] : _unit
         const unit_id = isNumber(_unit) ? _unit : this.registry.units.findIndex((u)=>_unit==u)
         if (!isNumber(unit_id)) {throw Error(`unable to find ${unit} in registry.units`)}
+        unit.unit_id = unit_id  // Bit of a hack - we force the `unit_id` onto the unit
         this.map_data[i] = unit_id
         unit.pos = i
     }

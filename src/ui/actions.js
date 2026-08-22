@@ -1,3 +1,4 @@
+import { filterInPlace } from '../core.js'
 import { Action, ActionType } from '../model/actions.js'
 
 export class ActionState {
@@ -18,4 +19,10 @@ export class QueuedActionManager {
     }
 
     get units() {return this.game.registry.getUnitsForPlayerID(this.player.id)}
+
+    addAction(action) {
+        // Remove duplicate actions
+        filterInPlace(this.actions, (a)=>!(action.unit_id==a.unit_id && action.action_type==a.action_type))
+        this.actions.push(action)
+    }
 }
