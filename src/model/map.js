@@ -50,7 +50,7 @@ export class MapChaos {
             }
         }
         indexes.delete(unit.pos)
-        return indexes.keys()
+        return indexes
     }
 
     get state() {return this}

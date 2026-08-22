@@ -1,5 +1,6 @@
 import { COLOR } from '../gfx/color.js'
 import { sprites } from '../gfx/sprites.js'  // just for mouse cursor graphic
+import { gfx_units } from '../gfx/units.js'
 
 import { logging } from '../log/logging.js'
 import { GfxEffects, SpriteEffect, SpriteAnimationEffect, HighlightEffect, InvertEffect } from '../gfx/gfx_effects.js'
@@ -29,6 +30,8 @@ export class UIManager {
 
         this.ui_map.addEventListener('map_clicked', this.map_pressed)
         this.ui_map.addEventListener('logging_clicked', this.logging_pressed)
+
+        this.unit_selected = undefined
         this.unit_selected_effects = []
 
         this._active_ui = undefined
@@ -57,8 +60,14 @@ export class UIManager {
         return this._active_ui
     }
 
+    addSelectedEffect(i, effect) {
+        this.ui_map.addEffect(i, effect)
+        this.unit_selected_effects.push(effect)
+    }
+
     unselect = () => {
-        // TODO - mark old selection as dirty
+        this.unit_selected = undefined
+        // TODO - mark old selection as dirty?
         for (let unit_selected_effect of this.unit_selected_effects) {
             unit_selected_effect.active = false
         }
@@ -68,14 +77,21 @@ export class UIManager {
     map_pressed = (i) => {
         const unit = this.ui_map.game.map.getUnit(i)
 
-        if (unit) {this.select_unit(unit)}
-        if (!unit) {this.default_ui()}
+        if (!this.unit_selected && unit) {this.unit_select(unit)}
+        if (!this.unit_selected && !unit) {this.default_ui()}
+
+        if (this.unit_selected && !unit) {
+            const unit_move_indexes = this.ui_map.game.map.getUnitMoveIndexes(this.unit_selected)
+            if (unit_move_indexes.has(i)) {
+                this.addSelectedEffect(i, new SpriteEffect(...gfx_units[this.unit_selected.unit_type].sprite_and_color(0)))
+            }
+        }
     }
 
     ui_input_callback = (item) => {
         console.log('UIManager', item)
         if (item.action == 'escape') {this.default_ui()}
-        if (item.unit) {this.select_unit(item.unit)}
+        if (item.unit) {this.unit_select(item.unit)}
     }
 
     default_ui = () => {
@@ -84,11 +100,11 @@ export class UIManager {
         this.ui.updateItems(this.actions.units)
     }
 
-    select_unit = (unit) => {
+    unit_select = (unit) => {
         this.unselect()
-        const select_effect = new SpriteEffect(sprites.cursor[3], COLOR.white)
-        this.ui_map.addEffect(unit.pos, select_effect)
-        this.unit_selected_effects.push(select_effect)
+        this.unit_selected = unit
+
+        this.addSelectedEffect(unit.pos, new SpriteEffect(sprites.cursor[3], COLOR.white))
 
         const units = this.ui_map.game.registry.getUnitsForPlayerID(unit.player_id)
         for (let _unit of units) {
@@ -96,10 +112,8 @@ export class UIManager {
         }
 
         const unit_move_indexes = this.ui_map.game.map.getUnitMoveIndexes(unit)
-        for (const i of unit_move_indexes) {
-            const move_sprite_effect = new HighlightEffect() // new SpriteEffect(sprites.cursor[4], COLOR.white)
-            this.ui_map.addEffect(i, move_sprite_effect)
-            this.unit_selected_effects.push(move_sprite_effect)
+        for (const i of unit_move_indexes.keys()) {
+            this.addSelectedEffect(i, new HighlightEffect())
         }
 
         this.ui = UIUnitStats
