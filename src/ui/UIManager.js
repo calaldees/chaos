@@ -86,8 +86,7 @@ export class UIManager {
                 this.actions.addAction(
                     new Action(ActionType.MOVE, this.actions.player.id, this.unit_selected.unit_id, i, undefined)
                 )
-                // placeholder effect to see it
-                this.addSelectedEffect(i, new SpriteEffect(...gfx_units[this.unit_selected.unit_type].sprite_and_color(0)))
+                this.render_actions()
                 return
             }
         }
@@ -126,4 +125,5 @@ export class UIManager {
         this.ui.drawStats(unit.unit_type)
         this.ui.drawStatModifiers(unit)
     }
+
 }

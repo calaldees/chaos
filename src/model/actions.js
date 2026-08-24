@@ -41,7 +41,7 @@ export class ActionType {
     static ATTACK = new ActionType('attack')
     static RANGEATTACK = new ActionType('rangeattack')
     static SPELL = new ActionType('spell')
-    static MOUNT = new ActionType('mount')  // unneeded? is this just Use/Enter/Attack
+    static USE = new ActionType('use')  // unneeded? is this just Use/Enter/Attack
     constructor(name) {this.name = name}
     toString() {return `ActionType.${this.name}`}
 }
@@ -55,4 +55,5 @@ export class Action {
         this.target_i = target_i
         this.target_id = target_id
     }
+    get key() {return `${this.action_type}-${this.unit_id}`}
 }
