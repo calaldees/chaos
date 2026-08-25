@@ -58,7 +58,9 @@ export class UIManager {
     set ui(UIClass) {
         // TODO: enforce UIClass type? // damn dirty typeless js
         this.ui_input_base.clear()
-        this._active_ui = new UIClass(this.ui_input_base)
+        const args = [this.ui_input_base]
+        if (UIClass.name == UIUnitActions.name) {args.push(this.actions)}
+        this._active_ui = new UIClass(...args)
         return this._active_ui
     }
 

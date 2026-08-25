@@ -4,16 +4,21 @@ import { COLOR } from '../gfx/color.js'
 import { mergeItemsAndLayout, UIInputBase } from './ui_input_base.js'
 
 export class UIUnitActions {
-    constructor(ui) {
+    constructor(ui, actions) {
         console.assert(ui.constructor.name == UIInputBase.name, 'must pass ui obj')
+        console.assert(actions.constructor.name == 'QueuedActionManager', 'must pass ui obj')
         this.ui = ui
-        ui.setBorder(COLOR.red, undefined, 16)
+        this.actions = actions
+
+        this.ui.setBorder(COLOR.red, undefined, 16)
+        this.ui.drawFont("Actions", 0,0, COLOR.yellow)
     }
 
-    updateItems(units) {  // units:Unit[]
-        this.ui.drawFont("Moves", 0,0, COLOR.yellow)
+    updateItems() {
         // TODO: Look at this.players unit and stats
         //{i, key, text, color, hide_key_prefix}
+
+        const units = this.actions.units
 
         //const unit_types = units.map((unit)=>unit.unit_type)
         // unit_types will be expanded to the state of those units
