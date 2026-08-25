@@ -1,12 +1,14 @@
 import { enumerate } from '../core.js'
 import { COLOR } from '../gfx/color.js'
+import { ActionType } from '../model/actions.js'
 
 import { mergeItemsAndLayout, UIInputBase } from './ui_input_base.js'
+import { QueuedActionManager, ActionState } from './actions.js'
 
 export class UIUnitActions {
     constructor(ui, actions) {
         console.assert(ui.constructor.name == UIInputBase.name, 'must pass ui obj')
-        console.assert(actions.constructor.name == 'QueuedActionManager', 'must pass ui obj')
+        console.assert(actions.constructor.name == QueuedActionManager.name, 'must pass ui obj')
         this.ui = ui
         this.actions = actions
 
@@ -38,6 +40,7 @@ export class UIUnitActions {
                 // TODO:
                 // the un-intractable/disabled text should be drawn _greyed out_ before the intractable text
 
+                const unit_action_state = this.actions.actionUnitState(unit)
                 return [
                     {
                         'i': row_index,
@@ -48,37 +51,37 @@ export class UIUnitActions {
                         'color': COLOR.white,
                         'unit': unit,
                     },
-                    {
+                    unit_action_state.get(ActionType.MOVE) == ActionState.UNAVAILABLE ? undefined : {
                         'i': row_index + 5,
                         'key': undefined,
                         'action': 'move',
                         'text': 'move',
                         'hide_key_prefix': true,
-                        'color': COLOR.white,
+                        'color': unit_action_state.get(ActionType.MOVE) == ActionState.QUEUED ? COLOR.cyan_bright : COLOR.white,
                     },
-                    {
+                    unit_action_state.get(ActionType.ATTACK) == ActionState.UNAVAILABLE ? undefined : {
                         'i': row_index + 10,
                         'key': undefined,
-                        'text': 'action',
+                        'text': 'attack',
                         'hide_key_prefix': true,
                         'action': 'aciton',
-                        'color': COLOR.white,
+                        'color': unit_action_state.get(ActionType.ATTACK) == ActionState.QUEUED ? COLOR.cyan_bright : COLOR.white,
                     },
-                    {
+                    unit_action_state.get(ActionType.RANGEATTACK) == ActionState.UNAVAILABLE ? undefined : {
                         'i': row_index + 17,
                         'key': undefined,
                         'action': 'range attack',
                         'text': 'range',
                         'hide_key_prefix': true,
-                        'color': COLOR.white,
+                        'color': unit_action_state.get(ActionType.RANGEATTACK) == ActionState.QUEUED ? COLOR.cyan_bright : COLOR.white,
                     },
-                    {  // maybe spell could replace rng? do wizards ever have an ongoing range attack?
+                    unit_action_state.get(ActionType.SPELL) == ActionState.UNAVAILABLE ? undefined : {
                         'i': row_index + 23,
                         'key': undefined,
                         'action': 'spell',
                         'text': 'spell',
                         'hide_key_prefix': true,
-                        'color': COLOR.white,
+                        'color': unit_action_state.get(ActionType.SPELL) == ActionState.QUEUED ? COLOR.cyan_bright : COLOR.white,
                     },
                 ]
             }

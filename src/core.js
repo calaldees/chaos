@@ -13,6 +13,10 @@ export function isObject(obj) {
     return obj != null && obj.constructor.name === "Object";
 }
 
+export function isEmpty(obj) {
+    return isObject(obj)&&Object.keys(obj).length==0 || hasIterationProtocol(obj)&&obj.constructor.name=='Array'&&obj.length==0 || Boolean(obj)
+}
+
 // https://stackoverflow.com/a/40953718/3356840
 export function clearObject(obj) {
     for (let key in obj) {

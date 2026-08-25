@@ -1,3 +1,4 @@
+import { isEmpty } from '../core.js'
 import { xyFromMouseEvent } from '../gfx/animation_base.js'
 
 import { Dimension, hasAllProperties, range, zip } from "../core.js"
@@ -56,7 +57,7 @@ export class UIInputBase {
 
     get items() {return this._items}
     set items(items) {
-        this._items = items
+        this._items = items.filter(isEmpty)
         const ITEM_REQUIRED_KEYS = ['i', 'key', 'action', 'text', 'color']
         this._items.forEach((item)=>{
             if (!hasAllProperties(item, ITEM_REQUIRED_KEYS)) {throw `ui items must have ${ITEM_REQUIRED_KEYS}, obj_properties:${Object.getOwnPropertyNames(item)}`}

@@ -34,20 +34,21 @@ export class QueuedActionManager {
     }
 
     actionUnitState(unit) {
+        const unit_stats = unit.stats
         const action_states = new Map([
-            [ActionType.MOVE, Boolean(unit.mov)],
-            [ActionType.ATTACK, Boolean(unit.com)],
-            [ActionType.RANGEATTACK, Boolean(unit.rcn)],
-            [ActionType.SPELL, Boolean(unit.spells)],
+            [ActionType.MOVE, Boolean(unit_stats.mov)],
+            [ActionType.ATTACK, Boolean(unit_stats.com)],
+            [ActionType.RANGEATTACK, Boolean(unit_stats.rcn)],
+            [ActionType.SPELL, Boolean(unit_stats.spells)],
         ].map(([action_type, available])=>{
             const action_state = available ? ActionState.AVAILABLE : ActionState.UNAVAILABLE
             return [action_type, action_state]
         }))
         this.actions.values()
-            .filter((action)=>action.unit_id=unit.unit_id)
+            .filter((action)=>action.unit_id==unit.unit_id)
             .filter((action)=>action_states.get(action.action_type)==ActionState.AVAILABLE)
             .forEach((action)=>{
-                action_states.set(action_type, ActionState.QUEUED)
+                action_states.set(action.action_type, ActionState.QUEUED)
             })
         return action_states
     }
