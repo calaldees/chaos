@@ -70,9 +70,7 @@ export class UIManager {
     unselect = () => {
         this.unit_selected = undefined
         // TODO - mark old selection as dirty?
-        for (let unit_selected_effect of this.unit_selected_effects) {
-            unit_selected_effect.active = false
-        }
+        for (let effect of this.unit_selected_effects) {effect.active = false}
         this.unit_selected_effects.length = 0
     }
 
@@ -86,7 +84,7 @@ export class UIManager {
                 this.actions.addAction(
                     new Action(ActionType.MOVE, this.actions.player.id, this.unit_selected.unit_id, i, undefined)
                 )
-                this.render_actions()
+                this.actions.action_effects.forEach(([i,effect])=>this.ui_map.addEffect(i,effect))
                 return
             }
         }

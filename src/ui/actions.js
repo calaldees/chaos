@@ -1,4 +1,6 @@
+import { gfx_units } from '../gfx/units.js'
 import { Action, ActionType } from '../model/actions.js'
+import { SpriteEffect, HighlightEffect, InvertEffect } from '../gfx/gfx_effects.js'
 
 export class ActionState {
     static AVAILABLE = new ActionState('available')
@@ -15,7 +17,7 @@ export class QueuedActionManager {
         Object.defineProperty(this, "player", {writable: false, enumerable: true, value: player})
 
         this.actions = new Map()  // <ActionKey<type,unit_id>, Action>
-        this.action_effects = new Map()
+        this.action_effects = new Array()
     }
 
     get units() {return this.game.registry.getUnitsForPlayerID(this.player.id)}
@@ -23,31 +25,31 @@ export class QueuedActionManager {
     addAction(action) {
         this.actions.set(action.key, action)
         this._validateActions()
-        this._refreshActionEffects()
+        this.generateActionEffects()
     }
     cancelAction(action_key) {
         this.actions.delete(action_key)
         this._validateActions()
-        this._refreshActionEffects()
+        this.generateActionEffects()
     }
 
-    //get actionUnitStates() {  // Map<unit_id,{action_type,state}>
-    //    return new Map(this.units.map((unit)=>[unit_id,this._actionUnitState(unit)]))
-    //}
     actionUnitState(unit) {
-        action_states = new Map([
+        const action_states = new Map([
             [ActionType.MOVE, Boolean(unit.mov)],
             [ActionType.ATTACK, Boolean(unit.com)],
             [ActionType.RANGEATTACK, Boolean(unit.rcn)],
             [ActionType.SPELL, Boolean(unit.spells)],
-        ].map(([action_type, available])=>[action_type,available?ActionState.AVAILABLE:ActionState.UNAVAILABLE]))
-        unit_actions = this.actions.values().filter((action)=>action.unit_id=unit.unit_id)
-        for (let action of unit_actions) {
-            if (action.action_type == ActionType.MOVE) {
-
-            }
-        }
-        return new Map()
+        ].map(([action_type, available])=>{
+            const action_state = available ? ActionState.AVAILABLE : ActionState.UNAVAILABLE
+            return [action_type, action_state]
+        }))
+        this.actions.values()
+            .filter((action)=>action.unit_id=unit.unit_id)
+            .filter((action)=>action_states.get(action.action_type)==ActionState.AVAILABLE)
+            .forEach((action)=>{
+                action_states.set(action_type, ActionState.QUEUED)
+            })
+        return action_states
     }
 
     _validateActions() {
@@ -63,18 +65,22 @@ export class QueuedActionManager {
         return true
     }
 
-    _refreshActionEffects() {
-
+    generateActionEffects() {  // GfxEffect[]
+        this.action_effects.forEach(([i, effect])=>effect.active = false)
+        this.action_effects = [...this.actions.values().flatMap((action)=>this._actionIndexEffectsForAction(action))]
     }
 
-    _actionEffect(action) {
+    _actionIndexEffectsForAction(action) {  // [ [i, GfxEffect] ]
         if (action.action_type == ActionType.MOVE) {
-            // new Action(ActionType.MOVE, this.actions.player.id, this.unit_selected.unit_id, i, undefined)
             const unit_type = this.game.registry.units[action.unit_id].unit_type
-            return
-            //this.addSelectedEffect(i, new SpriteEffect(...gfx_units[this.unit_selected.unit_type].sprite_and_color(0)))
+            return [
+                // TODO: Move path?
+                [action.target_i ,new SpriteEffect(...gfx_units[unit_type].sprite_and_color(0))],
+            ]
+            //this.ui_map.addEffect(action.target_i, effect)
         }
-        throw new Error(`ActionEffectError: Unknown ActionType ${action.action_type}`);
+        console.log(`ActionEffectError: Unknown ActionType ${action.action_type}`)
+        return []
     }
 }
 
