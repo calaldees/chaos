@@ -78,7 +78,7 @@ export class UIManager {
         const unit = this.ui_map.game.map.getUnit(i)
         if (!this.unit_selected && !unit) {this.default_ui(); return}
         if (unit && this.unit_selected != unit) {this.unit_select(unit); return}
-        if (this.unit_selected && !unit) {
+        if (this.unit_selected && this.unit_selected.player_id == this.actions.player.id && !unit) {
             const unit_move_indexes = this.ui_map.game.map.getUnitMoveIndexes(this.unit_selected)
             if (unit_move_indexes.has(i)) {
                 this.actions.addAction(
