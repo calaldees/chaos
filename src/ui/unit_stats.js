@@ -9,14 +9,13 @@ export class UIUnitStats {
     constructor(ui) {
         console.assert(ui.constructor.name == UIInputBase.name, 'must pass ui obj')
         this.ui = ui
+
+        ui.setBorder(COLOR.green, undefined, 16)
     }
 
     drawStats(unit_type) {
         const ui = this.ui
         const u = unit_data[unit_type]
-
-        ui.clear()
-        ui.setBorder(COLOR.green_bright, undefined, 16)
 
         const stat = (k) => `${u.stats[k]}`
 
@@ -77,4 +76,5 @@ export class UIUnitStats {
             }
         }
     }
+
 }

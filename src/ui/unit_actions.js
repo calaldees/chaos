@@ -96,24 +96,24 @@ export class UIUnitActions {
                         'action_state': unit_action_state.get(ActionType.SPELL)
                     },
                 ]
+                .map((ui_item)=>{
+                    if (ui_item?.unit) {
+                        this.ui.drawUnit(ui_item.unit.unit_type, ui_item.i+2)
+                    }
+                    return ui_item
+                })
+                .map((ui_item)=>{
+                    if (ui_item?.action_state == ActionState.UNAVAILABLE) {
+                        // If UNAVAILABlE, we should not store/activate an intractable ui_item
+                        // Draw the text in place now, but return no ui_item to register mouse clicks
+                        this.ui.drawFont_i(ui_item.text, ui_item.i, ui_item.color)
+                        return null
+                    }
+                    return ui_item
+                })
+
             }
         ).flat()
-        .map((ui_item)=>{
-            if (ui_item?.unit) {
-                this.ui.drawUnit(ui_item.unit.unit_type, ui_item.i+2)
-            }
-            return ui_item
-        })
-        .map((ui_item)=>{
-            if (ui_item?.action_state == ActionState.UNAVAILABLE) {
-                // If UNAVAILABlE, we should not store/activate an intractable ui_item
-                // Draw the text in place now, but return no ui_item to register mouse clicks
-                this.ui.drawFont_i(ui_item.text, ui_item.i, ui_item.color)
-                return null
-            }
-            return ui_item
-        })
-
     }
 }
 
