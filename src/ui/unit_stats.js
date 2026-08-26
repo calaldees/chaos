@@ -58,7 +58,7 @@ export class UIUnitStats {
         }
 
         // TODO: draw the unit in correct color for this unit status
-        this.ui.drawUnit(unit_type, 0, 0)
+        this.ui.drawUnit(unit_type, 0)
     }
 
     drawStatModifiers(unit) {

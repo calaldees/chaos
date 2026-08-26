@@ -75,6 +75,9 @@ export class UIInputBase {
         if (event.key=='Escape') {
             this.callback({i:undefined, key: event.key, action: 'escape', text: undefined, color: undefined})
         }
+        if (event.key=='`') {
+            this.callback({i:undefined, key: event.key, action: 'log', text: undefined, color: undefined})
+        }
         this.highlightItem(this.getItemFromKey(event.key))
     }
     keyUp   = (event) => {this.itemSelected(this.getItemFromKey(event.key))}  // FIX BUG: handle multiple keypress items gracefully
@@ -150,10 +153,13 @@ export class UIInputBase {
     drawFont = (text, col, row, color=COLOR.white) => {
         drawFont(this.c, text, ...this.colRow_to_xy(col,row), color)
     }
-    drawUnit = (unit_type, col, row, color=undefined) => {
+    drawFont_i = (text, i, color=COLOR.white) => {  // Gah! Try to remove this and only have one drawFront method
+        drawFont(this.c, text, ...this.i_to_xy(i), color)
+    }
+    drawUnit = (unit_type, i, color=undefined) => {
         this.c.drawImage(
             shiftImage(...gfx_units[unit_type].sprite_and_color(0)),  // TODO: color override
-            ...this.colRow_to_xy(col,row),
+            ...this.i_to_xy(i),
         )
     }
 

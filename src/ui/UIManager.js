@@ -96,6 +96,7 @@ export class UIManager {
     ui_input_callback = (item) => {
         console.log('UIManager', item)
         if (item.action == 'escape') {this.default_ui()}
+        if (item.action == 'log') {this.logging_pressed()}
         if (item.unit) {this.unit_select(item.unit)}
     }
 

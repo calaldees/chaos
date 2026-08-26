@@ -36,9 +36,7 @@ export class UIUnitActions {
                 // Temp: Draw un-intractable stuff
                 // This is contaminating item generation and drawing
                 // There should probably be separate draw step
-                this.ui.drawUnit(unit.unit_type, 2, row + START_ROW)
-                // TODO:
-                // the un-intractable/disabled text should be drawn _greyed out_ before the intractable text
+                //this.ui.drawUnit(unit.unit_type, 2, row + START_ROW)
 
                 const unit_action_state = this.actions.actionUnitState(unit)
                 function actionToColor(action_type) {  // color
@@ -64,49 +62,59 @@ export class UIUnitActions {
                     {
                         'i': row_index + 5,
                         'key': undefined,
-                        'action': actionString(ActionType.MOVE),
+                        'action': ActionType.MOVE,
                         'text': 'move',
                         'hide_key_prefix': true,
                         'color': actionToColor(ActionType.MOVE),
+                        'action_state': unit_action_state.get(ActionType.MOVE)
                     },
                     {
                         'i': row_index + 10,
                         'key': undefined,
-                        'action': actionString(ActionType.ATTACK),
+                        'action': ActionType.ATTACK,
                         'text': 'attack',
                         'hide_key_prefix': true,
                         'color': actionToColor(ActionType.ATTACK),
+                        'action_state': unit_action_state.get(ActionType.ATTACK)
                     },
                     {
                         'i': row_index + 17,
                         'key': undefined,
-                        'action': actionString(ActionType.RANGEATTACK),
+                        'action': ActionType.RANGEATTACK,
                         'text': 'range',
                         'hide_key_prefix': true,
                         'color': actionToColor(ActionType.RANGEATTACK),
+                        'action_state': unit_action_state.get(ActionType.RANGEATTACK)
                     },
-                    actionString(ActionType.SPELL) ? {
+                    {
                         'i': row_index + 23,
                         'key': undefined,
-                        'action': actionString(ActionType.SPELL),
+                        'action': ActionType.SPELL,
                         'text': 'spell',
                         'hide_key_prefix': true,
                         'color': actionToColor(ActionType.SPELL),
-                    } : null,
+                        'action_state': unit_action_state.get(ActionType.SPELL)
+                    },
                 ]
             }
         ).flat()
+        .map((ui_item)=>{
+            if (ui_item?.unit) {
+                this.ui.drawUnit(ui_item.unit.unit_type, ui_item.i+2)
+            }
+            return ui_item
+        })
+        .map((ui_item)=>{
+            if (ui_item?.action_state == ActionState.UNAVAILABLE) {
+                // If UNAVAILABlE, we should not store/activate an intractable ui_item
+                // Draw the text in place now, but return no ui_item to register mouse clicks
+                this.ui.drawFont_i(ui_item.text, ui_item.i, ui_item.color)
+                return null
+            }
+            return ui_item
+        })
 
     }
-
-    get UI_INDEXES_ROWS_3_ITEMS() {
-        return [...range(9)]
-        .map((r)=>{
-            return [
-            ]
-        }).flat()
-    }
-
 }
 
 
