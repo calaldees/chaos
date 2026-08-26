@@ -18,6 +18,10 @@ export const COLOR = {  // should be `D` (according to wikipedia)
     cyan_bright: "#0FF",
     yellow_bright: "#FF0",
     white_bright: "#FFF",
+
+    // my made up 'non-spectrum' colors
+    grey: "#444",
+    grey_bright: "#888",
 }
 
 // TODO - move to somewhere - this does more than color now

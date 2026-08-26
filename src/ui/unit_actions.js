@@ -41,6 +41,16 @@ export class UIUnitActions {
                 // the un-intractable/disabled text should be drawn _greyed out_ before the intractable text
 
                 const unit_action_state = this.actions.actionUnitState(unit)
+                function actionToColor(action_type) {  // color
+                    const state = unit_action_state.get(action_type)
+                    if (state == ActionState.QUEUED) {return COLOR.cyan_bright}
+                    if (state == ActionState.AVAILABLE) {return COLOR.white}
+                    if (state == ActionState.UNAVAILABLE) {return COLOR.grey}
+                }
+                function actionString(action_type) {
+                    const state = unit_action_state.get(action_type)
+                    return state == ActionState.AVAILABLE ? action_type : undefined
+                }
                 return [
                     {
                         'i': row_index,
@@ -51,38 +61,38 @@ export class UIUnitActions {
                         'color': COLOR.white,
                         'unit': unit,
                     },
-                    unit_action_state.get(ActionType.MOVE) == ActionState.UNAVAILABLE ? undefined : {
+                    {
                         'i': row_index + 5,
                         'key': undefined,
-                        'action': 'move',
+                        'action': actionString(ActionType.MOVE),
                         'text': 'move',
                         'hide_key_prefix': true,
-                        'color': unit_action_state.get(ActionType.MOVE) == ActionState.QUEUED ? COLOR.cyan_bright : COLOR.white,
+                        'color': actionToColor(ActionType.MOVE),
                     },
-                    unit_action_state.get(ActionType.ATTACK) == ActionState.UNAVAILABLE ? undefined : {
+                    {
                         'i': row_index + 10,
                         'key': undefined,
+                        'action': actionString(ActionType.ATTACK),
                         'text': 'attack',
                         'hide_key_prefix': true,
-                        'action': 'aciton',
-                        'color': unit_action_state.get(ActionType.ATTACK) == ActionState.QUEUED ? COLOR.cyan_bright : COLOR.white,
+                        'color': actionToColor(ActionType.ATTACK),
                     },
-                    unit_action_state.get(ActionType.RANGEATTACK) == ActionState.UNAVAILABLE ? undefined : {
+                    {
                         'i': row_index + 17,
                         'key': undefined,
-                        'action': 'range attack',
+                        'action': actionString(ActionType.RANGEATTACK),
                         'text': 'range',
                         'hide_key_prefix': true,
-                        'color': unit_action_state.get(ActionType.RANGEATTACK) == ActionState.QUEUED ? COLOR.cyan_bright : COLOR.white,
+                        'color': actionToColor(ActionType.RANGEATTACK),
                     },
-                    unit_action_state.get(ActionType.SPELL) == ActionState.UNAVAILABLE ? undefined : {
+                    actionString(ActionType.SPELL) ? {
                         'i': row_index + 23,
                         'key': undefined,
-                        'action': 'spell',
+                        'action': actionString(ActionType.SPELL),
                         'text': 'spell',
                         'hide_key_prefix': true,
-                        'color': unit_action_state.get(ActionType.SPELL) == ActionState.QUEUED ? COLOR.cyan_bright : COLOR.white,
-                    },
+                        'color': actionToColor(ActionType.SPELL),
+                    } : null,
                 ]
             }
         ).flat()
