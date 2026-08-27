@@ -166,7 +166,7 @@ export class UIInputBase {
     _drawItem = (item) => {
         const {i, key, text, color, hide_key_prefix} = item
         const [x, y] = this.i_to_xy(i)
-        drawFont(this.c, (hide_key_prefix?'':key)+text, x, y, color)
+        drawFont(this.c, (!key||hide_key_prefix?'':key)+text, x, y, color)
     }
     _drawInvertItem = (item) => {
         const [x,y] = this.i_to_xy(item.i)
