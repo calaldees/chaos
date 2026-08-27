@@ -5,6 +5,7 @@ import {gfx_units} from '../gfx/units.js'
 
 import { UIInputBase } from './ui_input_base.js'
 
+
 export class UIUnitStats {
     constructor(ui) {
         console.assert(ui.constructor.name == UIInputBase.name, 'must pass ui obj')
@@ -77,4 +78,7 @@ export class UIUnitStats {
         }
     }
 
+    drawActions() {
+
+    }
 }

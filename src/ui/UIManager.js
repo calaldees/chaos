@@ -9,7 +9,7 @@ import { Action, ActionType } from '../model/actions.js'
 
 import { UIInputBase } from './ui_input_base.js'
 import { UIMap } from './map.js'
-import { UIUnitActions } from './unit_actions.js'
+import { UIUnitActions, unitActionUIItems } from './unit_actions.js'
 import { UIUnitStats } from './unit_stats.js'
 import { UILogging } from './logging.js'
 import { QueuedActionManager } from './actions.js'
@@ -79,7 +79,7 @@ export class UIManager {
     map_pressed = (i) => {
         const unit = this.ui_map.game.map.getUnit(i)
         if (!this.unit_selected && !unit) {this.default_ui(); return}
-        if (unit && this.unit_selected != unit) {this.unit_select(unit); return}
+        if (unit && this.unit_selected != unit) {this.unit_select(unit.unit_id); return}
         if (this.unit_selected && this.unit_selected.player_id == this.actions.player.id && !unit) {
             const unit_move_indexes = this.ui_map.game.map.getUnitMoveIndexes(this.unit_selected)
             if (unit_move_indexes.has(i)) {
@@ -96,8 +96,8 @@ export class UIManager {
     ui_input_callback = (item) => {
         console.log('UIManager', item)
         if (item.action == 'escape') {this.default_ui()}
-        if (item.action == 'log') {this.logging_pressed()}
-        if (item.unit) {this.unit_select(item.unit)}
+        if (item.action == 'log'   ) {this.logging_pressed()}
+        if (item.action == 'unit'  ) {this.unit_select(item.unit_id)}
     }
 
     default_ui = () => {
@@ -106,8 +106,9 @@ export class UIManager {
         this.ui.updateItems(this.actions.units)
     }
 
-    unit_select = (unit) => {
+    unit_select = (unit_id) => {
         this.unselect()
+        const unit = this.ui_map.game.registry.units[unit_id]
         this.unit_selected = unit
 
         this.addSelectedEffect(unit.pos, new SpriteEffect(sprites.cursor[3], COLOR.white))
@@ -125,6 +126,13 @@ export class UIManager {
         this.ui = UIUnitStats
         this.ui.drawStats(unit.unit_type)
         this.ui.drawStatModifiers(unit)
+        const action_to_key = new Map([
+            [ActionType.MOVE, '1'],
+            [ActionType.ATTACK, '2'],
+            [ActionType.RANGEATTACK, '3'],
+            [ActionType.SPELL, '4'],
+        ])
+        this.ui.ui.items = unitActionUIItems(251, this.actions.actionUnitState(unit), action_to_key, unit.unit_id)
     }
 
 }
