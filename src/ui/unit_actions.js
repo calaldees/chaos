@@ -24,6 +24,7 @@ export class UIUnitActions {
             ([row, unit]) => {
                 const row_index = START_ROW_OFFSET + (row * this.ui.dimension.width)
                 const action_to_key = new Map([['unit',String.fromCharCode(row+49)]])  // 49='1'
+                this.ui.drawUnit(unit.unit_type, row_index+2)  // bit of jank - I wanted the action item generator to be used across ui's, so I put the unit drawing here
                 return this.unitActionUIItems(row_index, unit, action_to_key)
             }
         ).flat()
@@ -75,12 +76,6 @@ export class UIUnitActions {
                 'color': actionToColor(ActionType.SPELL),
             },
         ]
-        .map((ui_item)=>{
-            if (ui_item?.unit) {
-                this.ui.drawUnit(ui_item.unit.unit_type, ui_item.i+2)
-            }
-            return ui_item
-        })
     }
 
 }
