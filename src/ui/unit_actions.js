@@ -49,48 +49,35 @@ export class UIUnitActions {
             {
                 'i': row_index + 5,
                 'key': action_to_key.get(ActionType.MOVE),
-                'action': ActionType.MOVE,
+                'action': unit_action_state.get(ActionType.MOVE) == ActionState.UNAVAILABLE ? undefined : ActionType.MOVE,
                 'text': 'move',
                 'color': actionToColor(ActionType.MOVE),
-                'action_state': unit_action_state.get(ActionType.MOVE)
             },
             {
                 'i': row_index + 10,
                 'key': action_to_key.get(ActionType.ATTACK),
-                'action': ActionType.ATTACK,
+                'action': unit_action_state.get(ActionType.ATTACK) == ActionState.UNAVAILABLE ? undefined : ActionType.ATTACK,
                 'text': 'attack',
                 'color': actionToColor(ActionType.ATTACK),
-                'action_state': unit_action_state.get(ActionType.ATTACK)
             },
             {
                 'i': row_index + 17,
                 'key': action_to_key.get(ActionType.RANGEATTACK),
-                'action': ActionType.RANGEATTACK,
+                'action': unit_action_state.get(ActionType.RANGEATTACK) == ActionState.UNAVAILABLE ? undefined : ActionType.RANGEATTACK,
                 'text': 'range',
                 'color': actionToColor(ActionType.RANGEATTACK),
-                'action_state': unit_action_state.get(ActionType.RANGEATTACK)
             },
             {
                 'i': row_index + 23,
                 'key': action_to_key.get(ActionType.SPELL),
-                'action': ActionType.SPELL,
+                'action': unit_action_state.get(ActionType.SPELL) == ActionState.UNAVAILABLE ? undefined : ActionType.SPELL,
                 'text': 'spell',
                 'color': actionToColor(ActionType.SPELL),
-                'action_state': unit_action_state.get(ActionType.SPELL)
             },
         ]
         .map((ui_item)=>{
             if (ui_item?.unit) {
                 this.ui.drawUnit(ui_item.unit.unit_type, ui_item.i+2)
-            }
-            return ui_item
-        })
-        .map((ui_item)=>{
-            if (ui_item?.action_state == ActionState.UNAVAILABLE) {
-                // If UNAVAILABlE, we should not store/activate an intractable ui_item
-                // Draw the text in place now, but return no ui_item to register mouse clicks
-                this.ui.drawFont_i(ui_item.text, ui_item.i, ui_item.color)
-                return null
             }
             return ui_item
         })

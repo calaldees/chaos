@@ -84,7 +84,7 @@ export class UIInputBase {
 
     itemSelected = (item) => {
         this.highlightNone()
-        if (!item) {return}
+        if (!item || !item?.action) {return}
         this.callback(item)
     }
 
@@ -173,7 +173,7 @@ export class UIInputBase {
         this.c.save()
         this.c.globalCompositeOperation='difference'
         this.c.fillStyle='white'
-        this.c.fillRect(x, y, ((item.hide_key_prefix?0:1)+item.text.length)*FONT_WIDTH, FONT_HEIGHT)
+        this.c.fillRect(x, y, ((!item.key||item.hide_key_prefix?0:1)+item.text.length)*FONT_WIDTH, FONT_HEIGHT)
         this.c.restore()
     }
     highlightNone = () => {
@@ -186,7 +186,7 @@ export class UIInputBase {
     }
     highlightItem = (item) => {
         this.highlightNone()
-        if (!item || item.highlighted) {return}
+        if (!item || item?.highlighted || !item?.action) {return}
         item.highlighted = true
         this._drawInvertItem(item)
     }
