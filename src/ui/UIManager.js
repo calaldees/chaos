@@ -35,6 +35,7 @@ export class UIManager {
 
         this.unit_selected = undefined
         this.unit_selected_effects = []
+        this.input_mode = undefined
 
         this._active_ui = undefined
         this.map_pressed()  // trigger the default UI
@@ -70,6 +71,7 @@ export class UIManager {
     }
 
     unselect = () => {
+        this.input_mode = undefined
         this.unit_selected = undefined
         // TODO - mark old selection as dirty?
         for (let effect of this.unit_selected_effects) {effect.active = false}
@@ -78,16 +80,20 @@ export class UIManager {
 
     map_pressed = (i) => {
         const unit = this.ui_map.game.map.getUnit(i)
+
         if (!this.unit_selected && !unit) {this.default_ui(); return}
         if (unit && this.unit_selected != unit) {this.unit_select(unit.unit_id); return}
-        if (this.unit_selected && this.unit_selected.player_id == this.actions.player.id && !unit) {
-            const unit_move_indexes = this.ui_map.game.map.getUnitMoveIndexes(this.unit_selected)
-            if (unit_move_indexes.has(i)) {
-                this.actions.addAction(
-                    new Action(ActionType.MOVE, this.actions.player.id, this.unit_selected.unit_id, i, undefined)
-                )
-                this.actions.action_effects.forEach(([i,effect])=>this.ui_map.addEffect(i,effect))
-                return
+
+        if (this.input_mode == ActionType.MOVE) {
+            if (this.unit_selected && this.unit_selected.player_id == this.actions.player.id && !unit) {
+                const unit_move_indexes = this.ui_map.game.map.getUnitMoveIndexes(this.unit_selected)
+                if (unit_move_indexes.has(i)) {
+                    this.actions.addAction(
+                        new Action(ActionType.MOVE, this.actions.player.id, this.unit_selected.unit_id, i, undefined)
+                    )
+                    this.actions.action_effects.forEach(([i,effect])=>this.ui_map.addEffect(i,effect))
+                    return
+                }
             }
         }
         this.unselect()
@@ -95,9 +101,13 @@ export class UIManager {
 
     ui_input_callback = (item) => {
         console.log('UIManager', item)
-        if (item.action == 'escape') {this.default_ui()}
-        if (item.action == 'log'   ) {this.logging_pressed()}
-        if (item.action == 'unit'  ) {this.unit_select(item.unit_id)}
+        if (item.action == 'escape') {this.default_ui(); return}
+        if (item.action == 'log'   ) {this.logging_pressed(); return}
+        if (item.action == 'unit'  ) {this.unit_select(item.unit_id); return}
+        if (item.action == ActionType.MOVE) {  // Diz not wrk-ing - fyx it
+            this.input_mode = ActionType.MOVE
+            this.unit_select(item.unit_id)
+        }
     }
 
     default_ui = () => {
@@ -126,13 +136,15 @@ export class UIManager {
         this.ui = UIUnitStats
         this.ui.drawStats(unit.unit_type)
         this.ui.drawStatModifiers(unit)
-        const action_to_key = new Map([
-            [ActionType.MOVE, '1'],
-            [ActionType.ATTACK, '2'],
-            [ActionType.RANGEATTACK, '3'],
-            [ActionType.SPELL, '4'],
-        ])
-        this.ui.ui.items = unitActionUIItems(251, this.actions.actionUnitState(unit), action_to_key, unit.unit_id)
+        if (unit.player_id == this.actions.player.id) {
+            const action_to_key = new Map([
+                [ActionType.MOVE, '1'],
+                [ActionType.ATTACK, '2'],
+                [ActionType.RANGEATTACK, '3'],
+                [ActionType.SPELL, '4'],
+            ])
+            this.ui.ui.items = unitActionUIItems(251, this.actions.actionUnitState(unit), action_to_key, unit.unit_id)
+        }
     }
 
 }

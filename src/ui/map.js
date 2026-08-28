@@ -100,6 +100,7 @@ export class UIMap extends CanvasAnimationBase {
         const pressed = (
             this.keys_pressed.has('mouse0') || this.keys_pressed.has('Enter') || this.keys_pressed.has(' ')
         )
+        if (this.keys_pressed.has(' ')){console.log('space debug')}
 
         // Handle logging_area_click
         if (pressed && this.mouse_y >= this.LOGGING_AREA_XY[1]) {
