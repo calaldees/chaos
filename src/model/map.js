@@ -21,15 +21,8 @@ export class MapChaos {
         return this.registry.units[unit_id]
     }
 
-    getRangeAttackIndexes(unit) {
-        // TODO: check if `rng` follows the same distance rules as movement? or is diagonal allowed?
-        return this.getUnitRadiusIndexes(unit, unit.stats.rng, {include_enemy_units: true, include_empty: false})
-    }
-    getUnitMoveIndexes(unit) {
-        return this.getUnitRadiusIndexes(unit, unit.stats.mov, {})
-    }
-    getUnitRadiusIndexes(unit, radius=1, {include_friendly_units=false, include_enemy_units=false, include_empty=true}) {
-        const indexes = new Map([[unit.pos, radius]])
+    getUnitRadiusIndexes(i, radius=1, player_id=undefined, {include_friendly_units=false, include_enemy_units=false, include_empty=true}) {
+        const indexes = new Map([[i, radius]])
         for (let dt=radius ; dt>0 ; dt--) {
             for (let i of indexes.entries().filter(([i,d])=>d==dt).map(([i,d])=>i)) {
                 const [x,y,z] = this.dimension.index_to_position(i)
@@ -41,7 +34,7 @@ export class MapChaos {
                         const u = this.getUnit(i)
                         if (u) {
                             // TODO: more complexity here. Mounts? or Trees? or Walls?
-                            const friend = unit.player_id == u.player_id
+                            const friend = player_id == u.player_id
                             const enemy  = !friend
                             return (friend && include_friendly_units) || (enemy && include_enemy_units)
                         }

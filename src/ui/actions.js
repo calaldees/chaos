@@ -1,10 +1,11 @@
 import { gfx_units } from '../gfx/units.js'
-import { Action, ActionType } from '../model/actions.js'
+import { Action, ActionType, actionKey } from '../model/actions.js'
 import { SpriteEffect, HighlightEffect, InvertEffect } from '../gfx/gfx_effects.js'
 
 export class ActionState {
     static AVAILABLE = new ActionState('available')
     static UNAVAILABLE = new ActionState('unavailable')
+    static NOTARGETS = new ActionState('no-targets')
     static QUEUED = new ActionState('queued')
     constructor(name) {this.name = name}
     toString() {return `ActionState.${this.name}`}
@@ -16,7 +17,7 @@ export class QueuedActionManager {
         Object.defineProperty(this, "game"  , {writable: false, enumerable: true, value: game  })
         Object.defineProperty(this, "player", {writable: false, enumerable: true, value: player})
 
-        this.actions = new Map()  // <ActionKey<type,unit_id>, Action>
+        this.actions = new Map()  // <ActionKey<unit_id,action_type>, Action>
         this.action_effects = new Array()
     }
 
@@ -31,6 +32,33 @@ export class QueuedActionManager {
         this.actions.delete(action_key)
         this._validateActions()
         this.generateActionEffects()
+    }
+
+    getActionTypeToIndexes(unit_id) {  // <ActionType, [i]>
+        const unit = this.game.registry.units[unit_id]
+        const unit_actions = this.actions.values().filter((action)=>action.unit_id==unit.unit_id)
+        const unit_pos_override = [...unit_actions.filter((a)=>a.action_type == ActionType.MOVE).map((a)=>a.target_i)].pop()
+        const map = this.game.map
+        const getIndexesForActionType = (action_type) => {
+            const unit_pos = typeof(unit_pos_override)=="number" ? unit_pos_override : unit.pos
+            if (action_type == ActionType.MOVE) {
+                // `unit.pos` can never be overridden for move actions
+                return map.getUnitRadiusIndexes(unit.pos, unit.stats.mov, {include_empty: true})
+            }
+            if (action_type == ActionType.ATTACK) {
+                return map.getUnitRadiusIndexes(unit_pos, unit.stats.com ? 1 : 0, unit.player_id, {include_enemy_units: true, include_empty: false})
+            }
+            if (action_type == ActionType.RANGEATTACK) {
+                // TODO: check if `rng` follows the same distance rules as movement? or is diagonal allowed?
+                return map.getUnitRadiusIndexes(unit_pos, unit.stats.rng, unit.player_id, {include_enemy_units: true, include_empty: false})
+                // TODO: map over the responses and remove all item with radius==1 (or unit.stats.rng-1) - range can't be used point blank
+            }
+            if (action_type == ActionType.USE) {
+                return map.getUnitRadiusIndexes(unit_pos, 1, {include_friendly_units: false, include_empty: false})
+            }
+            throw new Error('unknown ActionType')
+        }
+        return new Map([ActionType.MOVE, ActionType.ATTACK, ActionType.RANGEATTACK, ActionType.USE].map(getIndexesForActionType))
     }
 
     actionUnitState(unit) {

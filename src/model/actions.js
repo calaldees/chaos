@@ -46,14 +46,16 @@ export class ActionType {
     toString() {return `ActionType.${this.name}`}
 }
 
+export const actionKey = (unit_id, action_type) => `${unit_id}-${action_type}`  // made this just for explicit visibility. I wish I had types
+
 // This can be sent across a network, so must not have references to objects
 export class Action {
-    constructor(action_type, player_id, unit_id, target_i, target_id) {
-        this.action_type = action_type
+    constructor(player_id, unit_id, action_type, target_i, target_id) {
         this.player_id = player_id
         this.unit_id = unit_id
+        this.action_type = action_type
         this.target_i = target_i
-        this.target_id = target_id
+        this.target_id = target_id  // for validation
     }
-    get key() {return `${this.action_type}-${this.unit_id}`}
+    get key() {return actionKey(this.unit_id, this.action_type)}
 }
