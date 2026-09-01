@@ -43,7 +43,7 @@ export class MapChaos {
                     .forEach((i)=>indexes.set(i, dt-1))
             }
         }
-        indexes.delete(unit.pos)
+        indexes.delete(i)
         return indexes
     }
 

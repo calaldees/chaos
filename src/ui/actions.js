@@ -43,22 +43,34 @@ export class QueuedActionManager {
             const unit_pos = typeof(unit_pos_override)=="number" ? unit_pos_override : unit.pos
             if (action_type == ActionType.MOVE) {
                 // `unit.pos` can never be overridden for move actions
-                return map.getUnitRadiusIndexes(unit.pos, unit.stats.mov, {include_empty: true})
+                return map.getUnitRadiusIndexes(unit.pos, unit.stats.mov, unit.player_id, {include_friendly_units:false, include_enemy_units:false, include_empty: true})
             }
             if (action_type == ActionType.ATTACK) {
-                return map.getUnitRadiusIndexes(unit_pos, unit.stats.com ? 1 : 0, unit.player_id, {include_enemy_units: true, include_empty: false})
+                return map.getUnitRadiusIndexes(unit_pos, unit.stats.com ? 1 : 0, unit.player_id, {include_enemy_units: true, include_empty: false, include_friendly_units: false})
             }
             if (action_type == ActionType.RANGEATTACK) {
                 // TODO: check if `rng` follows the same distance rules as movement? or is diagonal allowed?
-                return map.getUnitRadiusIndexes(unit_pos, unit.stats.rng, unit.player_id, {include_enemy_units: true, include_empty: false})
+                return map.getUnitRadiusIndexes(unit_pos, unit.stats.rng, unit.player_id, {include_enemy_units: true, include_empty: false, include_friendly_units: false})
                 // TODO: map over the responses and remove all item with radius==1 (or unit.stats.rng-1) - range can't be used point blank
             }
             if (action_type == ActionType.USE) {
-                return map.getUnitRadiusIndexes(unit_pos, 1, {include_friendly_units: false, include_empty: false})
+                if (unit.template.status.indexOf("canMount")==-1) {return new Map()}
+                return map.getUnitRadiusIndexes(unit_pos, 1, unit.player_id, {include_friendly_units: true, include_empty: false, include_enemy_units: false})
+                // TODO: additional checks for can_use/mount
+                // check that the target_id is mountable?
             }
             throw new Error('unknown ActionType')
         }
-        return new Map([ActionType.MOVE, ActionType.ATTACK, ActionType.RANGEATTACK, ActionType.USE].map(getIndexesForActionType))
+        return new Map(
+            [
+                ActionType.MOVE,
+                ActionType.ATTACK,
+                ActionType.RANGEATTACK,
+                ActionType.USE
+            ].map(
+                (action_type)=>[action_type,getIndexesForActionType(action_type)]
+            )
+        )
     }
 
     actionUnitState(unit) {

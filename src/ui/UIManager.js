@@ -130,10 +130,17 @@ export class UIManager {
             this.ui_map.addEffect(_unit.pos, new InvertEffect(20))
         }
 
-        const ll = new Map([[ActionType.MOVE, COLOR.yellow],[ActionType.ATTACK, COLOR.red],[ActionType.RANGEATTACK, COLOR.magenta],[ActionType.USE, COLOR.green]])
+        const ll = new Map([
+            [ActionType.MOVE, COLOR.yellow],
+            [ActionType.ATTACK, COLOR.red],
+            [ActionType.RANGEATTACK, COLOR.magenta],
+            [ActionType.USE, COLOR.green],
+        ])
         for (let [action_type, indexes] of this.actions.getActionTypeToIndexes(unit_id)) {
-            for (const i of indexes) {
-                this.addSelectedEffect(i, new HighlightEffect(ll.get(action_type)))
+            for (const [i, radius] of indexes) {
+                const colour = ll.get(action_type)
+                //console.log(i, colour)
+                this.addSelectedEffect(i, new HighlightEffect(colour))
             }
         }
 

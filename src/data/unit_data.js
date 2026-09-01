@@ -12,6 +12,21 @@
 // Chaos/Law=0,
 // Animation delay=1
 
+const WIZARD_BASE_STATS = {
+    "stats": {
+        "mov": 1,
+        "com": 1, // +rnd(0,9)/2  -> getRandomInt(9)>>1 01=0 23=1 45=2 67=3 89=4
+        "rcm": 0,
+        "rng": 0,
+        "def": 1, // +rnd(0,9)/2
+        "mnv": 3, // +rnd(0,9)/2
+        "res": 6, // +rnd(0,9)/4  -> getRandomInt(9)>>2 0123=0 4567=1 89=2
+        // ability 1  //
+        "spells": 11,  //min(rad(0,9)/2, 9)
+    },
+    "status": ["canMount"],
+}
+
 export const unit_data = {
     "King Cobra": {
         "name": "King Cobra",
@@ -664,123 +679,13 @@ export const unit_data = {
     },
 
     // https://zxnet.co.uk/spectrum/chaos/asm/EA39.html
-    "Wizard JULIAN": {
-        "name": "Wizard JULIAN",
-        "stats": {
-            "mov": 1,
-            "com": 1, // +rnd(0,9)/2  -> getRandomInt(9)>>1 01=0 23=1 45=2 67=3 89=4
-            "rcm": 0,
-            "rng": 0,
-            "def": 1, // +rnd(0,9)/2
-            "mnv": 3, // +rnd(0,9)/2
-            "res": 6, // +rnd(0,9)/4  -> getRandomInt(9)>>2 0123=0 4567=1 89=2
-            // ability 1  //
-            "spells": 11,  //min(rad(0,9)/2, 9)
-        },
-    },
-    "Wizard GANDALF": {
-        "name": "Wizard GANDALF",
-        "stats": {
-            "mov": 1,
-            "com": 1,
-            "rcm": 0,
-            "rng": 0,
-            "def": 1,
-            "mnv": 3,
-            "res": 6,
-            // ability 0
-            "spells": 11,
-        },
-
-    },
-    "Wizard GREATFOGEY": {
-        "name": "Wizard GREATFOGEY",
-        "stats": {
-            "mov": 1,
-            "com": 1,
-            "rcm": 0,
-            "rng": 0,
-            "def": 1,
-            "mnv": 3,
-            "res": 6,
-            // ability 0
-            "spells": 11,
-        },
-
-    },
-    "Wizard DYERARTI": {
-        "name": "Wizard DYERARTI",
-        "stats": {
-            "mov": 1,
-            "com": 1,
-            "rcm": 0,
-            "rng": 0,
-            "def": 1,
-            "mnv": 3,
-            "res": 6,
-            // ability 1
-            "spells": 11,
-        },
-
-    },
-    "Wizard GOWIN": {
-        "name": "Wizard GOWIN",
-        "stats": {
-            "mov": 1,
-            "com": 1,
-            "rcm": 0,
-            "rng": 0,
-            "def": 1,
-            "mnv": 5,
-            "res": 6,
-            // ability 0
-            "spells": 11,
-        },
-    },
-    "Wizard MERLIN": {
-        "name": "Wizard MERLIN",
-        "stats": {
-            "mov": 1,
-            "com": 1,
-            "rcm": 0,
-            "rng": 0,
-            "def": 1,
-            "mnv": 3,
-            "res": 6,
-            // ability 0
-            "spells": 11,
-        },
-    },
-    "Wizard ILIAN RANE": {
-        "name": "Wizard ILIAN RANE",
-        "stats": {
-            "mov": 1,
-            "com": 1,
-            "rcm": 0,
-            "rng": 0,
-            "def": 1,
-            "mnv": 3,
-            "res": 6,
-            // ability 0
-            "spells": 11,
-        },
-    },
-    "Wizard ASIMONO ZARK": {
-        // Combat=3, Ranged combat=0, Range=0, Defence=2, Movement allowance=1, Manoeuvre rating=6, Magic resistance=0, Spells=0, Ability=0, Animation delay=30
-        "name": "Wizard ASIMONO ZARK",
-        "stats": {
-            "mov": 1,
-            "com": 1,
-            "rcm": 0,
-            "rng": 0,
-            "def": 1,
-            "mnv": 3,
-            "res": 6,
-            // ability 1
-            "spells": 11,
-        },
-    },
-
-
-
+    // Idea? Perhaps some of the wizzards can have individual slightly different stats?
+    "Wizard JULIAN": Object.assign({"name": "Wizard JULIAN"}, WIZARD_BASE_STATS),
+    "Wizard GANDALF": Object.assign({"name": "Wizard GANDALF"}, WIZARD_BASE_STATS),
+    "Wizard GREATFOGEY": Object.assign({"name": "Wizard GREATFOGEY"}, WIZARD_BASE_STATS),
+    "Wizard DYERARTI": Object.assign({"name": "Wizard DYERARTI"}, WIZARD_BASE_STATS),
+    "Wizard GOWIN": Object.assign({"name": "Wizard GOWIN"}, WIZARD_BASE_STATS),
+    "Wizard MERLIN": Object.assign({"name": "Wizard MERLIN"}, WIZARD_BASE_STATS),
+    "Wizard ILIAN RANE": Object.assign({"name": "Wizard ILIAN RANE"}, WIZARD_BASE_STATS),
+    "Wizard ASIMONO ZARK": Object.assign({"name": "Wizard ASIMONO ZARK"}, WIZARD_BASE_STATS),
 }
