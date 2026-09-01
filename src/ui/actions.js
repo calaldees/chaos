@@ -44,6 +44,7 @@ export class QueuedActionManager {
             if (action_type == ActionType.MOVE) {
                 // `unit.pos` can never be overridden for move actions
                 return map.getUnitRadiusIndexes(unit.pos, unit.stats.mov, unit.player_id, {include_friendly_units:false, include_enemy_units:false, include_empty: true})
+                // TODO: Set.ids -- All existing target_id index of existing ActionType.MOVE actions. We don't want two units moving to the same square
             }
             if (action_type == ActionType.ATTACK) {
                 return map.getUnitRadiusIndexes(unit_pos, unit.stats.com ? 1 : 0, unit.player_id, {include_enemy_units: true, include_empty: false, include_friendly_units: false})

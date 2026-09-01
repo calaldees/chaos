@@ -86,7 +86,7 @@ export class UIManager {
 
         //if (this.input_mode == ActionType.MOVE) {
         if (this.unit_selected && this.unit_selected.player_id == this.actions.player.id && !unit) {
-            const unit_move_indexes = this.ui_map.game.map.getMoveIndexes(this.unit_selected)
+            const unit_move_indexes = this.actions.getActionTypeToIndexes(this.unit_selected.unit_id).get(ActionType.MOVE)
             if (unit_move_indexes.has(i)) {
                 this.actions.addAction(
                     new Action(this.actions.player.id, this.unit_selected.unit_id, ActionType.MOVE, i, undefined)
