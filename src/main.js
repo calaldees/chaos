@@ -55,8 +55,10 @@ async function local_test() {
     ui_map.game = game
     game.newUnit("King Cobra", this_id, game.map.dimension.position_to_index(4,3))
     game.newUnit("Horse", this_id, game.map.dimension.position_to_index(3,3))
+    game.newUnit("Elf", this_id, game.map.dimension.position_to_index(6,1))
     game.newUnit("Eagle", 'aaaaa', game.map.dimension.position_to_index(12,4))
     game.newUnit("Vampire", 'aaaaa', game.map.dimension.position_to_index(4,2))
+    game.newUnit("Ogre", 'aaaaa', game.map.dimension.position_to_index(3,1))
 
     new UIManager(ui_map, ui_input_base, game.registry.players.get(this_id))
 

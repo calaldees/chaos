@@ -1,11 +1,10 @@
 import { COLOR } from '../gfx/color.js'
 import { sprites } from '../gfx/sprites.js'  // just for mouse cursor graphic
-import { gfx_units } from '../gfx/units.js'
 
 import { logging } from '../log/logging.js'
 import { GfxEffects, SpriteEffect, SpriteAnimationEffect, HighlightEffect, InvertEffect } from '../gfx/gfx_effects.js'
 
-import { Action, ActionType } from '../model/actions.js'
+import { Action, ActionType, actionKey } from '../model/actions.js'
 
 import { UIInputBase } from './ui_input_base.js'
 import { UIMap } from './map.js'
@@ -79,25 +78,32 @@ export class UIManager {
     }
 
     map_pressed = (i) => {
-        const unit = this.ui_map.game.map.getUnit(i)
+        const target_unit = this.ui_map.game.map.getUnit(i)
 
-        if (!this.unit_selected && !unit) {this.default_ui(); return}
-        if (unit && this.unit_selected != unit) {this.unit_select(unit.unit_id); return}
+        if (!this.unit_selected && !target_unit) {this.default_ui(); return}
 
-        //if (this.input_mode == ActionType.MOVE) {
-        if (this.unit_selected && this.unit_selected.player_id == this.actions.player.id && !unit) {
-            const unit_move_indexes = this.actions.getActionTypeToIndexes(this.unit_selected.unit_id).get(ActionType.MOVE)
-            if (unit_move_indexes.has(i)) {
+        const player_id = this.actions.player.id
+        if (this.unit_selected) {
+            const selected_unit_is_players = this.unit_selected.player_id == player_id
+            const actionIndexes = this.actions.getActionTypeToIndexes(this.unit_selected.unit_id)
+            if (selected_unit_is_players && !target_unit && actionIndexes.get(ActionType.MOVE).has(i)) {
                 this.actions.addAction(
-                    new Action(this.actions.player.id, this.unit_selected.unit_id, ActionType.MOVE, i, undefined)
+                    new Action(player_id, this.unit_selected.unit_id, ActionType.MOVE, i, undefined)
                 )
                 this.actions.action_effects.forEach(([i,effect])=>this.ui_map.addEffect(i,effect))
-
-                // TODO: update attack and range_attack target index's
+                return
+            }
+            if (selected_unit_is_players && actionIndexes.get(ActionType.ATTACK).has(i)) {
+                const action = new Action(player_id, this.unit_selected.unit_id, ActionType.ATTACK, i, this.actions.game.map.map_data[i])
+                if (this.actions.hasAction(action.key)) {this.actions.cancelAction(action.key)}
+                else                                    {this.actions.addAction(action)}
+                this.actions.action_effects.forEach(([i,effect])=>this.ui_map.addEffect(i,effect))
                 return
             }
         }
-        //}
+
+        if (target_unit && this.unit_selected != target_unit) {this.unit_select(target_unit.unit_id); return}
+
         this.unselect()
     }
 

@@ -1,3 +1,4 @@
+import { sprites } from '../gfx/sprites.js'
 import { gfx_units } from '../gfx/units.js'
 import { Action, ActionType, actionKey } from '../model/actions.js'
 import { SpriteEffect, HighlightEffect, InvertEffect } from '../gfx/gfx_effects.js'
@@ -27,6 +28,9 @@ export class QueuedActionManager {
         this.actions.set(action.key, action)
         this._validateActions()
         this.generateActionEffects()
+    }
+    hasAction(action_key) {
+        return this.actions.has(action_key)
     }
     cancelAction(action_key) {
         this.actions.delete(action_key)
@@ -120,6 +124,11 @@ export class QueuedActionManager {
                 [action.target_i ,new SpriteEffect(...gfx_units[unit_type].sprite_and_color(0))],
             ]
             //this.ui_map.addEffect(action.target_i, effect)
+        }
+        if (action.action_type == ActionType.ATTACK) {
+            return [
+                [action.target_i, new SpriteEffect(sprites.cursor[2])],
+            ]
         }
         console.log(`ActionEffectError: Unknown ActionType ${action.action_type}`)
         return []
