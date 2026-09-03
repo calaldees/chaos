@@ -47,7 +47,7 @@ export class QueuedActionManager {
             const unit_pos = typeof(unit_pos_override)=="number" ? unit_pos_override : unit.pos
             if (action_type == ActionType.MOVE) {
                 // `unit.pos` can never be overridden for move actions
-                return map.getUnitRadiusIndexes(unit.pos, unit.stats.mov, unit.player_id, {include_friendly_units:false, include_enemy_units:false, include_empty: true})
+                return map.getUnitMoveIndexes(unit.pos, unit.stats.mov)
                 // TODO: Set.ids -- All existing target_id index of existing ActionType.MOVE actions. We don't want two units moving to the same square
             }
             if (action_type == ActionType.ATTACK) {
@@ -128,6 +128,11 @@ export class QueuedActionManager {
         if (action.action_type == ActionType.ATTACK) {
             return [
                 [action.target_i, new SpriteEffect(sprites.cursor[2])],
+            ]
+        }
+        if (action.action_type == ActionType.RANGEATTACK) {
+            return [
+                [action.target_i, new SpriteEffect(sprites.cursor[1])],
             ]
         }
         console.log(`ActionEffectError: Unknown ActionType ${action.action_type}`)

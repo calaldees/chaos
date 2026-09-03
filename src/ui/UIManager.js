@@ -100,6 +100,14 @@ export class UIManager {
                 this.actions.action_effects.forEach(([i,effect])=>this.ui_map.addEffect(i,effect))
                 return
             }
+            if (selected_unit_is_players && actionIndexes.get(ActionType.RANGEATTACK).has(i)) {
+                const action = new Action(player_id, this.unit_selected.unit_id, ActionType.RANGEATTACK, i, this.actions.game.map.map_data[i])
+                if (this.actions.hasAction(action.key)) {this.actions.cancelAction(action.key)}
+                else                                    {this.actions.addAction(action)}
+                this.actions.action_effects.forEach(([i,effect])=>this.ui_map.addEffect(i,effect))
+                return
+            }
+
         }
 
         if (target_unit && this.unit_selected != target_unit) {this.unit_select(target_unit.unit_id); return}
@@ -144,8 +152,7 @@ export class UIManager {
         ])
         for (let [action_type, indexes] of this.actions.getActionTypeToIndexes(unit_id)) {
             for (const [i, radius] of indexes) {
-                const colour = ll.get(action_type)
-                //console.log(i, colour)
+                const colour = ll.get(action_type)  // TODO - tidy
                 this.addSelectedEffect(i, new HighlightEffect(colour))
             }
         }

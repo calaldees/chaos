@@ -15,13 +15,30 @@ export class MapChaos {
         this.map_data[i] = unit_id
         unit.pos = i
     }
+    hasUnit(i) {return isNumber(this.map_data[i])}
     getUnit(i) {  // -> Unit
         const unit_id = this.map_data[i]
         if (!isNumber(unit_id)) {return}
         return this.registry.units[unit_id]
     }
 
-    getUnitRadiusIndexes(i, radius=1, player_id=undefined, {include_friendly_units=false, include_enemy_units=false, include_empty=true}) {
+    getUnitRadiusIndexes(i, radius_max=1, player_id=undefined, {include_friendly_units=false, include_enemy_units=false, include_empty=false, radius_min=1}) {
+        return new Map(
+            this.getUnitMoveIndexes(i, radius_max, true).entries()
+            .filter(([i,r])=>{
+                const distance_cutoff = radius_max - radius_min
+                if (r>distance_cutoff) {return false}
+                const unit = this.getUnit(i)
+                if (unit) {
+                    const friend = player_id == unit.player_id
+                    const enemy  = !friend
+                    return (friend && include_friendly_units) || (enemy && include_enemy_units)
+                }
+                return include_empty
+            })
+        )
+    }
+    getUnitMoveIndexes(i, radius=1, override_and_include_all=false) {
         const indexes = new Map([[i, radius]])
         for (let dt=radius ; dt>0 ; dt--) {
             for (let i of indexes.entries().filter(([i,d])=>d==dt).map(([i,d])=>i)) {
@@ -30,16 +47,7 @@ export class MapChaos {
                     .filter(([x,y])=>this.dimension.position_in_bounds(x,y))
                     .map   (([x,y])=>this.dimension.position_to_index(x,y))
                     .filter((i)=>!indexes.has(i))
-                    .filter((i)=>{  // true == keep
-                        const u = this.getUnit(i)
-                        if (u) {
-                            // TODO: more complexity here. Mounts? or Trees? or Walls?
-                            const friend = player_id == u.player_id
-                            const enemy  = !friend
-                            return (friend && include_friendly_units) || (enemy && include_enemy_units)
-                        }
-                        return include_empty
-                    })
+                    .filter((i)=>!this.hasUnit(i) || override_and_include_all)  // filter-true =keep
                     .forEach((i)=>indexes.set(i, dt-1))
             }
         }
