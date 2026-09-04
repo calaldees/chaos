@@ -162,7 +162,7 @@ export class UIManager {
             .entries()
             .filter(([i,r])=>r<rng-mov)
             .forEach(([i, r])=>{
-                this.addSelectedEffect(i, new HighlightEffect(COLOR.magenta))
+                this.addSelectedEffect(i, new HighlightEffect(COLOR.magenta, 0.15))
             })
 
         this.ui = UIUnitStats
