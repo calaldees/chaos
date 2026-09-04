@@ -156,6 +156,14 @@ export class UIManager {
                 this.addSelectedEffect(i, new HighlightEffect(colour))
             }
         }
+        // temp hack to display all RANGEATTACK range
+        const {rng, mov} = unit.stats
+        this.ui_map.game.map.getUnitMoveIndexes(unit.pos, rng, true)
+            .entries()
+            .filter(([i,r])=>r<rng-mov)
+            .forEach(([i, r])=>{
+                this.addSelectedEffect(i, new HighlightEffect(COLOR.magenta))
+            })
 
         this.ui = UIUnitStats
         this.ui.drawStats(unit.unit_type)
