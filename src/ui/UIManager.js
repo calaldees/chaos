@@ -90,21 +90,22 @@ export class UIManager {
                 this.actions.addAction(
                     new Action(player_id, this.unit_selected.unit_id, ActionType.MOVE, i, undefined)
                 )
-                this.actions.action_effects.forEach(([i,effect])=>this.ui_map.addEffect(i,effect))
+                this.actions.generateActionEffects(this.unit_selected.unit_id).forEach(([i,e])=>this.addSelectedEffect(i,e))
+                //this.actions.action_effects.forEach(([i,effect])=>this.ui_map.addEffect(i,effect))
                 return
             }
             if (selected_unit_is_players && actionIndexes.get(ActionType.ATTACK).has(i)) {
                 const action = new Action(player_id, this.unit_selected.unit_id, ActionType.ATTACK, i, this.actions.game.map.map_data[i])
                 if (this.actions.hasAction(action.key)) {this.actions.cancelAction(action.key)}
                 else                                    {this.actions.addAction(action)}
-                this.actions.action_effects.forEach(([i,effect])=>this.ui_map.addEffect(i,effect))
+                //this.actions.action_effects.forEach(([i,effect])=>this.ui_map.addEffect(i,effect))
                 return
             }
             if (selected_unit_is_players && actionIndexes.get(ActionType.RANGEATTACK).has(i)) {
                 const action = new Action(player_id, this.unit_selected.unit_id, ActionType.RANGEATTACK, i, this.actions.game.map.map_data[i])
                 if (this.actions.hasAction(action.key)) {this.actions.cancelAction(action.key)}
                 else                                    {this.actions.addAction(action)}
-                this.actions.action_effects.forEach(([i,effect])=>this.ui_map.addEffect(i,effect))
+                //this.actions.action_effects.forEach(([i,effect])=>this.ui_map.addEffect(i,effect))
                 return
             }
 
@@ -141,7 +142,7 @@ export class UIManager {
 
         const units = this.ui_map.game.registry.getUnitsForPlayerID(unit.player_id)
         for (let _unit of units) {
-            this.ui_map.addEffect(_unit.pos, new InvertEffect(20))
+            this.ui_map.addEffect(_unit.pos, new InvertEffect(30))
         }
 
         const ll = new Map([
@@ -150,7 +151,8 @@ export class UIManager {
             [ActionType.RANGEATTACK, COLOR.magenta],
             [ActionType.USE, COLOR.green],
         ])
-        for (let [action_type, indexes] of this.actions.getActionTypeToIndexes(unit_id)) {
+        const action_type_indexes = this.actions.getActionTypeToIndexes(unit_id)
+        for (let [action_type, indexes] of action_type_indexes) {
             for (const [i, radius] of indexes) {
                 const colour = ll.get(action_type)  // TODO - tidy
                 this.addSelectedEffect(i, new HighlightEffect(colour))
@@ -158,12 +160,16 @@ export class UIManager {
         }
         // temp hack to display all RANGEATTACK range
         const {rng, mov} = unit.stats
-        this.ui_map.game.map.getUnitMoveIndexes(unit.pos, rng, true)
+        const unit_pos = this.actions.getUnitPosFuture(unit_id, unit.pos)
+        this.ui_map.game.map.getUnitMoveIndexes(unit_pos, rng, true)
             .entries()
-            .filter(([i,r])=>r<rng-mov)
+            //.filter(([i,r])=>r<rng-mov)
+            //.filter(([i,r])=>!action_type_indexes.get(ActionType.MOVE).has(i))
             .forEach(([i, r])=>{
                 this.addSelectedEffect(i, new HighlightEffect(COLOR.magenta, 0.15))
             })
+
+        this.actions.generateActionEffects(unit_id).forEach(([i,e])=>this.addSelectedEffect(i,e))
 
         this.ui = UIUnitStats
         this.ui.drawStats(unit.unit_type)

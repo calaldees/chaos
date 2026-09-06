@@ -27,7 +27,6 @@ export class QueuedActionManager {
     addAction(action) {
         this.actions.set(action.key, action)
         this._validateActions()
-        this.generateActionEffects()
     }
     hasAction(action_key) {
         return this.actions.has(action_key)
@@ -35,16 +34,22 @@ export class QueuedActionManager {
     cancelAction(action_key) {
         this.actions.delete(action_key)
         this._validateActions()
-        this.generateActionEffects()
     }
 
+    getUnitActions(unit_id) {
+        return this.actions.values().filter((action)=>action.unit_id==unit_id)
+    }
+    getUnitPosFuture(unit_id, unit_pos) {
+        const unit_pos_future = [...
+            this.getUnitActions(unit_id).filter((a)=>a.action_type == ActionType.MOVE).map((a)=>a.target_i)
+        ].pop()
+        return typeof(unit_pos_future)=="number" ? unit_pos_future : unit_pos
+    }
     getActionTypeToIndexes(unit_id) {  // <ActionType, [i]>
         const unit = this.game.registry.units[unit_id]
-        const unit_actions = this.actions.values().filter((action)=>action.unit_id==unit.unit_id)
-        const unit_pos_override = [...unit_actions.filter((a)=>a.action_type == ActionType.MOVE).map((a)=>a.target_i)].pop()
+        const unit_pos = this.getUnitPosFuture(unit_id, unit.pos)
         const map = this.game.map
         const getIndexesForActionType = (action_type) => {
-            const unit_pos = typeof(unit_pos_override)=="number" ? unit_pos_override : unit.pos
             if (action_type == ActionType.MOVE) {
                 // `unit.pos` can never be overridden for move actions
                 return map.getUnitMoveIndexes(unit.pos, unit.stats.mov)
@@ -111,9 +116,16 @@ export class QueuedActionManager {
         return true
     }
 
-    generateActionEffects() {  // GfxEffect[]
-        this.action_effects.forEach(([i, effect])=>effect.active = false)
-        this.action_effects = [...this.actions.values().flatMap((action)=>this._actionIndexEffectsForAction(action))]
+    //generateActionEffects() {  // sets internal GfxEffect[]
+        //this.action_effects.forEach(([i, effect])=>effect.active = false)
+        //this.action_effects = [...this.actions.values().flatMap((action)=>this._actionIndexEffectsForAction(action))]
+    //}
+
+    generateActionEffects(...unit_ids) {  // [ [i, GfxEffect] ]
+        const actions = this.actions.values().filter(
+            (action)=>(unit_ids.length==0 || unit_ids.indexOf(action.unit_id)>=0)
+        )
+        return actions.flatMap((action)=>this._actionIndexEffectsForAction(action))
     }
 
     _actionIndexEffectsForAction(action) {  // [ [i, GfxEffect] ]

@@ -55,8 +55,9 @@ async function local_test() {
     ui_map.game = game
     game.newUnit("King Cobra", this_id, game.map.dimension.position_to_index(4,3))
     game.newUnit("Horse", this_id, game.map.dimension.position_to_index(3,3))
-    game.newUnit("Elf", this_id, game.map.dimension.position_to_index(6,1))
+    game.newUnit("Elf", this_id, game.map.dimension.position_to_index(11,2))
     game.newUnit("Red Dragon", this_id, game.map.dimension.position_to_index(5,4))
+    game.newUnit("Giant Rat", 'aaaaa', game.map.dimension.position_to_index(6,4))
     game.newUnit("Eagle", 'aaaaa', game.map.dimension.position_to_index(12,4))
     game.newUnit("Vampire", 'aaaaa', game.map.dimension.position_to_index(4,2))
     game.newUnit("Ogre", 'aaaaa', game.map.dimension.position_to_index(3,1))

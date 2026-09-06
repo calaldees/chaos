@@ -27,7 +27,7 @@ export class MapChaos {
             this.getUnitMoveIndexes(i, radius_max, true).entries()
             .filter(([i,r])=>{
                 const distance_cutoff = radius_max - radius_min
-                if (r>distance_cutoff) {return false}
+                if (r>=distance_cutoff) {return false}  // Remove melee attack from range attack possibilities
                 const unit = this.getUnit(i)
                 if (unit) {
                     const friend = player_id == unit.player_id
