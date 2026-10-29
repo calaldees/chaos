@@ -27,6 +27,11 @@ Implementation
 Chaos: References
 -----------------
 
+* Game Database Entries
+    * [Spectrum Computing: Chaos](https://spectrumcomputing.co.uk/entry/894/ZX-Spectrum/Chaos)
+        * Links to Instructions, Creature Stats, All Cover Artwork, TAP files, Playable links online
+* Play the original in browser
+    * [Chaos](https://torinak.com/qaop/play/chaos) with [Qaop/JS](https://torinak.com/qaop/about)
 * Original Instructions
     * [WorldOfSpectrum: Original Instructions (GamesWorkshop BigBox 1984).txt](https://worldofspectrum.net/pub/sinclair/games-info/c/Chaos.txt)
     * [nvg](http://rk.nvg.ntnu.no/sinclair/instructions/chaos.html) plain-html
@@ -37,7 +42,7 @@ Chaos: References
     * [The incomplete commented Chaos disassembly](https://zxnet.co.uk/spectrum/chaos/index.html)
 * Gameplay footage
     * [YouTube: Chaos： The Battle of Wizards Walkthrough ｜ 1985 ｜ Games Workshop ｜ ZX Spectrum [sh97mNYpsIw]](https://www.youtube.com/watch?v=sh97mNYpsIw)
-* Gameplay description/comentary
+* Gameplay description/commentary
     * [Data Driven Gamer: Game 409: Chaos: The Battle of Wizards](https://datadrivengamer.blogspot.com/2024/05/game-409-chaos.html) 2024
 * Remakes
     * [Chaos Remakes Wiki](https://chaosremakes.fandom.com/wiki/Chaos_Remakes_Wiki)
