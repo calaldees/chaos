@@ -13,9 +13,31 @@ function json_stringify_replacer(key, value) {
 }
 
 
-const id = getId()
+const ID = getId()
 
-export class NetworkManager {
+export class NetworkManagerMQTT {
+    constructor(channel) {
+        this.onMessageListeners = new Set()
+        this.channel = channel
+    }
+    addOnMessageListener = (listener) => {this.onMessageListeners.add(listener)}
+    removeOnMessageListener = (listener) => {this.onMessageListeners.delete(listener)}
+
+    connect = () => {
+
+    }
+
+    message = () => {
+
+    }
+
+    send = () => {
+        
+    }
+}
+
+
+export class NetworkManagerWebsocket {
     constructor(channel, gzip_length_threshold=500) {
         const urlParams = new URLSearchParams(window.location.search);
         this.websocket_url = urlParams.get('websocket_url') || `${window.location.protocol.startsWith("https")?"wss":"ws"}://${window.location.host}/`
@@ -68,7 +90,7 @@ export class NetworkManager {
                 return console.warn("socket failed send - not connected", data)
             }
             if (isObject(data)) {
-                data.from = id  // append from:id to every message
+                data.from = ID  // append from:id to every message
             }
             if (typeof data != "string") {
                 try {data = JSON.stringify(data, json_stringify_replacer)}

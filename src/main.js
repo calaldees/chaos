@@ -10,7 +10,7 @@ import { LoggingCanvas } from './log/logging_canvas.js'
 import { UIMap } from './ui/map.js'
 import { UIInputBase } from './ui/ui_input_base.js'
 
-import { NetworkManager } from './network/network.js'
+import { NetworkManagerMQTT } from './network/network.js'
 import { DialogJoinOrCreate } from './ui/dialogs.js'
 import { JoinManager } from './manager/JoinManager.js'
 
@@ -86,7 +86,7 @@ if (action == 'join') {
 
 const connectNetwork = (channel) => {
     ui_map.canvas.classList.add('disconnected')
-    const network = new NetworkManager(channel)
+    const network = new NetworkManagerMQTT(channel)
     network.socket.addEventListener("open", () => {ui_map.canvas.classList.remove('disconnected')})
     network.socket.addEventListener("close", () => {ui_map.canvas.classList.add('disconnected')})
     return network
