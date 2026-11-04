@@ -4,7 +4,7 @@
 // https://www.archaos.co.uk/chaos-disassembly/maps/move-combat.html
 // So I just hard coded the patterns here.
 // I don't know if this is going to help, but yolo
-manoeuvre = `
+export const MANOEUVRE = `
 --44444
 -4333334
 432222234
@@ -15,7 +15,7 @@ manoeuvre = `
 -4333334
 --44444
 `
-flying = `
+export const FLYING = `
 -----666
 ---6655566
 --655444556
@@ -30,7 +30,7 @@ flying = `
 ---6655566
 -----666
 `
-range = `
+export const RANGE = `
 ------6
 ----66566
 --665545566
